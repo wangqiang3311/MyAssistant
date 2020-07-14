@@ -1,0 +1,110 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\项目集\\MyAssistant\\MyAssistant\\MyAssistant.csproj": {}
+  },
+  "projects": {
+    "D:\\项目集\\MyAssistant\\MyAssistant\\MyAssistant.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\项目集\\MyAssistant\\MyAssistant\\MyAssistant.csproj",
+        "projectName": "MyAssistant",
+        "projectPath": "D:\\项目集\\MyAssistant\\MyAssistant\\MyAssistant.csproj",
+        "packagesPath": "C:\\Users\\jiupai\\.nuget\\packages\\",
+        "outputPath": "D:\\项目集\\MyAssistant\\MyAssistant\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\jiupai\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/servicestack": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "ServiceStack": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.Client.Core": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.Core": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.Interfaces.Core": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.MongoDB": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "ServiceStack.OrmLite.Mysql": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.OrmLite.Sqlite": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.Redis.Core": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "ServiceStack.Server.Core": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "Servicestack.Logging.Nlog.Core": {
+              "target": "Package",
+              "version": "[5.9.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

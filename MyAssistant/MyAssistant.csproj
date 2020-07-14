@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+     <PropertyGroup>
+          <OutputType>WinExe</OutputType>
+          <TargetFramework>netcoreapp3.1</TargetFramework>
+          <UseWPF>true</UseWPF>
+     </PropertyGroup>
+
+     <ItemGroup>
+          <PackageReference Include="ServiceStack.MongoDB" Version="1.0.0" />
+          <PackageReference Include="ServiceStack.OrmLite.Mysql" Version="5.9.0" />
+          <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+          
+          <PackageReference Include="ServiceStack.Core" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.Client.Core" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.Redis.Core" Version="5.9.0" />
+          <PackageReference Include="Servicestack.Logging.Nlog.Core" Version="5.9.0" />
+
+          <PackageReference Include="ServiceStack" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.Server.Core" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.Interfaces.Core" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="5.9.0" />
+     </ItemGroup>
+
+</Project>
