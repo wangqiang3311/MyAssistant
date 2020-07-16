@@ -2,7 +2,7 @@
 using System.Reflection;
 using ServiceStack;
 
-namespace Acme
+namespace MyAssistant
 {
     public static class MyAssistants
      {

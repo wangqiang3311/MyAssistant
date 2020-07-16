@@ -22,4 +22,28 @@
           <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="5.9.0" />
      </ItemGroup>
 
+     <ItemGroup>
+       <Compile Update="UpdateManage.xaml.cs">
+         <SubType>Code</SubType>
+       </Compile>
+     </ItemGroup>
+
+     <ItemGroup>
+       <None Update="YCIOT.ModbusPoll.RtuOverTcp.dll">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+     </ItemGroup>
+
+     <ItemGroup>
+       <Page Update="Style\labelStyle.xaml">
+         <SubType>Designer</SubType>
+       </Page>
+       <Page Update="Style\textboxStyle.xaml">
+         <SubType>Designer</SubType>
+       </Page>
+       <Page Update="UpdateManage.xaml">
+         <SubType>Designer</SubType>
+       </Page>
+     </ItemGroup>
+
 </Project>

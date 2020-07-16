@@ -29,6 +29,12 @@
     <Page Update="MyTask.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Style\labelStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\textboxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Style\buttonStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -45,6 +51,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="TaskBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UpdateManage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

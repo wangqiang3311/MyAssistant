@@ -1,4 +1,5 @@
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.exe
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\YCIOT.ModbusPoll.RtuOverTcp.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.deps.json
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.runtimeconfig.json
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.runtimeconfig.dev.json
@@ -76,7 +77,6 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win-x64\na
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\netstandard2.1\SQLite.Interop.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\netstandard2.0\SQLite.Interop.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\netstandard2.1\SQLite.Interop.dll
-D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csprojAssemblyReference.cache
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\buttonStyle.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\datagridStyle.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\General.baml
@@ -86,6 +86,7 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\AddTask.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MainWindow.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyTask.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\TaskBar.g.cs
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\UpdateManage.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\App.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant_MarkupCompile.cache
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant_MarkupCompile.lref
@@ -94,6 +95,7 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\AddTask.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MainWindow.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyTask.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\TaskBar.baml
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\UpdateManage.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.g.resources
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.CoreCompileInputs.cache
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.AssemblyInfoInputs.cache
@@ -102,3 +104,6 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.dll
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.pdb
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.genruntimeconfig.cache
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\labelStyle.baml
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\textboxStyle.baml
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.dll.config

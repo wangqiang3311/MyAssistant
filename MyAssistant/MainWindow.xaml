@@ -11,6 +11,7 @@
           <ListBox>
                <ListBoxItem x:Name="MyTask" MouseDoubleClick="MyTask_MouseDoubleClick">我的任务</ListBoxItem>
                <ListBoxItem>知识库</ListBoxItem>
+               <ListBoxItem x:Name="publishManage" MouseDoubleClick="publishManage_MouseDoubleClick">发布管理</ListBoxItem>
           </ListBox>
           
      </Grid>

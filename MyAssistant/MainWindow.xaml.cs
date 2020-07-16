@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyAssistant;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ namespace MyAssistant
           public MainWindow()
           {
                InitializeComponent();
+               MyAssistants.Patch();
           }
 
           private void MyTask_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -28,5 +30,12 @@ namespace MyAssistant
                t.Owner = this;
                t.ShowDialog();
           }
-     }
+
+        private void publishManage_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+               UpdateManage w= new UpdateManage();
+               w.Owner = this;
+               w.ShowDialog();
+          }
+    }
 }
