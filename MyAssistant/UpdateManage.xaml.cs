@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -86,7 +87,7 @@ namespace MyAssistant
 
           }
 
-          private void ShowMessage(string message, int? delay = 10)
+          private void ShowMessage(string message, int? delay = 5)
           {
                TaskBar bar = new TaskBar();
                bar.Left = SystemParameters.WorkArea.Size.Width - bar.Width;
@@ -116,7 +117,7 @@ namespace MyAssistant
                try
                {
                     //停掉exe进程
-                    var t1 = Kill(exeName);
+                    var t1 = StopProcessAsync(exeName);
 
                     var t2 = t1.ContinueWith(t =>
                       {
@@ -161,7 +162,13 @@ namespace MyAssistant
                          item.IsStarted = false;
                     }
                }
+
           }
+          private void NotifyStop(ProjectViewModel model)
+          {
+               model.IsStarted = false;
+          }
+
 
           private void NotifyStart()
           {
@@ -172,6 +179,10 @@ namespace MyAssistant
                          item.IsStarted = true;
                     }
                }
+          }
+          private void NotifyStart(ProjectViewModel model)
+          {
+               model.IsStarted = true;
           }
 
           private async Task<bool> StartProcessAsync(string exeName, List<string> exeList)
@@ -247,6 +258,26 @@ namespace MyAssistant
           }
 
 
+          private bool Excute(string sourceDllPath, string targetDll, ProjectViewModel item)
+          {
+               //获取当前运行目录下的dll，更新到指定地方
+               try
+               {
+                    var root = GetTargetRoot(item);
+                    var targetDllPath = System.IO.Path.Combine(root, item.Name, targetDll);
+
+                    if (File.Exists(targetDllPath))
+                         System.IO.File.Copy(sourceDllPath, targetDllPath, true);
+
+               }
+               catch (Exception ex)
+               {
+                    throw ex;
+               }
+               return true;
+          }
+
+
           private void KillProcess(string procName)
           {
                var killprocess = Process.GetProcessesByName(procName);
@@ -300,8 +331,13 @@ namespace MyAssistant
           {
                return Process.GetProcessesByName(procName).Length;
           }
+          private int GetProcessCount(string procName, string procPath)
+          {
+               var processes = Process.GetProcessesByName(procName).Where(p => p.MainModule.FileName == procPath);
+               return processes.Count();
+          }
 
-          private Task<bool> Kill(string procName)
+          private Task<bool> StopProcessAsync(string procName)
           {
                var task = Task.Run(async () =>
                  {
@@ -327,24 +363,27 @@ namespace MyAssistant
                return task;
           }
 
-          private Task<bool> Kill(string procName, string targetPath)
+          private Task<bool> StopProcessAsync(string procName, string targetPath)
           {
                var task = Task.Run(async () =>
                {
                     try
                     {
+                         //获取当前运行的进程数量
+                         var count = GetProcessCount(procName, targetPath);
+
                          KillProcess(procName, targetPath);
 
                          int times = 5;
 
-                         //获取当前运行的进程数量
-                         var count = GetProcessCount(procName);
-
-                         while (GetProcessCount(procName) == count)
+                         if (count > 0)
                          {
-                              times--;
-                              if (times < 0) return false;
-                              await Task.Delay(3000);
+                              while (GetProcessCount(procName, targetPath) == count)
+                              {
+                                   times--;
+                                   if (times < 0) return false;
+                                   await Task.Delay(3000);
+                              }
                          }
                     }
                     catch (Exception ex)
@@ -386,7 +425,7 @@ namespace MyAssistant
 
           private async void batStop_Click(object sender, RoutedEventArgs e)
           {
-               var result = await Kill(exeName);
+               var result = await StopProcessAsync(exeName);
                if (result)
                {
                     NotifyStop();
@@ -443,7 +482,12 @@ namespace MyAssistant
                {
                     if (item.IsStarted)
                     {
-
+                         var result = await StopProcessAsync(exeName, targetExePath);
+                         if (result)
+                         {
+                              item.IsStarted = false;
+                              ShowMessage($"停止{item.Name}成功");
+                         }
                     }
                     else
                     {
@@ -451,7 +495,7 @@ namespace MyAssistant
                          if (result)
                          {
                               item.IsStarted = true;
-                              ShowMessage($"启动进程成功");
+                              ShowMessage($"启动{item.Name}成功");
                          }
                     }
                }
@@ -459,7 +503,61 @@ namespace MyAssistant
 
           private void btnUpdate_Click(object sender, RoutedEventArgs e)
           {
+               var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
+               string targetDll = $"{exeName}.dll";
+               string sourceDllPath = System.IO.Path.Combine(executablePathRoot, targetDll);
+
+               var item = ItemProject.SelectedItem as ProjectViewModel;
+               var root = GetTargetRoot(item);
+
+               var targetExePath = System.IO.Path.Combine(root, item.Name, $"{exeName}.exe");
+
+               if (File.Exists(targetExePath))
+               {
+                    item.IsEnable = true;
+               }
+
+               if (item.IsEnable)
+               {
+                    try
+                    {
+                         //停掉exe进程
+                         var t1 = StopProcessAsync(exeName, targetExePath);
+
+                         var t2 = t1.ContinueWith(t =>
+                         {
+                              if (t.Result)
+                              {
+                                   NotifyStop(item);
+                                   //执行核心工作
+                                   return Excute(sourceDllPath, targetDll, item);
+                              }
+                              else
+                              {
+                                   return false;
+                              }
+                         });
+
+                         var t3 = t2.ContinueWith(async t =>
+                         {
+                              var result = await StartProcessAsync(exeName, targetExePath);
+                              if (result)
+                              {
+                                   NotifyStart();
+
+                                   this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                                   {
+                                        ShowMessage($"{item.Name}更新成功");
+                                   });
+                              }
+                         });
+                    }
+                    catch (Exception ex)
+                    {
+                         ShowMessage(ex.Message, null);
+                    }
+               }
           }
 
           private void cbxAll_Click(object sender, RoutedEventArgs e)
