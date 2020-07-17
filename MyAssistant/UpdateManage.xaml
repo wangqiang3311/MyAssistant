@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyAssistant"
         mc:Ignorable="d"
+        xmlns:share="clr-namespace:MyAssistant"
         Title="包发布管理" Height="600" Width="900" WindowStartupLocation="CenterOwner">
-
+     <Window.Resources>
+          <share:ColorConverter  x:Key="gridCellcvtColor"/>
+     </Window.Resources>
      <Grid>
           <Grid.Resources>
                <DataTemplate x:Key="DateTemplate" >
