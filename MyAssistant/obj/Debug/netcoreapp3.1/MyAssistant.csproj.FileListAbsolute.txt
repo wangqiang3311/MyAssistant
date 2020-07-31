@@ -1,5 +1,4 @@
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.exe
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\YCIOT.ModbusPoll.RtuOverTcp.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.deps.json
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.runtimeconfig.json
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.runtimeconfig.dev.json
@@ -108,3 +107,10 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\labelStyle.ba
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\Style\textboxStyle.baml
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.dll.config
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.cs
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NPOI.OOXML.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NPOI.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NPOI.OpenXml4Net.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NPOI.OpenXmlFormats.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ICSharpCode.SharpZipLib.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\DHTable.xlsx
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Update\YCIOT.ModbusPoll.RtuOverTcp.dll

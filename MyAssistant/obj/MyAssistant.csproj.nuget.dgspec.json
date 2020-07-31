@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "D:\\packages": {},
           "https://api.nuget.org/v3/index.json": {},
           "https://www.myget.org/F/servicestack": {}
         },
@@ -39,6 +40,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "DotNetCore.NPOI": {
+              "target": "Package",
+              "version": "[1.2.2, )"
+            },
             "ServiceStack": {
               "target": "Package",
               "version": "[5.9.0, )"

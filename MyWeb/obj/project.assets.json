@@ -28,6 +28,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "D:\\packages": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://www.myget.org/F/servicestack": {}
       },

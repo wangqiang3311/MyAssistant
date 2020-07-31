@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "MyAssistant/1.0.0": {
         "dependencies": {
+          "DotNetCore.NPOI": "1.2.2",
           "ServiceStack": "5.9.0",
           "ServiceStack.Client.Core": "5.9.0",
           "ServiceStack.Core": "5.9.0",
@@ -60,6 +61,54 @@
           "lib/netstandard1.3/DnsClient.dll": {
             "assemblyVersion": "1.0.7.0",
             "fileVersion": "1.0.7.0"
+          }
+        }
+      },
+      "DotNetCore.NPOI/1.2.2": {
+        "dependencies": {
+          "DotNetCore.NPOI.Core": "1.2.2",
+          "DotNetCore.NPOI.OpenXml4Net": "1.2.2",
+          "DotNetCore.NPOI.OpenXmlFormats": "1.2.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NPOI.OOXML.dll": {
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
+          }
+        }
+      },
+      "DotNetCore.NPOI.Core/1.2.2": {
+        "dependencies": {
+          "SharpZipLib": "1.2.0",
+          "System.Drawing.Common": "4.7.0",
+          "System.Text.Encoding.CodePages": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NPOI.dll": {
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
+          }
+        }
+      },
+      "DotNetCore.NPOI.OpenXml4Net/1.2.2": {
+        "dependencies": {
+          "DotNetCore.NPOI.Core": "1.2.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NPOI.OpenXml4Net.dll": {
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
+          }
+        }
+      },
+      "DotNetCore.NPOI.OpenXmlFormats/1.2.2": {
+        "dependencies": {
+          "DotNetCore.NPOI.OpenXml4Net": "1.2.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NPOI.OpenXmlFormats.dll": {
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
           }
         }
       },
@@ -537,7 +586,7 @@
           "System.Configuration.ConfigurationManager": "4.4.1",
           "System.Runtime.CompilerServices.Unsafe": "4.6.0",
           "System.Security.Permissions": "4.6.0",
-          "System.Text.Encoding.CodePages": "4.4.0"
+          "System.Text.Encoding.CodePages": "4.5.0"
         },
         "runtime": {
           "lib/netstandard2.1/MySql.Data.dll": {
@@ -962,6 +1011,14 @@
           "System.Reflection.Emit": "4.3.0",
           "System.Reflection.Emit.Lightweight": "4.3.0",
           "System.Runtime": "4.3.1"
+        }
+      },
+      "SharpZipLib/1.2.0": {
+        "runtime": {
+          "lib/netstandard2.0/ICSharpCode.SharpZipLib.dll": {
+            "assemblyVersion": "1.2.0.246",
+            "fileVersion": "1.2.0.246"
+          }
         }
       },
       "SSH.NET/2016.1.0": {
@@ -1867,9 +1924,10 @@
           "System.Runtime": "4.3.1"
         }
       },
-      "System.Text.Encoding.CodePages/4.4.0": {
+      "System.Text.Encoding.CodePages/4.5.0": {
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0"
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.6.0"
         }
       },
       "System.Text.Encoding.Extensions/4.3.0": {
@@ -2061,6 +2119,34 @@
       "sha512": "sha512-f3k5ufhUSL658fy/ac1mReqRIr0jGMyOJFvBqJ+7cASq01NIysYbrrRDjboYKAGrd0Y2mc1A749uQvT8vAA91A==",
       "path": "dnsclient/1.0.7",
       "hashPath": "dnsclient.1.0.7.nupkg.sha512"
+    },
+    "DotNetCore.NPOI/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DACoUvopt/8z6PhWQdMoXogVdVqI8k6Z++oEWUO5PToUwcK73hsTDOeaqh2hgHHxdRsRtzImqG7Cbw1gPPOAjA==",
+      "path": "dotnetcore.npoi/1.2.2",
+      "hashPath": "dotnetcore.npoi.1.2.2.nupkg.sha512"
+    },
+    "DotNetCore.NPOI.Core/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ohnR015XcwKUvtWR2AKIAbTH3sS8DbhjDZcPYShwToVKPgAekP5jn1LsyfWJYYFxDuPv4hha0WYfBGVx1BMMLg==",
+      "path": "dotnetcore.npoi.core/1.2.2",
+      "hashPath": "dotnetcore.npoi.core.1.2.2.nupkg.sha512"
+    },
+    "DotNetCore.NPOI.OpenXml4Net/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-l41xh1GMbb6c41bQe2ipm6GJwBF9A+N6Bt9aYhKeI/Ak6XKaijIU7g4V28VuuMRoZjPhEp7gL7RP5ChTWUdLzA==",
+      "path": "dotnetcore.npoi.openxml4net/1.2.2",
+      "hashPath": "dotnetcore.npoi.openxml4net.1.2.2.nupkg.sha512"
+    },
+    "DotNetCore.NPOI.OpenXmlFormats/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+Y5IZfiF/ls+opIMMmolRZdnYcxguErVk9eOfmz5s/wnNnPeBWR1mxGOpvBWsbqch75isU5Lk0CZWtAXVgYCPQ==",
+      "path": "dotnetcore.npoi.openxmlformats/1.2.2",
+      "hashPath": "dotnetcore.npoi.openxmlformats.1.2.2.nupkg.sha512"
     },
     "Google.Protobuf/3.6.1": {
       "type": "package",
@@ -2635,6 +2721,13 @@
       "sha512": "sha512-Eoj+NUkZt43QyODMfXIN3k07wnsa4ZtlCet3UWuxoeuvy2GpIUDd3QSuxzH44MBiYB9kjlXKbohMuuYj+xQIyA==",
       "path": "servicestack.text.core/5.9.0",
       "hashPath": "servicestack.text.core.5.9.0.nupkg.sha512"
+    },
+    "SharpZipLib/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zvWa/L02JHNatdtjya6Swpudb2YEHaOLHL1eRrqpjm71iGRNUNONO5adUF/9CHbSJbzhELW1UoH4NGy7n7+3bQ==",
+      "path": "sharpziplib/1.2.0",
+      "hashPath": "sharpziplib.1.2.0.nupkg.sha512"
     },
     "SSH.NET/2016.1.0": {
       "type": "package",
@@ -3224,12 +3317,12 @@
       "path": "system.text.encoding/4.3.0",
       "hashPath": "system.text.encoding.4.3.0.nupkg.sha512"
     },
-    "System.Text.Encoding.CodePages/4.4.0": {
+    "System.Text.Encoding.CodePages/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6JX7ZdaceBiLKLkYt8zJcp4xTJd1uYyXXEkPw6mnlUIjh1gZPIVKPtRXPmY5kLf6DwZmf5YLwR3QUrRonl7l0A==",
-      "path": "system.text.encoding.codepages/4.4.0",
-      "hashPath": "system.text.encoding.codepages.4.4.0.nupkg.sha512"
+      "sha512": "sha512-S0wEUiKcLvRlkFUXca8uio1UQ5bYQzYgOmOKtCqaBQC3GR9AJjh43otcM32IGsAyvadFTaAMw9Irm6dS4Evfng==",
+      "path": "system.text.encoding.codepages/4.5.0",
+      "hashPath": "system.text.encoding.codepages.4.5.0.nupkg.sha512"
     },
     "System.Text.Encoding.Extensions/4.3.0": {
       "type": "package",

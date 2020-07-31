@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NETCOREAPP;NETCOREAPP3_1
 D:\项目集\MyAssistant\MyAssistant\App.xaml
-9-421813685
+121447550644
 
-9747282919
-237-2052559930
-AddTask.xaml;MainWindow.xaml;MyTask.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;TaskBar.xaml;
+16-69519710
+256873871034
+AddTask.xaml;MainWindow.xaml;MyTask.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\labelStyle.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;Style\textboxStyle.xaml;TaskBar.xaml;UpdateManage.xaml;
 
 False
 

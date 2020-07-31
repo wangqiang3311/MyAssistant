@@ -1,4 +1,8 @@
 ﻿using MyAssistant.ViewModel;
+using NPOI.HSSF.Record.PivotTable;
+using NPOI.SS.Formula.Eval;
+using NPOI.SS.UserModel;
+using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Host;
 using System;
@@ -244,11 +248,79 @@ namespace MyAssistant
                     foreach (var item in projectlist)
                     {
                          var root = GetTargetRoot(item);
+
                          var targetDllPath = System.IO.Path.Combine(root, item.Name, targetDll);
 
                          if (File.Exists(targetDllPath))
                               System.IO.File.Copy(sourceDllPath, targetDllPath, true);
                     }
+               }
+               catch (Exception ex)
+               {
+                    throw ex;
+               }
+               return true;
+          }
+
+          private bool ExcuteBat(string sourceDir)
+          {
+               //获取当前运行目录下的所有文件，更新到指定地方
+               try
+               {
+                    foreach (var item in projectlist)
+                    {
+                         var root = GetTargetRoot(item);
+
+                         var targetDir = System.IO.Path.Combine(root, item.Name);
+
+                         if (Directory.Exists(targetDir))
+                         {
+                              var files = Directory.GetFiles(sourceDir);
+
+                              foreach (var sourceFile in files)
+                              {
+                                   var fileName = System.IO.Path.GetFileName(sourceFile);
+                                   var extension = System.IO.Path.GetExtension(sourceFile);
+                                   var targetPath = System.IO.Path.Combine(targetDir, fileName);
+
+                                   if (extension == ".pdb" || extension == ".config") continue;
+                                   System.IO.File.Copy(sourceFile, targetPath, true);
+                              }
+                         }
+                    }
+               }
+               catch (Exception ex)
+               {
+                    throw ex;
+               }
+               return true;
+          }
+
+          private bool ExcuteBat(string sourceDir, ProjectViewModel item)
+          {
+               //获取当前运行目录下的所有文件，更新到指定地方
+               try
+               {
+                    var root = GetTargetRoot(item);
+
+                    var targetDir = System.IO.Path.Combine(root, item.Name);
+
+                    if (Directory.Exists(targetDir))
+                    {
+                         var files = Directory.GetFiles(sourceDir);
+
+                         foreach (var sourceFile in files)
+                         {
+                              var fileName = System.IO.Path.GetFileName(sourceFile);
+                              var extension = System.IO.Path.GetExtension(sourceFile);
+                              var targetPath = System.IO.Path.Combine(targetDir, fileName);
+
+                              if (extension == ".pdb" || extension == ".config") continue;
+
+                              System.IO.File.Copy(sourceFile, targetPath, true);
+                         }
+                    }
+
                }
                catch (Exception ex)
                {
@@ -565,6 +637,211 @@ namespace MyAssistant
                foreach (var item in projectlist)
                {
                     item.IsChecked = this.cbxAll.IsChecked.Value;
+               }
+          }
+          /// <summary>
+          /// 根据Excel生成sql语句
+          /// </summary>
+          /// <param name="sender"></param>
+          /// <param name="e"></param>
+          private void MakeSql_Click(object sender, RoutedEventArgs e)
+          {
+               var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+               var filePath = System.IO.Path.Combine(executablePathRoot, "DHTable.xlsx");
+               IWorkbook workbook = null;
+               ISheet sheet = null;
+               try
+               {
+                    workbook = WorkbookFactory.Create(filePath);
+                    sheet = workbook.GetSheetAt(0);//获取第一个工作薄
+
+                    var tableName = "";
+                    var fieldName = "";
+                    var fieldType = "";
+
+                    Dictionary<string, string> fields = new Dictionary<string, string>();
+
+                    for (var j = 1; j < 63; j++)
+                    {
+                         var row = sheet.GetRow(j);
+
+                         if (row.Cells.Count == 4)
+                         {
+                              var v = GetCellValue(row.Cells[0]);
+                              tableName = v.ToString();
+                              var key = GetCellValue(row.Cells[1]);
+                              fieldName = key.ToString();
+                              var value = GetCellValue(row.Cells[2]);
+                              fieldType = value.ToString();
+
+                              fields.Add(fieldName, fieldType);
+                         }
+                         else
+                         {
+                              int i = 0;
+                              foreach (var cell in row.Cells)
+                              {
+                                   var v = GetCellValue(cell);
+                                   if (i == 0)
+                                   {
+                                        fieldName = v.ToString();
+                                   }
+                                   if (i == 1)
+                                   {
+                                        fieldType = v.ToString();
+                                   }
+                                   i++;
+                              }
+                              fields.Add(fieldName, fieldType);
+                         }
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine($"CREATE TABLE {tableName} (");
+                    foreach (var item in fields)
+                    {
+                         if (item.Key == "Id")
+                         {
+                              sb.AppendLine($"{item.Key} {item.Value}  PRIMARY KEY  AUTO_INCREMENT,");
+                         }
+                         else
+                         {
+                              sb.AppendLine($"{item.Key} {item.Value},");
+                         }
+                    }
+                    sb.AppendLine($")");
+
+
+                    txtResult.Document.Blocks.Clear();
+
+                    Paragraph p = new Paragraph();
+                    Run r = new Run(sb.ToString());
+                    p.Inlines.Add(r);
+                    txtResult.Document.Blocks.Add(p);
+               }
+               catch (Exception ex)
+               {
+                    Console.WriteLine("获取excel数据出错" + ex.Message);
+                    workbook?.Close();
+
+               }
+          }
+
+          protected object GetCellValue(ICell item)
+          {
+               if (item == null)
+               {
+                    return string.Empty;
+               }
+               switch (item.CellType)
+               {
+                    case CellType.Boolean:
+                         return item.BooleanCellValue;
+
+                    case CellType.Error:
+                         return ErrorEval.GetText(item.ErrorCellValue);
+                    case CellType.Formula:
+                         switch (item.CachedFormulaResultType)
+                         {
+                              case CellType.Boolean:
+                                   return item.BooleanCellValue;
+
+                              case CellType.Error:
+                                   return ErrorEval.GetText(item.ErrorCellValue);
+
+                              case CellType.Numeric:
+                                   if (DateUtil.IsCellDateFormatted(item))
+                                   {
+                                        return item.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss");
+                                   }
+                                   else
+                                   {
+                                        return item.NumericCellValue;
+                                   }
+                              case CellType.String:
+                                   var str = item.StringCellValue;
+                                   if (!string.IsNullOrEmpty(str))
+                                   {
+                                        return str;
+                                   }
+                                   else
+                                   {
+                                        return string.Empty;
+                                   }
+                              case CellType.Unknown:
+                              case CellType.Blank:
+                              default:
+                                   return string.Empty;
+                         }
+                    case CellType.Numeric:
+                         if (DateUtil.IsCellDateFormatted(item))
+                         {
+                              return item.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss");
+                         }
+                         else
+                         {
+
+                              return item.NumericCellValue;
+                         }
+                    case CellType.String:
+                         var strValue = item.StringCellValue;
+                         return strValue.Trim();
+
+                    case CellType.Unknown:
+                    case CellType.Blank:
+                    default:
+                         return string.Empty;
+               }
+          }
+          /// <summary>
+          /// 全部文件更新
+          /// </summary>
+          /// <param name="sender"></param>
+          /// <param name="e"></param>
+          private void batUpdateAll_Click(object sender, RoutedEventArgs e)
+          {
+               var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+
+               string targetFolder = "Update";
+               string sourceFolder = System.IO.Path.Combine(executablePathRoot, targetFolder);
+
+               var exeList = GetExeList(exeName);
+               try
+               {
+                    //停掉exe进程
+                    var t1 = StopProcessAsync(exeName);
+
+                    var t2 = t1.ContinueWith(t =>
+                    {
+                         if (t.Result)
+                         {
+                              NotifyStop();
+                              //执行核心工作
+                              return ExcuteBat(sourceFolder, targetFolder);
+                         }
+                         else
+                         {
+                              return false;
+                         }
+                    });
+
+                    var t3 = t2.ContinueWith(async t =>
+                    {
+                         var result = await StartProcessAsync(exeName, exeList);
+                         if (result)
+                         {
+                              NotifyStart();
+
+                              this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                              {
+                                   ShowMessage($"批量更新{exeList.Count}个成功");
+                              });
+                         }
+                    });
+               }
+               catch (Exception ex)
+               {
+                    ShowMessage(ex.Message, null);
                }
           }
      }

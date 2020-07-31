@@ -7,6 +7,7 @@
      </PropertyGroup>
 
      <ItemGroup>
+          <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
           <PackageReference Include="ServiceStack.MongoDB" Version="1.0.0" />
           <PackageReference Include="ServiceStack.OrmLite.Mysql" Version="5.9.0" />
           <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
@@ -29,7 +30,10 @@
      </ItemGroup>
 
      <ItemGroup>
-       <None Update="YCIOT.ModbusPoll.RtuOverTcp.dll">
+       <None Update="DHTable.xlsx">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update="Update\YCIOT.ModbusPoll.RtuOverTcp.dll">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
      </ItemGroup>
