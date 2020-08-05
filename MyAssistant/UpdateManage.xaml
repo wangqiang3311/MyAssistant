@@ -16,6 +16,7 @@
                     <StackPanel Orientation="Horizontal">
                          <Button Content="开启/停止" Name="btnControl" Style="{ StaticResource BtnInfoStyle}"  Click="btnControl_Click" />
                          <Button Content="更新" Name="btnUpdate" Style="{ StaticResource BtnInfoStyle}"  Click="btnUpdate_Click" />
+                         <Button Content="更新全部文件" Name="btnUpdateAll" Style="{ StaticResource BtnInfoStyle}"  Click="btnUpdateAll_Click" />
                     </StackPanel>
                </DataTemplate>
 
@@ -49,8 +50,9 @@
                <Button   Content="批量更新主dll" x:Name="batUpdate"  Style="{StaticResource BtnInfoStyle}" Click="batUpdate_Click"/>
                <Button   Content="批量更新全部文件" x:Name="batUpdateAll"  Style="{StaticResource BtnInfoStyle}" Click="batUpdateAll_Click"/>
                <Button   Content="生成sql语句" x:Name="MakeSql"  Style="{StaticResource BtnInfoStyle}" Click="MakeSql_Click"/>
-
-               <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
+               <Button   Content="发送邮件" x:Name="btnSendEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnSendEmail_Click"/>
+               <Button   Content="接收邮件" x:Name="btnReceiveEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnReceiveEmail_Click"/>
+            <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
 
           </StackPanel>
      </Grid>
