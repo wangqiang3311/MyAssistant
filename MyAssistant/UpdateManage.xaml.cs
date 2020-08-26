@@ -1,10 +1,16 @@
 ﻿using MyAssistant.ViewModel;
+using NLog.Fluent;
 using NPOI.HSSF.Record.PivotTable;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
+using OpenPop.Mime;
+using OpenPop.Pop3;
+using OpenPop.Pop3.Exceptions;
 using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Host;
+using ServiceStack.Redis;
+using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -1009,10 +1015,253 @@ namespace MyAssistant
             {
                 //每3秒，检查邮件
                 Thread.Sleep(3000);
+                string host = "pop.qq.com";
+                string user = "540887384@qq.com";
+                string pass = "vkyuhqrejvuobfji";   //qclhpkrldvdzbfib
+                int port = 995;
 
+                string root = @"D:\Desktop\download";
 
+                EmailHelper email = new EmailHelper(user, pass, host, port, true, null);
+                string error = "";
+                var isSuccess = email.ValidateAccount(ref error);
+
+                if (isSuccess)
+                {
+                    var count = email.GetEmailCount();
+
+                    if (count > 0)
+                    {
+                        for (int i = 1; i <= count; i++)
+                        {
+                            //收取附件
+                            var flag = email.DownAttachmentsById(root, i);
+
+                            if (flag)
+                            {
+                                this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                                {
+                                    ShowMessage($"收取文件成功,当前MessageId：{i}");
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }
 
             });
         }
+        /// <summary>
+        /// 写入redis
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnWriteToRedis_Click(object sender, RoutedEventArgs e)
+        {
+
+            using var redisClient = new RedisClient("112.126.101.120", 6379, "ERe@3_rit!", 14);
+
+            string QueueId = "YCIOT";
+
+            var jobParameter = "[{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000003,\"DeviceName\":\"1-3井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":51,\"DeviceTypeId\":1,\"CommandParameter\":{\"13\":1005024,\"14\":1000523,\"17\":1005125,\"16\":1005206}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000013,\"DeviceName\":\"1-9井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":52,\"DeviceTypeId\":1,\"CommandParameter\":{\"110\":1004920,\"112\":1004922,\"113\":1004923,\"116\":1004998}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000004,\"DeviceName\":\"1-51井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":54,\"DeviceTypeId\":1,\"CommandParameter\":{\"151\":1005106,\"152\":1005107,\"153\":1005108,\"158\":1005113}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000006,\"DeviceName\":\"1-68井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":55,\"DeviceTypeId\":1,\"CommandParameter\":{\"170\":1005123,\"171\":1005126,\"172\":1005127}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000009,\"DeviceName\":\"1-74井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":56,\"DeviceTypeId\":1,\"CommandParameter\":{\"175\":1005129,\"177\":1005131,\"179\":1005133,\"173\":1005205}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000011,\"DeviceName\":\"1-80井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":57,\"DeviceTypeId\":1,\"CommandParameter\":{\"183\":1005207,\"182\":1005212,\"180\":1005213,\"184\":1005214,\"185\":1005215,\"187\":1005216}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9002018,\"DeviceName\":\"吴46-37井场\",\"StationId\":12101010009002,\"StationName\":\"46-37工作站\",\"ModbusAddress\":61,\"DeviceTypeId\":1,\"CommandParameter\":{\"4642\":1007553,\"4640\":1007555,\"4637\":1007557,\"4639\":1007663}}]";
+            var controlRequests = jobParameter.FromJson<List<ControlRequestDeHui>>();
+
+            foreach (var item in controlRequests)
+            {
+                if (item.ModbusAddress == 51)
+                {
+                    item.RequestTime = DateTime.Now;
+                    item.CommandType = $"Get_DEHUI_LLJ";
+                    item.LinkMode = "RTU";
+
+                    item.UserId = "1";
+                    item.UserName = "wbq";
+
+                    item.RemoteHost = "192.168.207.216";
+                    item.RemotePort = 502;
+
+                    var listId = $"{QueueId}:User:JobList:" + item.GroupName;
+
+                    redisClient.AddItemToList(listId, item.ToJson().IndentJson());
+                    break;
+                }
+            }
+        }
+    }
+
+    public class EmailHelper
+    {
+        private string accout; //邮箱账户
+        private string pass;//邮箱密码
+        private string popServer; //pop服务地址
+        private int popPort; //pop服务端口号（110）
+        private bool isUseSSL;
+        private string ServerDataDB;
+
+        public EmailHelper(string _accout, string _pass, string _popServer, int _popPort, bool _isUseSSL, string _ServerDataDB)
+        {
+            this.accout = _accout;
+            this.pass = _pass;
+            this.popServer = _popServer;
+            this.popPort = _popPort;
+            this.isUseSSL = _isUseSSL;
+            this.ServerDataDB = _ServerDataDB;
+        }
+
+        #region 验证邮箱是否登录成功
+        public bool ValidateAccount(ref string error)
+        {
+            Pop3Client client = new Pop3Client();
+            try
+            {
+                client.Connect(popServer, popPort, isUseSSL);
+                client.Authenticate(accout, pass);
+            }
+            catch (InvalidLoginException ex)
+            {
+                error = "邮箱登录失败！";
+                Console.WriteLine("0.1邮箱登录失败");
+                return false;
+            }
+            catch (InvalidUseException ex)
+            {
+                error = "邮箱登录失败！";
+                Console.WriteLine("0.2邮箱登录失败");
+                return false;
+            }
+            catch (PopServerNotFoundException ex)
+            {
+                error = "服务器没有找到！";
+                Console.WriteLine("0.3服务器没有找到");
+                return false;
+            }
+            catch (PopServerException ex)
+            {
+                error = "请在邮箱开通POP3/SMTP！";
+                Console.WriteLine("0.4请在邮箱开通POP3/SMTP！");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                error = "连接出现异常";
+                Console.WriteLine("0.5连接出现异常");
+                return false;
+            }
+            finally
+            {
+                client.Disconnect();
+            }
+            return true;
+        }
+        #endregion
+
+        #region
+        /// <summary>
+        /// 获取邮件数量
+        /// </summary>
+        /// <returns></returns>
+        public int GetEmailCount()
+        {
+            int messageCount = 0;
+            using (Pop3Client client = new Pop3Client())
+            {
+                if (client.Connected)
+                {
+                    client.Disconnect();
+                }
+                client.Connect(popServer, popPort, isUseSSL);
+                client.Authenticate(accout, pass, AuthenticationMethod.UsernameAndPassword);
+                messageCount = client.GetMessageCount();
+            }
+
+            return messageCount;
+        }
+        #endregion
+
+        #region 下载邮件附件
+        /// <summary>
+        /// 下载邮件附件
+        /// </summary>
+        /// <param name="path">下载路径</param>
+        /// <param name="messageId">邮件编号</param>
+        public bool DownAttachmentsById(string path, int messageId)
+        {
+            using (Pop3Client client = new Pop3Client())
+            {
+                try
+                {
+                    if (client.Connected)
+                    {
+                        client.Disconnect();
+                    }
+                    client.Connect(popServer, popPort, isUseSSL);
+                    client.Authenticate(accout, pass);
+                    Message message = client.GetMessage(messageId);
+                    string senders = message.Headers.From.DisplayName;
+                    string from = message.Headers.From.Address;
+                    string subject = message.Headers.Subject;
+                    DateTime Datesent = message.Headers.DateSent;
+
+
+                    List<MessagePart> messageParts = message.FindAllAttachments();
+
+                    if (messageParts.Count == 0) return false;
+
+                    foreach (var item in messageParts)
+                    {
+                        if (item.IsAttachment)
+                        {
+                            if (item.FileName.Contains(".zip"))
+                            {
+                                if (!Directory.Exists(path))
+                                {
+                                    Directory.CreateDirectory(path);
+                                }
+
+                                File.WriteAllBytes(System.IO.Path.Combine(path, item.FileName), item.Body);
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("获取附件出错：" + ex.Message);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        #endregion
+    }
+
+
+    public class ControlRequest
+    {
+        public long DeviceId { get; set; }
+        public string DeviceName { get; set; }
+        public int DeviceTypeId { get; set; }
+        public string GroupName { get; set; }
+        public string LinkMode { get; set; }  //TCP  or  RTU
+        public string RemoteHost { get; set; }
+        public int RemotePort { get; set; }
+        public byte ModbusAddress { get; set; }
+        public string CommandType { get; set; }
+        public string CommandParameter { get; set; }
+        public string SessionId { get; set; }
+        public DateTime RequestTime { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public bool UseMockData { get; set; }
+        public string MockData { get; set; }
+        public int? LinkId { get; set; }
+    }
+
+    public class ControlRequestDeHui : ControlRequest
+    {
+        public long StationId { set; get; }
+        public string StationName { set; get; }
     }
 }

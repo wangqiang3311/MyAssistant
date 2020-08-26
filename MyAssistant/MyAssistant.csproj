@@ -24,6 +24,12 @@
      </ItemGroup>
 
      <ItemGroup>
+       <Reference Include="OpenPop">
+         <HintPath>ref\OpenPop.dll</HintPath>
+       </Reference>
+     </ItemGroup>
+
+     <ItemGroup>
        <Compile Update="UpdateManage.xaml.cs">
          <SubType>Code</SubType>
        </Compile>
