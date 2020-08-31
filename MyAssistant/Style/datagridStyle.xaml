@@ -47,7 +47,8 @@ BorderThickness="{TemplateBinding BorderThickness}"
                 Margin="{TemplateBinding Padding}"
                 
                 Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content.Text}"
-                TextTrimming="CharacterEllipsis"
+                TextWrapping="Wrap"
+                                  
                 />
                          </Border>
                     </ControlTemplate>

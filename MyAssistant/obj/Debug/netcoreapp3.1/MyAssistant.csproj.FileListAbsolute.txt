@@ -116,3 +116,14 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\DHTable.xlsx
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Update\YCIOT.ModbusPoll.RtuOverTcp.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\OpenPop.dll
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csprojAssemblyReference.cache
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\ModbusTools.g.cs
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\HslCommunication.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.IO.Ports.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\linux-arm\native\System.IO.Ports.Native.so
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\linux-arm64\native\System.IO.Ports.Native.so
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\linux-x64\native\System.IO.Ports.Native.so
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\osx-x64\native\System.IO.Ports.Native.dylib
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\linux\lib\netstandard2.0\System.IO.Ports.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\osx\lib\netstandard2.0\System.IO.Ports.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.IO.Ports.dll
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\ModbusTools.baml

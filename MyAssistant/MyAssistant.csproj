@@ -8,6 +8,7 @@
 
      <ItemGroup>
           <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
+          <PackageReference Include="HslCommunication" Version="9.3.1" />
           <PackageReference Include="ServiceStack.MongoDB" Version="1.0.0" />
           <PackageReference Include="ServiceStack.OrmLite.Mysql" Version="5.9.0" />
           <PackageReference Include="System.Drawing.Common" Version="4.7.0" />

@@ -8,11 +8,23 @@
         Title="我的助理" Height="768" Width="1024" WindowState="Maximized">
 
      <Grid>
-          <ListBox>
-               <ListBoxItem x:Name="MyTask" MouseDoubleClick="MyTask_MouseDoubleClick">我的任务</ListBoxItem>
+        <ListBox>
+            <ListBox.Template>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <WrapPanel Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="True"/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ListBox.Template>
+
+            <ListBoxItem x:Name="MyTask" MouseDoubleClick="MyTask_MouseDoubleClick">我的任务</ListBoxItem>
                <ListBoxItem>知识库</ListBoxItem>
                <ListBoxItem x:Name="publishManage" MouseDoubleClick="publishManage_MouseDoubleClick">发布管理</ListBoxItem>
-          </ListBox>
+            <ListBoxItem x:Name="modbusPackage" MouseDoubleClick="modbusPackage_MouseDoubleClick">Modbus包解析</ListBoxItem>
+
+        </ListBox>
+         
+         
           
      </Grid>
 </Window>
