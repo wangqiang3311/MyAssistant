@@ -47,6 +47,10 @@ namespace MyAssistant
                 {
                     modbusPackage_MouseDoubleClick(null, null);
                 }
+                if(item.Name== "doTest")
+                {
+                    doTest_MouseDoubleClick(null, null);
+                }
             }
         }
 
@@ -67,6 +71,13 @@ namespace MyAssistant
         private void modbusPackage_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ModbusTools w = new ModbusTools();
+            w.Owner = this;
+            w.ShowDialog();
+        }
+
+        private void doTest_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TestTools w = new TestTools();
             w.Owner = this;
             w.ShowDialog();
         }

@@ -31,6 +31,9 @@
      </ItemGroup>
 
      <ItemGroup>
+       <Compile Update="TestTools.xaml.cs">
+         <SubType>Code</SubType>
+       </Compile>
        <Compile Update="UpdateManage.xaml.cs">
          <SubType>Code</SubType>
        </Compile>
@@ -50,6 +53,9 @@
          <SubType>Designer</SubType>
        </Page>
        <Page Update="Style\textboxStyle.xaml">
+         <SubType>Designer</SubType>
+       </Page>
+       <Page Update="TestTools.xaml">
          <SubType>Designer</SubType>
        </Page>
        <Page Update="UpdateManage.xaml">

@@ -1,0 +1,33 @@
+﻿<Window x:Class="MyAssistant.TestTools"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyAssistant"
+        mc:Ignorable="d"
+        xmlns:share="clr-namespace:MyAssistant"
+        Title="包发布管理" Height="600" Width="900" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <share:ColorConverter  x:Key="gridCellcvtColor"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+
+            <Button   Content="生成sql语句" x:Name="MakeSql"  Style="{StaticResource BtnInfoStyle}" Click="MakeSql_Click"/>
+
+            <Button   Content="发送邮件" x:Name="btnSendEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnSendEmail_Click"/>
+            <Button   Content="接收邮件" x:Name="btnReceiveEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnReceiveEmail_Click"/>
+
+            <Button   Content="写入redis" x:Name="btnWriteToRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnWriteToRedis_Click"/>
+            <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
+
+        </StackPanel>
+    </Grid>
+</Window>

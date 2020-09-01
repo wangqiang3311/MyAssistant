@@ -21,7 +21,7 @@
                <ListBoxItem>知识库</ListBoxItem>
                <ListBoxItem x:Name="publishManage" MouseDoubleClick="publishManage_MouseDoubleClick">发布管理</ListBoxItem>
             <ListBoxItem x:Name="modbusPackage" MouseDoubleClick="modbusPackage_MouseDoubleClick">Modbus包解析</ListBoxItem>
-
+            <ListBoxItem x:Name="doTest" MouseDoubleClick="doTest_MouseDoubleClick">Test</ListBoxItem>
         </ListBox>
          
          
