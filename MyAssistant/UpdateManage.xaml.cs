@@ -722,7 +722,7 @@ namespace MyAssistant
         {
             var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
-            string targetFolder = "Update";
+            string targetFolder = "Update/overtcp";
             string sourceFolder = System.IO.Path.Combine(executablePathRoot, targetFolder);
 
             var exeList = GetExeList(exeName);
@@ -779,7 +779,7 @@ namespace MyAssistant
                 item.IsEnable = true;
             }
 
-            string targetFolder = "Update";
+            string targetFolder = "Update/overtcp";
             string sourceFolder = System.IO.Path.Combine(executablePathRoot, targetFolder);
 
             if (!item.IsEnable) return;

@@ -23,8 +23,6 @@
             <Button   Content="生成sql语句" x:Name="MakeSql"  Style="{StaticResource BtnInfoStyle}" Click="MakeSql_Click"/>
 
             <Button   Content="发送邮件" x:Name="btnSendEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnSendEmail_Click"/>
-            <Button   Content="接收邮件" x:Name="btnReceiveEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnReceiveEmail_Click"/>
-
             <Button   Content="写入redis" x:Name="btnWriteToRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnWriteToRedis_Click"/>
             <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
 

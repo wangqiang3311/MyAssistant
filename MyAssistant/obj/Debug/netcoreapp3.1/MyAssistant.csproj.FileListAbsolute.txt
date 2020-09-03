@@ -127,3 +127,6 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\lib\ne
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\ModbusTools.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\TestTools.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\TestTools.baml
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csprojAssemblyReference.cache
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\ReceiveTools.g.cs
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\ReceiveTools.baml

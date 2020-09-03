@@ -55,7 +55,6 @@ namespace MyAssistant
 
             #region  创建消息通知
             ShowMessage("测试工具已启动");
-
             #endregion
         }
 
@@ -239,7 +238,7 @@ namespace MyAssistant
 
             OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.InitialDirectory = @"D:\";
+            ofd.InitialDirectory = @"D:\Desktop\publish";
             ofd.Filter = "(zip压缩文件)|*.z*";
             ofd.Multiselect = true;
 
@@ -291,6 +290,8 @@ namespace MyAssistant
         }
         private async Task<bool> Sendmail(string sfrom, string sfromer, string sto, string stoer, string sSubject, string sBody, string sfile, string sSMTPHost, string sSMTPuser, string sSMTPpass)
         {
+           await DeleteAllMessage();
+
             ////设置from和to地址
             MailAddress from = new MailAddress(sfrom, sfromer);
             MailAddress to = new MailAddress(sto, stoer);
@@ -339,61 +340,17 @@ namespace MyAssistant
 
         }
 
-        private void btnReceiveEmail_Click(object sender, RoutedEventArgs e)
+        private Task<bool> DeleteAllMessage()
         {
-            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            string targetFolder = "Update";
-            var targetPath = System.IO.Path.Combine(executablePathRoot, targetFolder);
-            DeleteDir(targetPath);
-            Task.Run(() =>
-            {
-                //每3秒，检查邮件
-                Thread.Sleep(1000);
-                string host = "pop.qq.com";
-                string user = "540887384@qq.com";
-                string pass = "vkyuhqrejvuobfji";   //qclhpkrldvdzbfib
-                int port = 995;
+            string host = "pop.qq.com";
+            string user = "540887384@qq.com";
+            string pass = "vkyuhqrejvuobfji";   //qclhpkrldvdzbfib
+            int port = 995;
 
-                //解压到Update文件夹下
-
-                //string root = @"D:\Desktop\download";
-
-                EmailHelper email = new EmailHelper(user, pass, host, port, true, null);
-                string error = "";
-                var isSuccess = email.ValidateAccount(ref error);
-
-                if (isSuccess)
-                {
-                    var count = email.GetEmailCount();
-
-                    if (count > 0)
-                    {
-                        var zipFilePath = "";
-                        for (int i = count; i >= 1; i--)
-                        {
-                            //收取附件
-                            var result = email.DownAttachmentsById(targetPath, i);
-
-                            if (result.Item1)
-                            {
-                                if (result.Item2 != "")
-                                {
-                                    zipFilePath = result.Item2;
-                                }
-                                if (zipFilePath != "" && i == 1)
-                                    //解压到同名目录下
-                                    UnPackage.Unzip(zipFilePath, targetPath);
-                                this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-                                {
-                                    ShowMessage($"收取文件成功,当前MessageId：{i}");
-                                });
-                            }
-                        }
-                    }
-                }
-
-            });
+            EmailHelper email = new EmailHelper(user, pass, host, port, true, null);
+            return email.DeleteAllMessage();
         }
+
         /// <summary>
         /// 写入redis
         /// </summary>
@@ -428,46 +385,6 @@ namespace MyAssistant
                     redisClient.AddItemToList(listId, item.ToJson().IndentJson());
                     break;
                 }
-            }
-        }
-        public static void DeleteDir(string file)
-        {
-            if (!Directory.Exists(file))
-            {
-                return;
-            }
-            try
-            {
-                //去除文件夹和子文件的只读属性
-                //去除文件夹的只读属性
-                System.IO.DirectoryInfo fileInfo = new DirectoryInfo(file);
-                fileInfo.Attributes = FileAttributes.Normal & FileAttributes.Directory;
-
-                //去除文件的只读属性
-                System.IO.File.SetAttributes(file, System.IO.FileAttributes.Normal);
-
-                if (Directory.Exists(file))
-                {
-                    foreach (string f in Directory.GetFileSystemEntries(file))
-                    {
-                        if (File.Exists(f))
-                        {
-                            File.Delete(f);
-                        }
-                        else
-                        {
-                            DeleteDir(f);
-                        }
-                    }
-
-                    //删除空文件夹
-                    Directory.Delete(file);
-                }
-
-            }
-            catch (Exception ex) // 异常处理
-            {
-                Console.WriteLine(ex.Message.ToString());// 异常信息
             }
         }
     }

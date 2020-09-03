@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyAssistant.Common
 {
@@ -74,7 +75,7 @@ namespace MyAssistant.Common
         }
         #endregion
 
-        #region
+        #region 获取邮件数量
         /// <summary>
         /// 获取邮件数量
         /// </summary>
@@ -96,6 +97,58 @@ namespace MyAssistant.Common
             return messageCount;
         }
         #endregion
+
+        public Message GetMessage(int number)
+        {
+           using (Pop3Client client = new Pop3Client())
+            {
+                if (client.Connected)
+                {
+                    client.Disconnect();
+                }
+                client.Connect(popServer, popPort, isUseSSL);
+                client.Authenticate(accout, pass, AuthenticationMethod.UsernameAndPassword);
+                return client.GetMessage(number);
+            }
+        }
+
+        public bool DeleteMessage(int number)
+        {
+            using (Pop3Client client = new Pop3Client())
+            {
+                if (client.Connected)
+                {
+                    client.Disconnect();
+                }
+                client.Connect(popServer, popPort, isUseSSL);
+                client.Authenticate(accout, pass, AuthenticationMethod.UsernameAndPassword);
+
+                var count=client.GetMessageCount();
+
+                client.DeleteMessage(number);
+
+                var afterCount = client.GetMessageCount();
+
+                return count == afterCount + 1;
+            }
+        }
+        public async Task<bool> DeleteAllMessage()
+        {
+            using (Pop3Client client = new Pop3Client())
+            {
+                if (client.Connected)
+                {
+                    client.Disconnect();
+                }
+                client.Connect(popServer, popPort, isUseSSL);
+                client.Authenticate(accout, pass, AuthenticationMethod.UsernameAndPassword);
+                client.DeleteAllMessages();
+                await Task.Delay(new Random().Next(500, 1000));
+                var count = client.GetMessageCount();
+                return count == 0;
+            }
+
+        }
 
         #region 下载邮件附件
         /// <summary>
@@ -162,6 +215,6 @@ namespace MyAssistant.Common
         }
         #endregion
 
-         }
+    }
 }
 

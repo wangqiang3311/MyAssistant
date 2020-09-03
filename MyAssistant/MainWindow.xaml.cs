@@ -51,6 +51,10 @@ namespace MyAssistant
                 {
                     doTest_MouseDoubleClick(null, null);
                 }
+                if(item.Name== "doReceive")
+                {
+                    doReceive_MouseDoubleClick(null, null);
+                }
             }
         }
 
@@ -78,6 +82,13 @@ namespace MyAssistant
         private void doTest_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TestTools w = new TestTools();
+            w.Owner = this;
+            w.ShowDialog();
+        }
+
+        private void doReceive_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ReceiveTools w = new  ReceiveTools();
             w.Owner = this;
             w.ShowDialog();
         }

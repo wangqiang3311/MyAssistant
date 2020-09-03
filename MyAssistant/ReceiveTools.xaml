@@ -1,0 +1,24 @@
+﻿<Window x:Class="MyAssistant.ReceiveTools"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyAssistant"
+        mc:Ignorable="d"
+        xmlns:share="clr-namespace:MyAssistant"
+        Title="包接收管理器" Height="600" Width="900" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <share:ColorConverter  x:Key="gridCellcvtColor"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+
+            <Button   Content="接收邮件" x:Name="btnReceiveEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnReceiveEmail_Click"/>
+
+        </StackPanel>
+    </Grid>
+</Window>
