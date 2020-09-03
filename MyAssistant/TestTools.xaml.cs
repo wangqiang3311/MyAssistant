@@ -1,4 +1,5 @@
-﻿using MyAssistant.Common;
+﻿using Microsoft.Win32;
+using MyAssistant.Common;
 using MyAssistant.ViewModel;
 using NLog.Fluent;
 using NPOI.HSSF.Record.PivotTable;
@@ -72,7 +73,7 @@ namespace MyAssistant
                 bar.CloseMessage(delay.Value);
         }
 
-     
+
         /// <summary>
         /// 根据Excel生成sql语句
         /// </summary>
@@ -227,7 +228,7 @@ namespace MyAssistant
                     return string.Empty;
             }
         }
-       
+
         private async void btnSendEmail_Click(object sender, RoutedEventArgs e)
         {
             string from = "540887384@qq.com";
@@ -235,12 +236,25 @@ namespace MyAssistant
             string to = "540887384@qq.com";
             string toer = "wbq";
             string Subject = "overtcp";
-            string root = @"D:\Desktop\publish";
+
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            ofd.InitialDirectory = @"D:\";
+            ofd.Filter = "(zip压缩文件)|*.z*";
+            ofd.Multiselect = true;
+
+            if (ofd.ShowDialog() == false)
+            {
+                MessageBox.Show("没有选择文件");
+                return;
+            }
+
+            string[] filePath = ofd.FileNames;
 
             List<string> files = new List<string>();
-            files.Add(System.IO.Path.Combine(root, "overtcp.zip"));
+            files.AddRange(filePath);
 
-            string Body = "ycbz";
+            string Body = "传送文件";
             string SMTPHost = "smtp.qq.com";
             string SMTPuser = "540887384@qq.com";
             string SMTPpass = "vkyuhqrejvuobfji";   //qclhpkrldvdzbfib
@@ -252,6 +266,7 @@ namespace MyAssistant
 
             int s = 0;
             int f = 0;
+
 
             foreach (var item in files)
             {
@@ -266,7 +281,7 @@ namespace MyAssistant
                 {
                     s++;
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(new Random().Next(3000));
             }
 
             if (flag)
@@ -326,16 +341,22 @@ namespace MyAssistant
 
         private void btnReceiveEmail_Click(object sender, RoutedEventArgs e)
         {
+            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            string targetFolder = "Update";
+            var targetPath = System.IO.Path.Combine(executablePathRoot, targetFolder);
+            DeleteDir(targetPath);
             Task.Run(() =>
             {
                 //每3秒，检查邮件
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
                 string host = "pop.qq.com";
                 string user = "540887384@qq.com";
                 string pass = "vkyuhqrejvuobfji";   //qclhpkrldvdzbfib
                 int port = 995;
 
-                string root = @"D:\Desktop\download";
+                //解压到Update文件夹下
+
+                //string root = @"D:\Desktop\download";
 
                 EmailHelper email = new EmailHelper(user, pass, host, port, true, null);
                 string error = "";
@@ -347,18 +368,25 @@ namespace MyAssistant
 
                     if (count > 0)
                     {
-                        for (int i = 1; i <= count; i++)
+                        var zipFilePath = "";
+                        for (int i = count; i >= 1; i--)
                         {
                             //收取附件
-                            var flag = email.DownAttachmentsById(root, i);
+                            var result = email.DownAttachmentsById(targetPath, i);
 
-                            if (flag)
+                            if (result.Item1)
                             {
+                                if (result.Item2 != "")
+                                {
+                                    zipFilePath = result.Item2;
+                                }
+                                if (zipFilePath != "" && i == 1)
+                                    //解压到同名目录下
+                                    UnPackage.Unzip(zipFilePath, targetPath);
                                 this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                                 {
                                     ShowMessage($"收取文件成功,当前MessageId：{i}");
                                 });
-                                break;
                             }
                         }
                     }
@@ -400,6 +428,46 @@ namespace MyAssistant
                     redisClient.AddItemToList(listId, item.ToJson().IndentJson());
                     break;
                 }
+            }
+        }
+        public static void DeleteDir(string file)
+        {
+            if (!Directory.Exists(file))
+            {
+                return;
+            }
+            try
+            {
+                //去除文件夹和子文件的只读属性
+                //去除文件夹的只读属性
+                System.IO.DirectoryInfo fileInfo = new DirectoryInfo(file);
+                fileInfo.Attributes = FileAttributes.Normal & FileAttributes.Directory;
+
+                //去除文件的只读属性
+                System.IO.File.SetAttributes(file, System.IO.FileAttributes.Normal);
+
+                if (Directory.Exists(file))
+                {
+                    foreach (string f in Directory.GetFileSystemEntries(file))
+                    {
+                        if (File.Exists(f))
+                        {
+                            File.Delete(f);
+                        }
+                        else
+                        {
+                            DeleteDir(f);
+                        }
+                    }
+
+                    //删除空文件夹
+                    Directory.Delete(file);
+                }
+
+            }
+            catch (Exception ex) // 异常处理
+            {
+                Console.WriteLine(ex.Message.ToString());// 异常信息
             }
         }
     }

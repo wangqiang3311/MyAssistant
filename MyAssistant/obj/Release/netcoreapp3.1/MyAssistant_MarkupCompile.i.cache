@@ -1,5 +1,5 @@
 ﻿MyAssistant
-
+1.0.0.0
 
 winexe
 C#
@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NETCOREAPP;NETCOREAPP3_1
 D:\项目集\MyAssistant\MyAssistant\App.xaml
-121447550644
+14-1059273553
 
-1718430394
-256873871034
-AddTask.xaml;MainWindow.xaml;MyTask.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\labelStyle.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;Style\textboxStyle.xaml;TaskBar.xaml;UpdateManage.xaml;
+25283200503
+264-2090768547
+AddTask.xaml;MainWindow.xaml;ModbusTools.xaml;MyTask.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\labelStyle.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;Style\textboxStyle.xaml;TaskBar.xaml;TestTools.xaml;UpdateManage.xaml;
 
 False
 

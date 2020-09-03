@@ -103,8 +103,9 @@ namespace MyAssistant.Common
         /// </summary>
         /// <param name="path">下载路径</param>
         /// <param name="messageId">邮件编号</param>
-        public bool DownAttachmentsById(string path, int messageId)
+        public (bool,string) DownAttachmentsById(string path, int messageId)
         {
+            var zipFilePath = "";
             using (Pop3Client client = new Pop3Client())
             {
                 try
@@ -124,28 +125,27 @@ namespace MyAssistant.Common
 
                     List<MessagePart> messageParts = message.FindAllAttachments();
 
-                    if (messageParts.Count == 0) return false;
+                    if (messageParts.Count == 0) return (false,zipFilePath);
+
 
                     foreach (var item in messageParts)
                     {
                         if (item.IsAttachment)
                         {
-                            if (item.FileName.Contains(".zip"))
+                            if (item.FileName.Contains(".z"))
                             {
                                 if (!Directory.Exists(path))
                                 {
                                     Directory.CreateDirectory(path);
                                 }
-
                                 var filePath = System.IO.Path.Combine(path, item.FileName);
 
                                 File.WriteAllBytes(filePath, item.Body);
 
-                                //解压到同名目录下
-
-                                UnPackage.Unzip(filePath, path);
-
-                                break;
+                                if (item.FileName.Contains(".zip"))
+                                {
+                                    zipFilePath = filePath;
+                                }
                             }
                         }
                     }
@@ -154,12 +154,14 @@ namespace MyAssistant.Common
                 catch (Exception ex)
                 {
                     Console.WriteLine("获取附件出错：" + ex.Message);
-                    return false;
+                    return (false,zipFilePath);
                 }
             }
 
-            return true;
+            return (true,zipFilePath);
         }
         #endregion
-    }
+
+         }
 }
+
