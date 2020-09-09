@@ -35,6 +35,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace MyAssistant
 {
@@ -228,7 +230,11 @@ namespace MyAssistant
             }
         }
 
-        private async void btnSendEmail_Click(object sender, RoutedEventArgs e)
+        private void btnSendEmail_Click(object sender, RoutedEventArgs e)
+        {
+            SendEmailAsync();    
+        }
+        private async void SendEmailAsync(params string[] fileList)
         {
             string from = "540887384@qq.com";
             string fromer = "wbq3311";
@@ -236,22 +242,30 @@ namespace MyAssistant
             string toer = "wbq";
             string Subject = "overtcp";
 
-            OpenFileDialog ofd = new OpenFileDialog();
-
-            ofd.InitialDirectory = @"D:\Desktop\publish";
-            ofd.Filter = "(zip压缩文件)|*.z*";
-            ofd.Multiselect = true;
-
-            if (ofd.ShowDialog() == false)
-            {
-                MessageBox.Show("没有选择文件");
-                return;
-            }
-
-            string[] filePath = ofd.FileNames;
-
             List<string> files = new List<string>();
-            files.AddRange(filePath);
+
+            if (fileList.Length == 0)
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+
+                ofd.InitialDirectory = @"D:\Desktop\publish";
+                ofd.Filter = "(zip压缩文件)|*.z*";
+                ofd.Multiselect = true;
+
+                if (ofd.ShowDialog() == false)
+                {
+                    MessageBox.Show("没有选择文件");
+                    return;
+                }
+
+                string[] filePath = ofd.FileNames;
+
+                files.AddRange(filePath);
+            }
+            else
+            {
+                files.AddRange(fileList);
+            }
 
             string Body = "传送文件";
             string SMTPHost = "smtp.qq.com";
@@ -286,8 +300,8 @@ namespace MyAssistant
             if (flag)
 
                 ShowMessage($"邮件发送完毕，共有{files.Count}个邮件,成功{s}个，失败{f}个");
-
         }
+
         private async Task<bool> Sendmail(string sfrom, string sfromer, string sto, string stoer, string sSubject, string sBody, string sfile, string sSMTPHost, string sSMTPuser, string sSMTPpass)
         {
            await DeleteAllMessage();
@@ -386,6 +400,37 @@ namespace MyAssistant
                     break;
                 }
             }
+        }
+
+        private void btnPackage_Click(object sender, RoutedEventArgs e)
+        {
+            Process proc = new Process();
+            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            proc.StartInfo.WorkingDirectory = executablePathRoot;
+            proc.StartInfo.FileName = "publish.bat";
+
+            var projectRoot=@"D:\project\jiupai\ModbusPoll\src\YCIOT.ModbusPoll.RtuOverTcp";
+
+            proc.StartInfo.Arguments = projectRoot; 
+            proc.Start();
+            proc.WaitForExit();
+
+            //读取发布位置
+            var filePath = System.IO.Path.Combine(projectRoot, "Properties", "PublishProfiles", "FolderProfile.pubxml");
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+
+            var nodes= doc.GetElementsByTagName("PublishDir");
+            
+            var publishDir = nodes[0].InnerText;
+
+            var dirName = System.IO.Path.GetDirectoryName(publishDir);
+            var folderName = System.IO.Path.GetFileName(publishDir);
+            var zipFilePath = System.IO.Path.Combine(dirName, folderName + ".zip");
+            //压缩文件
+            ZipPackage.Zip(publishDir, zipFilePath);
+            SendEmailAsync(zipFilePath);    
         }
     }
 }

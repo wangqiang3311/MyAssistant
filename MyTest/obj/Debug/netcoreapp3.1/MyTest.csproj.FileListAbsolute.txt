@@ -86,7 +86,6 @@ D:\项目集\MyAssistant\MyTest\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.Visual
 D:\项目集\MyAssistant\MyTest\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 D:\项目集\MyAssistant\MyTest\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 D:\项目集\MyAssistant\MyTest\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
-D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.csprojAssemblyReference.cache
 D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.AssemblyInfoInputs.cache
 D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.AssemblyInfo.cs
 D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.csproj.CopyComplete

@@ -46,6 +46,9 @@
        <None Update="DHTable.xlsx">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
+       <None Update="publish.bat">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
        <None Update="Update\YCIOT.ModbusPoll.RtuOverTcp.dll">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>

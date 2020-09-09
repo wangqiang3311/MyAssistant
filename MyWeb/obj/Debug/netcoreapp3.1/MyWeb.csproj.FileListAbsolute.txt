@@ -7,7 +7,6 @@ D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.runtimeconfig.json
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.runtimeconfig.dev.json
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.dll
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.pdb
-D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.csprojAssemblyReference.cache
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.csproj.CoreCompileInputs.cache
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.MvcApplicationPartsAssemblyInfo.cache
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.AssemblyInfoInputs.cache

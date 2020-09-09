@@ -713,6 +713,10 @@ namespace MyAssistant
                     return string.Empty;
             }
         }
+        public void UpdateAll()
+        {
+            batUpdateAll_Click(null, null);
+        }
         /// <summary>
         /// 全部文件更新
         /// </summary>

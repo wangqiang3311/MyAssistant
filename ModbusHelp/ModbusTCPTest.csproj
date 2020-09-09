@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+      <ProjectReference Include="..\YCIOT.ServiceModel\YCIOT.ServiceModel.csproj" />
+      <PackageReference Include="HslCommunication" Version="9.3.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.7" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.7" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.7" />
+      <PackageReference Include="ServiceStack.Core" Version="5.9.2" />
+      <PackageReference Include="ServiceStack.Client.Core" Version="5.9.2" />
+      <PackageReference Include="ServiceStack.Redis.Core" Version="5.9.2" />
+      <PackageReference Include="Servicestack.Logging.Nlog.Core" Version="5.9.2" />
+      <PackageReference Include="System.Runtime.Caching" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="SingleTest.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Vendor\WAGL\WM2000\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

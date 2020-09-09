@@ -82,6 +82,11 @@ namespace MyAssistant
             var targetPath = System.IO.Path.Combine(executablePathRoot, targetFolder);
             DeleteDir(targetPath);
 
+            var assembliesWithServices = new Assembly[1];
+            assembliesWithServices[0] = typeof(AppHost).Assembly;
+            var appHost = new AppHost("AppHost", assembliesWithServices);
+            var unzipToDir = appSettings.Get<string>("UnzipToDir");
+
             bool hasReceived = false;
 
             Task.Run(() =>
@@ -102,7 +107,6 @@ namespace MyAssistant
 
                     //解压到Update文件夹下
 
-                    //string root = @"D:\Desktop\download";
 
                     EmailHelper email = new EmailHelper(user, pass, host, port, true, null);
                     string error = "";
@@ -142,14 +146,21 @@ namespace MyAssistant
                                             var desPath = System.IO.Path.Combine(targetFolder, "release");
                                             var zipfileName = System.IO.Path.GetFileName(zipFilePath);
                                             var searchPattern = System.IO.Path.GetFileNameWithoutExtension(zipFilePath) + "*";
-                                            UnPackage.ZIPDecompress(sourceDir, desPath, zipfileName, searchPattern);
+                                            ZipPackage.ZIPDecompress(sourceDir, desPath, zipfileName, searchPattern);
 
                                             hasReceived = true;
                                         }
                                         else
                                         {
-                                            UnPackage.Unzip(zipFilePath, targetPath);
+                                            ZipPackage.Unzip(zipFilePath,System.IO.Path.Combine(targetPath,unzipToDir));
                                             hasReceived = true;
+
+                                            //auto copy
+                                            this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                                            {
+                                                UpdateManage w = new UpdateManage();
+                                                w.UpdateAll();
+                                            });
                                         }
                                     }
                                     this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()

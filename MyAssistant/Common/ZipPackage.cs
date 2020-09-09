@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MyAssistant.Common
 {
-    public class UnPackage
+    public class ZipPackage
     {
         public static string Unzip(string zipFile, string desFolder)
         {
@@ -37,6 +37,35 @@ namespace MyAssistant.Common
             }
             return result;
         }
+        public static string Zip(string sourceFolder,string zipFile)
+        {
+            string result = "";
+            try
+            {
+                //创建压缩包
+                if (!Directory.Exists(sourceFolder)) return result = "压缩文件夹不存在";
+
+                DirectoryInfo d = new DirectoryInfo(sourceFolder);
+                var files = d.GetFiles();
+                if (files.Length == 0)
+                {
+                    //找子目录
+                    var ds = d.GetDirectories();
+                    if (ds.Length > 0)
+                    {
+                        files = ds[0].GetFiles();
+                    }
+                }
+                if (files.Length == 0) return result = "待压缩文件为空";
+                System.IO.Compression.ZipFile.CreateFromDirectory(sourceFolder, zipFile);
+            }
+            catch (Exception ex)
+            {
+                result += "压缩出错：" + ex.Message;
+            }
+            return result;
+        }
+
         public static void ZIPDecompress(string sourceDir, string targetPath, string zipfileName, string searchPattern)
         {
             #region 判断参数
