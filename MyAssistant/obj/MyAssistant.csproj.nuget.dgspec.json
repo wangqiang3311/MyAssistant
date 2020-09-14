@@ -4,6 +4,80 @@
     "D:\\项目集\\MyAssistant\\MyAssistant\\MyAssistant.csproj": {}
   },
   "projects": {
+    "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj",
+        "projectName": "Acme.Common",
+        "projectPath": "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj",
+        "packagesPath": "C:\\Users\\jiupaidata\\.nuget\\packages\\",
+        "outputPath": "D:\\项目集\\MyAssistant\\Acme.Common\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\jiupaidata\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
+            "ServiceStack.Core": {
+              "target": "Package",
+              "version": "[5.9.2, )"
+            },
+            "ServiceStack.Redis.Core": {
+              "target": "Package",
+              "version": "[5.9.2, )"
+            },
+            "ServiceStack.Text.Core": {
+              "target": "Package",
+              "version": "[5.9.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "D:\\项目集\\MyAssistant\\MyAssistant\\MyAssistant.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -30,7 +104,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj": {
+                "projectPath": "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -42,6 +120,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Common.Logging": {
+              "target": "Package",
+              "version": "[3.4.1, )"
+            },
             "DotNetCore.NPOI": {
               "target": "Package",
               "version": "[1.2.2, )"
@@ -50,21 +132,37 @@
               "target": "Package",
               "version": "[9.3.1, )"
             },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.Extensions.Options.ConfigurationExtensions": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Quartz": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
             "ServiceStack": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.Client.Core": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.Core": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.Interfaces.Core": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.MongoDB": {
               "target": "Package",
@@ -72,27 +170,31 @@
             },
             "ServiceStack.OrmLite.Mysql": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.OrmLite.Sqlite": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.Redis.Core": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "ServiceStack.Server.Core": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "Servicestack.Logging.Nlog.Core": {
               "target": "Package",
-              "version": "[5.9.0, )"
+              "version": "[5.9.2, )"
             },
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[4.7.0, )"
+            },
+            "Templater": {
+              "target": "Package",
+              "version": "[4.6.0, )"
             }
           },
           "imports": [

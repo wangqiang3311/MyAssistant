@@ -15,6 +15,8 @@ namespace Acme.Common
         [ApiMember(Name = "ErrMsg", Description = "错误消息",
             ParameterType = "query", DataType = "string", IsRequired = true)]
         public string ErrMsg { get; set; }
+
+        public string FilePath { get; set; }
     }
 
     public class Report

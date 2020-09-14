@@ -8,8 +8,11 @@ using NPOI.SS.UserModel;
 using OpenPop.Mime;
 using OpenPop.Pop3;
 using OpenPop.Pop3.Exceptions;
+using Quartz;
+using Quartz.Impl;
 using ServiceStack;
 using ServiceStack.Configuration;
+using ServiceStack.Data;
 using ServiceStack.Host;
 using ServiceStack.Redis;
 using ServiceStack.Text;
@@ -45,11 +48,6 @@ namespace MyAssistant
     /// </summary>
     public partial class TestTools : Window
     {
-        public static IAppSettings appSettings = new AppSettings();
-        public static string yanchangRoot;
-        public static string ansenRoot;
-        public static string yanchangs;
-        public static string ansens;
 
         public TestTools()
         {
@@ -431,6 +429,58 @@ namespace MyAssistant
             //压缩文件
             ZipPackage.Zip(publishDir, zipFilePath);
             SendEmailAsync(zipFilePath);    
+        }
+
+        private async void btnStartJob_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Grab the Scheduler instance from the Factory 
+                IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+
+                // and start it off
+                await scheduler.Start();  
+
+                 IJobDetail job = JobBuilder.Create<HelloJob>()
+                    .WithIdentity("job1", "group1")
+                    .Build();
+
+                // Trigger the job to run now, and then repeat every 10 seconds
+                ITrigger trigger = TriggerBuilder.Create()
+                    .WithIdentity("trigger1", "group1")
+                    .StartNow()
+                    .WithSimpleSchedule(x => x
+                        .WithIntervalInSeconds(10)
+                        .RepeatForever())
+                    .Build();
+
+               await scheduler.ScheduleJob(job, trigger);
+                // some sleep to show what's happening
+                Thread.Sleep(TimeSpan.FromSeconds(3));
+
+                // and last shut down the scheduler when you are ready to close your program
+                await scheduler.Shutdown();
+            }
+            catch (SchedulerException se)
+            {
+                Console.WriteLine(se);
+            }
+        }
+    }
+
+     public class HelloJob : IJob
+    {
+        Task IJob.Execute(IJobExecutionContext context)
+        {
+            return Task.Run(() =>
+            {
+                //操作数据库
+
+                var connectionFactory = HostContext.TryResolve<IDbConnectionFactory>();
+                using var dbFac = connectionFactory.OpenDbConnection();
+
+                Console.WriteLine("Greetings from HelloJob!");
+            });
         }
     }
 }

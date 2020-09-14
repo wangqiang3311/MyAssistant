@@ -55,6 +55,10 @@ namespace MyAssistant
                 {
                     doReceive_MouseDoubleClick(null, null);
                 }
+                if(item.Name== "doExport")
+                {
+                    doExport_MouseDoubleClick(null, null);
+                }
             }
         }
 
@@ -89,6 +93,13 @@ namespace MyAssistant
         private void doReceive_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ReceiveTools w = new  ReceiveTools();
+            w.Owner = this;
+            w.ShowDialog();
+        }
+
+        private void doExport_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ExportTools w = new ExportTools();
             w.Owner = this;
             w.ShowDialog();
         }

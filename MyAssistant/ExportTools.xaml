@@ -1,4 +1,4 @@
-﻿<Window x:Class="MyAssistant.TestTools"
+﻿<Window x:Class="MyAssistant.ExportTools"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyAssistant"
         mc:Ignorable="d"
         xmlns:share="clr-namespace:MyAssistant"
-        Title="包发布管理" Height="600" Width="900" WindowStartupLocation="CenterOwner">
+        Title="导出" Height="600" Width="900" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <share:ColorConverter  x:Key="gridCellcvtColor"/>
     </Window.Resources>
@@ -20,11 +20,8 @@
 
         <StackPanel Orientation="Horizontal">
 
-            <Button   Content="生成sql语句" x:Name="MakeSql"  Style="{StaticResource BtnInfoStyle}" Click="MakeSql_Click"/>
-            <Button   Content="打包发布" x:Name="btnPackage"  Style="{StaticResource BtnInfoStyle}" Click="btnPackage_Click"/>
-            <Button   Content="发送邮件" x:Name="btnSendEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnSendEmail_Click"/>
-            <Button   Content="写入redis" x:Name="btnWriteToRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnWriteToRedis_Click"/>
-            <Button   Content="启动job" x:Name="btnStartJob"  Style="{StaticResource BtnInfoStyle}" Click="btnStartJob_Click"/>
+            <Button   Content="[T]导出" x:Name="btnTemplateExport"  Style="{StaticResource BtnInfoStyle}" Click="btnTemplateExport_Click"/>
+            <Button   Content="NPOI导出" x:Name="btnNPOIExport"  Style="{StaticResource BtnInfoStyle}" Click="btnNPOIExport_Click"/>
             <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
 
         </StackPanel>

@@ -7,21 +7,31 @@
      </PropertyGroup>
 
      <ItemGroup>
+          <PackageReference Include="Common.Logging" Version="3.4.1" />
           <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
           <PackageReference Include="HslCommunication" Version="9.3.1" />
+          <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+          <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+          <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.8" />
+          <PackageReference Include="Quartz" Version="3.1.0" />
           <PackageReference Include="ServiceStack.MongoDB" Version="1.0.0" />
-          <PackageReference Include="ServiceStack.OrmLite.Mysql" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.OrmLite.Mysql" Version="5.9.2" />
           <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
           
-          <PackageReference Include="ServiceStack.Core" Version="5.9.0" />
-          <PackageReference Include="ServiceStack.Client.Core" Version="5.9.0" />
-          <PackageReference Include="ServiceStack.Redis.Core" Version="5.9.0" />
-          <PackageReference Include="Servicestack.Logging.Nlog.Core" Version="5.9.0" />
+          <PackageReference Include="ServiceStack.Core" Version="5.9.2" />
+          <PackageReference Include="ServiceStack.Client.Core" Version="5.9.2" />
+          <PackageReference Include="ServiceStack.Redis.Core" Version="5.9.2" />
+          <PackageReference Include="Servicestack.Logging.Nlog.Core" Version="5.9.2" />
 
-          <PackageReference Include="ServiceStack" Version="5.9.0" />
-          <PackageReference Include="ServiceStack.Server.Core" Version="5.9.0" />
-          <PackageReference Include="ServiceStack.Interfaces.Core" Version="5.9.0" />
-          <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="5.9.0" />
+          <PackageReference Include="ServiceStack" Version="5.9.2" />
+          <PackageReference Include="ServiceStack.Server.Core" Version="5.9.2" />
+          <PackageReference Include="ServiceStack.Interfaces.Core" Version="5.9.2" />
+          <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="5.9.2" />
+          <PackageReference Include="Templater" Version="4.6.0" />
+     </ItemGroup>
+
+     <ItemGroup>
+       <ProjectReference Include="..\Acme.Common\Acme.Common.csproj" />
      </ItemGroup>
 
      <ItemGroup>
@@ -34,6 +44,9 @@
        <Compile Update="ReceiveTools.xaml.cs">
          <SubType>Code</SubType>
        </Compile>
+       <Compile Update="ExportTools.xaml.cs">
+         <SubType>Code</SubType>
+       </Compile>
        <Compile Update="TestTools.xaml.cs">
          <SubType>Code</SubType>
        </Compile>
@@ -43,6 +56,9 @@
      </ItemGroup>
 
      <ItemGroup>
+       <None Update="appsettings.json">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
        <None Update="DHTable.xlsx">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
@@ -62,6 +78,9 @@
          <SubType>Designer</SubType>
        </Page>
        <Page Update="ReceiveTools.xaml">
+         <SubType>Designer</SubType>
+       </Page>
+       <Page Update="ExportTools.xaml">
          <SubType>Designer</SubType>
        </Page>
        <Page Update="TestTools.xaml">

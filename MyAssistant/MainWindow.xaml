@@ -23,6 +23,7 @@
             <ListBoxItem x:Name="modbusPackage" MouseDoubleClick="modbusPackage_MouseDoubleClick">Modbus包解析</ListBoxItem>
             <ListBoxItem x:Name="doTest" MouseDoubleClick="doTest_MouseDoubleClick">包发送管理</ListBoxItem>
             <ListBoxItem x:Name="doReceive" MouseDoubleClick="doReceive_MouseDoubleClick">包接收管理</ListBoxItem>
+            <ListBoxItem x:Name="doExport" MouseDoubleClick="doExport_MouseDoubleClick">报表导出</ListBoxItem>
         </ListBox>
          
          

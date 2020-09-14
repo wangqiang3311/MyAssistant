@@ -94,3 +94,4 @@ D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.pdb
 D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.genruntimeconfig.cache
 D:\项目集\MyAssistant\MyTest\bin\Debug\netcoreapp3.1\ICSharpCode.SharpZipLib.dll
 D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.csproj.CoreCompileInputs.cache
+D:\项目集\MyAssistant\MyTest\obj\Debug\netcoreapp3.1\MyTest.csprojAssemblyReference.cache

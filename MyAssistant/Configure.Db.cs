@@ -30,15 +30,6 @@ namespace MyAssistant
 
             var dbFactory = new OrmLiteConnectionFactory(dbConnectionSys, GetConnectionProvider(dbTypeSys));
             services.AddSingleton<IDbConnectionFactory>(dbFactory);
-
-            var appDataDbConnectionsList = appSettings.GetList("AppDataDbConnections");
-            foreach (var appDataDbConnection in appDataDbConnectionsList)
-            {
-                var connectionName = appDataDbConnection.Replace(" ", "");
-                var dbType = appSettings.Get<string>(connectionName + ".DbType");
-                var dbConnection = appSettings.Get<string>(connectionName + ".DbConnection");
-                dbFactory.RegisterConnection(connectionName, dbConnection, GetConnectionProvider(dbType));
-            }
         }
 
         public void Configure(IAppHost appHost)

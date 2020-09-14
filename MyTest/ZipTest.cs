@@ -22,6 +22,30 @@ namespace MyTest
             var searchPattern = "ycbz*";
             ZIPDecompress(sourceDir, targetPath, zipfileName, searchPattern);
         }
+        [Test]
+        public void Test2()
+        {
+            var baseUrl = GetUrl("redis://clientid:ERe@3_rit!@112.126.101.120:6379?db=1");
+
+            Uri uri = new Uri("http://"+baseUrl);
+
+
+        }
+        private static string GetUrl(string client)
+        {
+            string redisPushclientUrl = "";
+            var linkString = client.Split('@');
+            if (linkString.Length == 3)
+            {
+                var clientip = linkString[2].Split('?');//10.30.2.77:6379?db=15
+                if (clientip.Length == 2)
+                {
+                    redisPushclientUrl = clientip[0];
+                }
+            }
+
+            return redisPushclientUrl;
+        }
 
         public static void ZIPDecompress(string sourceDir, string targetPath, string zipfileName, string searchPattern)
         {
