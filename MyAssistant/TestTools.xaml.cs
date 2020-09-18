@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using Acme.Common;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using MyAssistant.Common;
 using MyAssistant.ViewModel;
 using NLog.Fluent;
@@ -14,6 +16,7 @@ using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Data;
 using ServiceStack.Host;
+using ServiceStack.OrmLite;
 using ServiceStack.Redis;
 using ServiceStack.Text;
 using System;
@@ -48,7 +51,7 @@ namespace MyAssistant
     /// </summary>
     public partial class TestTools : Window
     {
-
+        private const string QueudId = "YCIOT";
         public TestTools()
         {
             InitializeComponent();
@@ -230,7 +233,7 @@ namespace MyAssistant
 
         private void btnSendEmail_Click(object sender, RoutedEventArgs e)
         {
-            SendEmailAsync();    
+            SendEmailAsync();
         }
         private async void SendEmailAsync(params string[] fileList)
         {
@@ -302,7 +305,7 @@ namespace MyAssistant
 
         private async Task<bool> Sendmail(string sfrom, string sfromer, string sto, string stoer, string sSubject, string sBody, string sfile, string sSMTPHost, string sSMTPuser, string sSMTPpass)
         {
-           await DeleteAllMessage();
+            await DeleteAllMessage();
 
             ////设置from和to地址
             MailAddress from = new MailAddress(sfrom, sfromer);
@@ -407,9 +410,9 @@ namespace MyAssistant
             proc.StartInfo.WorkingDirectory = executablePathRoot;
             proc.StartInfo.FileName = "publish.bat";
 
-            var projectRoot=@"D:\project\jiupai\ModbusPoll\src\YCIOT.ModbusPoll.RtuOverTcp";
+            var projectRoot = @"D:\project\jiupai\ModbusPoll\src\YCIOT.ModbusPoll.RtuOverTcp";
 
-            proc.StartInfo.Arguments = projectRoot; 
+            proc.StartInfo.Arguments = projectRoot;
             proc.Start();
             proc.WaitForExit();
 
@@ -419,8 +422,8 @@ namespace MyAssistant
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
 
-            var nodes= doc.GetElementsByTagName("PublishDir");
-            
+            var nodes = doc.GetElementsByTagName("PublishDir");
+
             var publishDir = nodes[0].InnerText;
 
             var dirName = System.IO.Path.GetDirectoryName(publishDir);
@@ -428,7 +431,7 @@ namespace MyAssistant
             var zipFilePath = System.IO.Path.Combine(dirName, folderName + ".zip");
             //压缩文件
             ZipPackage.Zip(publishDir, zipFilePath);
-            SendEmailAsync(zipFilePath);    
+            SendEmailAsync(zipFilePath);
         }
 
         private async void btnStartJob_Click(object sender, RoutedEventArgs e)
@@ -439,11 +442,11 @@ namespace MyAssistant
                 IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
                 // and start it off
-                await scheduler.Start();  
+                await scheduler.Start();
 
-                 IJobDetail job = JobBuilder.Create<HelloJob>()
-                    .WithIdentity("job1", "group1")
-                    .Build();
+                IJobDetail job = JobBuilder.Create<HelloJob>()
+                   .WithIdentity("job1", "group1")
+                   .Build();
 
                 // Trigger the job to run now, and then repeat every 10 seconds
                 ITrigger trigger = TriggerBuilder.Create()
@@ -454,7 +457,7 @@ namespace MyAssistant
                         .RepeatForever())
                     .Build();
 
-               await scheduler.ScheduleJob(job, trigger);
+                await scheduler.ScheduleJob(job, trigger);
                 // some sleep to show what's happening
                 Thread.Sleep(TimeSpan.FromSeconds(3));
 
@@ -466,17 +469,238 @@ namespace MyAssistant
                 Console.WriteLine(se);
             }
         }
+
+        private void btnCheckRedis_Click(object sender, RoutedEventArgs e)
+        {
+            var appSettings = new AppSettings();
+
+            var isHasRedis = true;
+            var redisclient = appSettings.GetString("Redis.WriterData");
+            var otherRedisClient = new RedisClient();
+
+            if (redisclient is null)
+                isHasRedis = false;
+            else
+                otherRedisClient = new RedisClient(redisclient);
+            var isPushData = false;
+            var YTGSRedisClient = new RedisClient();
+            var redisPushclient = appSettings.GetString("Redis.SyncPush");//redis://clientid:ERe@3_rit!@10.30.2.77:6379?db=15
+            if (redisPushclient is null)
+            {
+                isPushData = false;
+            }
+            else
+            {
+                isPushData = true;
+                YTGSRedisClient = new RedisClient(redisPushclient);
+            }
+
+            DateTime start = DateTime.Now;
+            int period = appSettings.Get<int>("RedisCheckPeriod", 30000);
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    DateTime end = DateTime.Now;
+
+                    if (end.Subtract(start).TotalMilliseconds >= period)
+                    {
+                        if (redisclient != null)
+                        {
+                            isHasRedis = IsOnline(redisclient);
+
+                            if (isHasRedis == false)
+                            {
+                                otherRedisClient?.Dispose();
+                                //重新实例化redis
+                                otherRedisClient = new RedisClient(redisclient);
+                                start = DateTime.Now;
+                                isHasRedis = IsOnline(redisclient);
+                                Console.WriteLine("重新实例化CaiYouRedisClient");
+                            }
+                            else
+                            {
+                                Console.WriteLine("CaiYouRedisClient:" + isHasRedis);
+                            }
+
+                        }
+                        if (redisPushclient != null)
+                        {
+                            isPushData = IsOnline(redisPushclient);
+                            if (isPushData == false)
+                            {
+                                YTGSRedisClient?.Dispose();
+                                //重新实例化redis
+                                YTGSRedisClient = new RedisClient(redisPushclient);
+                                start = DateTime.Now;
+                                Console.WriteLine("重新实例化YCGSRedisClient");
+                                isPushData = IsOnline(redisPushclient);
+                            }
+                            else
+                            {
+                                Console.WriteLine("YCGSRedisClient:" + isPushData);
+                            }
+                        }
+
+                    }
+
+                }
+            });
+        }
+
+        private static bool IsOnline(string baseUrl, int millisecondsTimeout = 2000)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(baseUrl)) return false;
+
+                var redisClientUrl = GetUrl(baseUrl);
+
+                var urlSegments = redisClientUrl.Split(':');
+                if (urlSegments.Length == 2)
+                {
+                    var isOnline = TcpClientConnector.IsOnline(urlSegments[0], int.Parse(urlSegments[1]), millisecondsTimeout);
+                    return isOnline;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static string GetUrl(string client)
+        {
+            string url = "";
+
+            if (string.IsNullOrEmpty(client)) return url;
+
+            var linkString = client.Split('@');
+            if (linkString.Length == 3)
+            {
+                var clientip = linkString[2].Split('?');//10.30.2.77:6379?db=15
+                if (clientip.Length == 2)
+                {
+                    url = clientip[0];
+                }
+            }
+
+            return url;
+        }
+
+        private void btnManualCheckRedis_Click(object sender, RoutedEventArgs e)
+        {
+            var appSettings = new AppSettings();
+
+            var isHasRedis = true;
+            var redisclient = appSettings.GetString("Redis.WriterData");
+            var otherRedisClient = new RedisClient();
+
+            if (redisclient is null)
+                isHasRedis = false;
+            else
+                otherRedisClient = new RedisClient(redisclient);
+            var isPushData = false;
+            var YTGSRedisClient = new RedisClient();
+            var redisPushclient = appSettings.GetString("Redis.SyncPush");//redis://clientid:ERe@3_rit!@10.30.2.77:6379?db=15
+            if (redisPushclient is null)
+            {
+                isPushData = false;
+            }
+            else
+            {
+                isPushData = true;
+                YTGSRedisClient = new RedisClient(redisPushclient);
+            }
+
+            var redisClientUrl = GetUrl(redisclient);
+            var redisPushclientUrl = GetUrl(redisPushclient);
+            if (isHasRedis)
+            {
+                isHasRedis = IsOnline(redisClientUrl);
+                Console.WriteLine("CaiYouRedisClient:" + isHasRedis);
+            }
+            if (isPushData)
+            {
+                isPushData = IsOnline(redisPushclientUrl);
+                Console.WriteLine("YCGSRedisClient:" + isPushData);
+            }
+        }
+
+        private void btnCheckUrl_Click(object sender, RoutedEventArgs e)
+        {
+            var url = this.txtUrl.Text;
+            var isOn = IsOnline(url);
+            MessageBox.Show($"{url} {isOn}");
+        }
+
+        private void btnReadRedis_Click(object sender, RoutedEventArgs e)
+        {
+            var appSettings = new AppSettings();
+            var redisCon = appSettings.GetString("TestRedis");
+            var groupName = appSettings.GetString("GroupName");
+
+            RedisClient redisClient = null;
+            try
+            {
+                redisClient = new RedisClient(redisCon);
+                var userRequestListId = $"{QueudId}:User:JobList:{groupName}";
+
+                var messageString = redisClient.RemoveStartFromList(userRequestListId);
+                Console.WriteLine("读取到UserJob:" + messageString.Dump());
+
+                var quartzRequestListId = $"{QueudId}:Quartz:JobList:" + groupName;
+                messageString = redisClient.RemoveStartFromList(quartzRequestListId);
+                Console.WriteLine("读取到QuartzJob:" + messageString.Dump());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("读取redis异常" + ex.Message + "\n" + ex.StackTrace);
+                redisClient = new RedisClient(redisCon);
+                Console.WriteLine("重新实例化redis");
+            }
+        }
+
+        private void btnGetOilData_Click(object sender, RoutedEventArgs e)
+        {
+            var connectionFactory = App.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+            using var dbFac = connectionFactory.OpenDbConnection();
+
+            var txtWellName = this.txtWell.Text;
+
+            var oilWell = dbFac.Single<IotOilWell>(w => w.WellName == txtWellName);
+
+            if (oilWell != null)
+            {
+                var wellId = oilWell.WellId;
+
+                var wells = dbFac.Select<IotOilWellDevice>(w => w.WellId == wellId);
+
+                foreach (var well in wells)
+                {
+                    if (well.NetworkNode != well.RemoteHost)
+                    {
+                        this.txtWell.Text = $"wellId: {wellId}\n WellName: {oilWell.WellName}\n GroupName: {well.GroupName} \n ModusAddress: {well.ModbusAddress}\n SlotId: {well.SlotId}";
+                        break;
+                    }
+                }
+            }
+        }
     }
 
-     public class HelloJob : IJob
+    public class HelloJob : IJob
     {
         Task IJob.Execute(IJobExecutionContext context)
         {
             return Task.Run(() =>
             {
                 //操作数据库
-
-                var connectionFactory = HostContext.TryResolve<IDbConnectionFactory>();
+                var connectionFactory = App.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
                 using var dbFac = connectionFactory.OpenDbConnection();
 
                 Console.WriteLine("Greetings from HelloJob!");

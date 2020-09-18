@@ -52,7 +52,8 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
                 var jo1 = (JObject)JsonConvert.DeserializeObject(par.CommandParameter);
 
-                indicatorDiagram.Displacement = Convert.ToDouble(jo1["0"].ToString());
+                if (jo1["0"] != null)
+                    indicatorDiagram.Displacement = Convert.ToDouble(jo1["0"].ToString());
 
                 ClientInfo.CurrentModbusPoolAddress = modbusAddress;
 

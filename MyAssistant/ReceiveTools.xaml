@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyAssistant"
         mc:Ignorable="d"
         xmlns:share="clr-namespace:MyAssistant"
-        Title="包接收管理器" Height="600" Width="900" WindowStartupLocation="CenterOwner">
+        Title="包接收管理器" Height="600" Width="900" WindowStartupLocation="CenterOwner" Closed="Window_Closed">
     <Window.Resources>
         <share:ColorConverter  x:Key="gridCellcvtColor"/>
     </Window.Resources>
@@ -17,8 +17,8 @@
 
         <StackPanel Orientation="Horizontal">
 
+            <Button   Content="自动部署" x:Name="btnAutoDep"  Style="{StaticResource BtnInfoStyle}" Click="btnAutoDep_Click"/>
             <Button   Content="接收邮件" x:Name="btnReceiveEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnReceiveEmail_Click"/>
-
         </StackPanel>
     </Grid>
 </Window>

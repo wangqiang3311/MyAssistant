@@ -121,7 +121,7 @@
           </Grid.ColumnDefinitions>
 
         <Label>CommandType：</Label>
-        <TextBox Grid.Column="1" x:Name="txtCommandType">Get_DEHUI_LLJ</TextBox>
+        <TextBox Grid.Column="1" x:Name="txtCommandType">Get_XAGL_WM3000DB_PowerMeter</TextBox>
 
         <Label Grid.Row="1">ModbusAddrss：</Label>
           <TextBox  Grid.Row="1" Grid.Column="1" x:Name="txtModbusAddress">51</TextBox>

@@ -68,7 +68,7 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                 }
                 else
                 {
-                    IsHostAlive = new TcpClientConnector().isOnline(host, null, 1000);
+                    IsHostAlive = TcpClientConnector.IsOnline(host, null, 1000);
                     if (IsHostAlive)
                     {
                         url = $"http://{host}{url}{Slot}";

@@ -55,8 +55,6 @@ namespace MyAssistant
 
             #region  创建消息通知
             ShowMessage("接收工具已启动");
-            //make sure auto receive
-            btnReceiveEmail_Click(null, null);
 
             #endregion
         }
@@ -155,12 +153,16 @@ namespace MyAssistant
                                             ZipPackage.Unzip(zipFilePath,System.IO.Path.Combine(targetPath,unzipToDir));
                                             hasReceived = true;
 
-                                            //auto copy
-                                            this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                                            if (isDeploy)
                                             {
-                                                UpdateManage w = new UpdateManage();
-                                                w.UpdateAll();
-                                            });
+                                                //auto copy
+                                                this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+                                                {
+                                                    UpdateManage w = new UpdateManage();
+                                                    w.UpdateAll();
+                                                });
+                                                isDeploy = false;
+                                            }
                                         }
                                     }
                                     this.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
@@ -214,6 +216,23 @@ namespace MyAssistant
             {
                 Console.WriteLine(ex.Message.ToString());// 异常信息
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            ConsoleManager.Toggle();
+        }
+
+        /// <summary>
+        /// 是否部署
+        /// </summary>
+        bool isDeploy = false;
+        private void btnAutoDep_Click(object sender, RoutedEventArgs e)
+        {
+            ConsoleManager.Toggle();
+
+            isDeploy = true;
+            btnReceiveEmail_Click(null, null);
         }
     }
 }

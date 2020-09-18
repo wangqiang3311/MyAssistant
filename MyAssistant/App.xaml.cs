@@ -26,35 +26,44 @@ namespace MyAssistant
     /// </summary>
     public partial class App : Application
     {
-        public IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             ConsoleManager.Toggle();
+            Init();
+        }
 
+        private void Init()
+        {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+              .SetBasePath(Directory.GetCurrentDirectory())
+              .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
 
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
 
-            //ServiceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            //var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            //mainWindow.Show();
+            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        public static IOrmLiteDialectProvider GetConnectionProvider(string dbType)
         {
-            Configure(services);
-
+            return dbType switch
+            {
+                "SqliteFileDb" => SqliteDialect.Provider,
+                "MySqlDb" => MySqlDialect.Provider,
+                _ => MySqlDialect.Provider
+            };
         }
-         private void Configure(IServiceCollection services)
+
+        public void ConfigureServices(IServiceCollection services)
         {
             var assembliesWithServices = new Assembly[1];
             assembliesWithServices[0] = typeof(AppHost).Assembly;
@@ -66,15 +75,7 @@ namespace MyAssistant
 
             var dbFactory = new OrmLiteConnectionFactory(dbConnectionSys, GetConnectionProvider(dbTypeSys));
             services.AddSingleton<IDbConnectionFactory>(dbFactory);
-        }
-        public static IOrmLiteDialectProvider GetConnectionProvider(string dbType)
-        {
-            return dbType switch
-            {
-                 "SqliteFileDb" => SqliteDialect.Provider,
-                 "MySqlDb" => MySqlDialect.Provider,
-                 _ => MySqlDialect.Provider
-            };
+            services.AddTransient(typeof(MainWindow));
         }
 
     }

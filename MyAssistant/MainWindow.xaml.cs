@@ -1,4 +1,5 @@
 ﻿using MyAssistant;
+using ServiceStack.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,13 @@ namespace MyAssistant
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+       private readonly IDbConnectionFactory _factory;
+        public MainWindow(IDbConnectionFactory factory)
         {
             InitializeComponent();
             MyAssistants.Patch();
+
+            _factory = factory;
 
             EventManager.RegisterClassHandler(typeof(ListBoxItem),
     ListBoxItem.MouseLeftButtonDownEvent,

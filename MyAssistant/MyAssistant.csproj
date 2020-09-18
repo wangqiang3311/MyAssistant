@@ -10,6 +10,7 @@
           <PackageReference Include="Common.Logging" Version="3.4.1" />
           <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
           <PackageReference Include="HslCommunication" Version="9.3.1" />
+          <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
           <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
           <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
           <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.8" />
@@ -56,6 +57,9 @@
      </ItemGroup>
 
      <ItemGroup>
+       <None Update="App.config">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
        <None Update="appsettings.json">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>

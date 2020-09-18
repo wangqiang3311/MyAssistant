@@ -45,10 +45,10 @@
 
 
           <StackPanel Grid.Row="2" Orientation="Horizontal">
-               <Button  Content="批量启动" x:Name="batStart"  Style="{StaticResource BtnInfoStyle}" Click="batStart_Click"/>
-               <Button  Content="批量停止" x:Name="batStop"  Style="{StaticResource BtnInfoStyle}" Click="batStop_Click"/>
+               <Button   Content="批量启动" x:Name="batStart"  Style="{StaticResource BtnInfoStyle}" Click="batStart_Click"/>
+               <Button   Content="批量停止" x:Name="batStop"  Style="{StaticResource BtnInfoStyle}" Click="batStop_Click"/>
                <Button   Content="批量更新主dll" x:Name="batUpdate"  Style="{StaticResource BtnInfoStyle}" Click="batUpdate_Click"/>
-            <Button   Content="批量更新全部文件" x:Name="batUpdateAll"  Style="{StaticResource BtnInfoStyle}" Click="batUpdateAll_Click"/>
+               <Button   Content="批量更新全部文件" x:Name="batUpdateAll"  Style="{StaticResource BtnInfoStyle}" Click="batUpdateAll_Click"/>
         </StackPanel>
      </Grid>
 </Window>

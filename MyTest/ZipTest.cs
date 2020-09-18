@@ -1,7 +1,10 @@
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MyTest
@@ -31,6 +34,20 @@ namespace MyTest
 
 
         }
+        [Test]
+        public void TestJson()
+        {
+            var parDic = new Dictionary<long, string>();
+
+            parDic.Add(0, "2.40");
+
+            var jo1 = (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(parDic));
+
+            var s= Convert.ToDouble(jo1["0"].ToString());
+
+        }
+
+
         private static string GetUrl(string client)
         {
             string redisPushclientUrl = "";

@@ -79,7 +79,7 @@ namespace Acme.Common
             }
         }
 
-        public bool isOnline(string hostname, int? port, int? millisecondsTimeout)
+        public static bool IsOnline(string hostname, int? port, int? millisecondsTimeout)
         {
             bool IsHostAlive = false;
             TcpClient tc = TcpClientConnector.Connect(hostname, port, millisecondsTimeout);//（采用线程池强行中断超时时间）
