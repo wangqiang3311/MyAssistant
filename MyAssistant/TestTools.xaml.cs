@@ -366,43 +366,6 @@ namespace MyAssistant
             return email.DeleteAllMessage();
         }
 
-        /// <summary>
-        /// 写入redis
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnWriteToRedis_Click(object sender, RoutedEventArgs e)
-        {
-
-            using var redisClient = new RedisClient("112.126.101.120", 6379, "ERe@3_rit!", 14);
-
-            string QueueId = "YCIOT";
-
-            var jobParameter = "[{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000003,\"DeviceName\":\"1-3井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":51,\"DeviceTypeId\":1,\"CommandParameter\":{\"13\":1005024,\"14\":1000523,\"17\":1005125,\"16\":1005206}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000013,\"DeviceName\":\"1-9井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":52,\"DeviceTypeId\":1,\"CommandParameter\":{\"110\":1004920,\"112\":1004922,\"113\":1004923,\"116\":1004998}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000004,\"DeviceName\":\"1-51井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":54,\"DeviceTypeId\":1,\"CommandParameter\":{\"151\":1005106,\"152\":1005107,\"153\":1005108,\"158\":1005113}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000006,\"DeviceName\":\"1-68井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":55,\"DeviceTypeId\":1,\"CommandParameter\":{\"170\":1005123,\"171\":1005126,\"172\":1005127}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000009,\"DeviceName\":\"1-74井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":56,\"DeviceTypeId\":1,\"CommandParameter\":{\"175\":1005129,\"177\":1005131,\"179\":1005133,\"173\":1005205}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9000011,\"DeviceName\":\"1-80井场\",\"StationId\":12101010009000,\"StationName\":\"1-27工作站\",\"ModbusAddress\":57,\"DeviceTypeId\":1,\"CommandParameter\":{\"183\":1005207,\"182\":1005212,\"180\":1005213,\"184\":1005214,\"185\":1005215,\"187\":1005216}},{\"JobName\":\"读取油井计量\",\"GroupName\":\"SLS-01\",\"DeviceId\":9002018,\"DeviceName\":\"吴46-37井场\",\"StationId\":12101010009002,\"StationName\":\"46-37工作站\",\"ModbusAddress\":61,\"DeviceTypeId\":1,\"CommandParameter\":{\"4642\":1007553,\"4640\":1007555,\"4637\":1007557,\"4639\":1007663}}]";
-            var controlRequests = jobParameter.FromJson<List<ControlRequestDeHui>>();
-
-            foreach (var item in controlRequests)
-            {
-                if (item.ModbusAddress == 51)
-                {
-                    item.RequestTime = DateTime.Now;
-                    item.CommandType = $"Get_DEHUI_LLJ";
-                    item.LinkMode = "RTU";
-
-                    item.UserId = "1";
-                    item.UserName = "wbq";
-
-                    item.RemoteHost = "192.168.207.216";
-                    item.RemotePort = 502;
-
-                    var listId = $"{QueueId}:User:JobList:" + item.GroupName;
-
-                    redisClient.AddItemToList(listId, item.ToJson().IndentJson());
-                    break;
-                }
-            }
-        }
-
         private void btnPackage_Click(object sender, RoutedEventArgs e)
         {
             Process proc = new Process();
@@ -576,20 +539,19 @@ namespace MyAssistant
 
         private static string GetUrl(string client)
         {
-            string url = "";
+            string url = client;
 
             if (string.IsNullOrEmpty(client)) return url;
 
             var linkString = client.Split('@');
-            if (linkString.Length == 3)
+            if (linkString.Length > 1)
             {
-                var clientip = linkString[2].Split('?');//10.30.2.77:6379?db=15
+                var clientip = linkString.Last().Split('?');//10.30.2.77:6379?db=15
                 if (clientip.Length == 2)
                 {
                     url = clientip[0];
                 }
             }
-
             return url;
         }
 
@@ -617,17 +579,14 @@ namespace MyAssistant
                 isPushData = true;
                 YTGSRedisClient = new RedisClient(redisPushclient);
             }
-
-            var redisClientUrl = GetUrl(redisclient);
-            var redisPushclientUrl = GetUrl(redisPushclient);
             if (isHasRedis)
             {
-                isHasRedis = IsOnline(redisClientUrl);
+                isHasRedis = IsOnline(redisclient);
                 Console.WriteLine("CaiYouRedisClient:" + isHasRedis);
             }
             if (isPushData)
             {
-                isPushData = IsOnline(redisPushclientUrl);
+                isPushData = IsOnline(redisPushclient);
                 Console.WriteLine("YCGSRedisClient:" + isPushData);
             }
         }
@@ -690,6 +649,19 @@ namespace MyAssistant
                     }
                 }
             }
+        }
+
+        private void btnWriteToReids_Click(object sender, RoutedEventArgs e)
+        {
+            var appSettings = new AppSettings();
+            var redisCon = appSettings.GetString("TestRedis");
+
+            using var redisClient = new RedisClient(redisCon);
+
+            var json = this.txtJson.Text;
+            var listId = this.txtListId.Text;
+
+            redisClient.AddItemToList(listId, json.IndentJson());
         }
     }
 

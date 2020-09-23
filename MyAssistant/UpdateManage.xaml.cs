@@ -1,4 +1,5 @@
-﻿using MyAssistant.ViewModel;
+﻿using MyAssistant.Common;
+using MyAssistant.ViewModel;
 using NLog.Fluent;
 using NPOI.HSSF.Record.PivotTable;
 using NPOI.SS.Formula.Eval;
@@ -97,7 +98,7 @@ namespace MyAssistant
                     TypeId = 2
                 });
             }
-
+            ConsoleManager.Hide();
         }
 
         private void ShowMessage(string message, int? delay = 5)
@@ -124,7 +125,10 @@ namespace MyAssistant
             var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
             string targetDll = $"{exeName}.dll";
-            string sourceDllPath = System.IO.Path.Combine(executablePathRoot, targetDll);
+
+            string targetFolder = "Update/overtcp";
+
+            string sourceDllPath = System.IO.Path.Combine(executablePathRoot, targetFolder, targetDll);
 
             var exeList = GetExeList(exeName);
             try
@@ -276,6 +280,7 @@ namespace MyAssistant
             //获取当前运行目录下的所有文件，更新到指定地方
             try
             {
+                bool hasBak = false;
                 foreach (var item in projectlist)
                 {
                     var root = GetTargetRoot(item);
@@ -284,6 +289,15 @@ namespace MyAssistant
 
                     if (Directory.Exists(targetDir))
                     {
+                        if (hasBak == false)
+                        {
+                            var bakDir = System.IO.Path.Combine(root, "bak", $"{item.Name}_bak_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
+                            //备份
+                            FileOper.CopyDir(targetDir, bakDir);
+
+                            hasBak = true;
+                        }
+
                         var files = Directory.GetFiles(sourceDir);
 
                         foreach (var sourceFile in files)
@@ -316,6 +330,10 @@ namespace MyAssistant
 
                 if (Directory.Exists(targetDir))
                 {
+                    var bakDir = System.IO.Path.Combine(root, "bak", $"{item.Name}_bak_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
+                    //备份
+                    FileOper.CopyDir(targetDir, bakDir);
+
                     var files = Directory.GetFiles(sourceDir);
 
                     foreach (var sourceFile in files)
@@ -450,8 +468,8 @@ namespace MyAssistant
             {
                 try
                 {
-                    //获取当前运行的进程数量
-                    var count = GetProcessCount(procName, targetPath);
+            //获取当前运行的进程数量
+            var count = GetProcessCount(procName, targetPath);
 
                     KillProcess(procName, targetPath);
 
@@ -585,7 +603,10 @@ namespace MyAssistant
             var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
             string targetDll = $"{exeName}.dll";
-            string sourceDllPath = System.IO.Path.Combine(executablePathRoot, targetDll);
+
+            string targetFolder = "Update/overtcp";
+
+            string sourceDllPath = System.IO.Path.Combine(executablePathRoot, targetFolder, targetDll);
 
             var item = ItemProject.SelectedItem as ProjectViewModel;
             var root = GetTargetRoot(item);
@@ -609,8 +630,8 @@ namespace MyAssistant
                         if (t.Result)
                         {
                             NotifyStop(item);
-                            //执行核心工作
-                            return Excute(sourceDllPath, targetDll, item);
+                    //执行核心工作
+                    return Excute(sourceDllPath, targetDll, item);
                         }
                         else
                         {
@@ -740,8 +761,8 @@ namespace MyAssistant
                     if (t.Result)
                     {
                         NotifyStop();
-                        //执行核心工作
-                        return ExcuteBat(sourceFolder);
+                //执行核心工作
+                return ExcuteBat(sourceFolder);
                     }
                     else
                     {
@@ -797,8 +818,8 @@ namespace MyAssistant
                     if (t.Result)
                     {
                         NotifyStop();
-                        //执行核心工作
-                        return ExcuteBat(sourceFolder, item);
+                //执行核心工作
+                return ExcuteBat(sourceFolder, item);
                     }
                     else
                     {
@@ -826,5 +847,9 @@ namespace MyAssistant
             }
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            ConsoleManager.Toggle();
+        }
     }
 }

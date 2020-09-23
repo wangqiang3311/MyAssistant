@@ -23,7 +23,6 @@
             <Button   Content="生成sql语句" x:Name="MakeSql"  Style="{StaticResource BtnInfoStyle}" Click="MakeSql_Click"/>
             <Button   Content="打包发布" x:Name="btnPackage"  Style="{StaticResource BtnInfoStyle}" Click="btnPackage_Click"/>
             <Button   Content="发送邮件" x:Name="btnSendEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnSendEmail_Click"/>
-            <Button   Content="写入redis" x:Name="btnWriteToRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnWriteToRedis_Click"/>
             <Button   Content="读取Redis" x:Name="btnReadRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnReadRedis_Click"/>
             <Button   Content="自动检查redis" x:Name="btnCheckRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnCheckRedis_Click"/>
             <Button   Content="手动检查redis" x:Name="btnManualCheckRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnManualCheckRedis_Click"/>
@@ -84,6 +83,58 @@
             </TextBox>
 
             <Button  Content="获取油井数据" x:Name="btnGetOilData"  Style="{StaticResource BtnInfoStyle}" Click="btnGetOilData_Click"/>
+
+            <TextBox x:Name="txtJson" TextWrapping="Wrap">
+
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock FontStyle="Italic" FontSize="11" Text="result Json"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
+            </TextBox>
+
+            <TextBox x:Name="txtListId" TextWrapping="Wrap">
+
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock FontStyle="Italic" FontSize="11" Text="ListId"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
+            </TextBox>
+
+
+            <Button  Content="写入redis" x:Name="btnWriteToReids"  Style="{StaticResource BtnInfoStyle}" Click="btnWriteToReids_Click"/>
+
 
         </StackPanel>
     </Grid>

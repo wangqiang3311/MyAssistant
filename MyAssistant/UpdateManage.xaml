@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyAssistant"
         mc:Ignorable="d"
         xmlns:share="clr-namespace:MyAssistant"
-        Title="包发布管理" Height="600" Width="900" WindowStartupLocation="CenterOwner">
+        Title="包发布管理" Height="600" Width="900" WindowStartupLocation="CenterOwner" Closed="Window_Closed">
      <Window.Resources>
           <share:ColorConverter  x:Key="gridCellcvtColor"/>
      </Window.Resources>
