@@ -89,11 +89,9 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Client
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Common.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Interfaces.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Logging.NLog.dll
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.MongoDB.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.OrmLite.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.OrmLite.MySql.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.OrmLite.Sqlite.dll
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.QueryableDataSource.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Redis.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Server.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Text.dll
@@ -104,7 +102,6 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.Data.SQLite.
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.IO.Ports.dll
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.Linq.Dynamic.Core.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.Private.ServiceModel.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.ServiceModel.Primitives.dll
@@ -188,3 +185,8 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\System.IO.Pipelines
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win-x64\nativeassets\netcoreapp2.2\aspnetcorev2_inprocess.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win-x86\nativeassets\netcoreapp2.2\aspnetcorev2_inprocess.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\App.config
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MongoDB.Libmongocrypt.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\SharpCompress.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\libzstd.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy32.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll

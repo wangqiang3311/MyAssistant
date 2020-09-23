@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NLog;
 using ServiceStack;
 using ServiceStack.Configuration;
@@ -75,6 +76,15 @@ namespace MyAssistant
 
             var dbFactory = new OrmLiteConnectionFactory(dbConnectionSys, GetConnectionProvider(dbTypeSys));
             services.AddSingleton<IDbConnectionFactory>(dbFactory);
+
+
+            services.Configure<BookstoreDatabaseSettings>(
+            Configuration.GetSection(nameof(BookstoreDatabaseSettings)));
+
+            services.AddSingleton<IBookstoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<BookstoreDatabaseSettings>>().Value);
+
+
             services.AddTransient(typeof(MainWindow));
         }
 

@@ -1,6 +1,7 @@
 ﻿using Acme.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
+using MongoDB.Driver;
 using MyAssistant.Common;
 using MyAssistant.ViewModel;
 using NLog.Fluent;
@@ -674,6 +675,12 @@ namespace MyAssistant
                 //操作数据库
                 var connectionFactory = App.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
                 using var dbFac = connectionFactory.OpenDbConnection();
+
+                var settings = App.ServiceProvider.GetRequiredService<IBookstoreDatabaseSettings>();
+                 var client = new MongoClient(settings.ConnectionString);
+                var database = client.GetDatabase(settings.DatabaseName);
+
+                var books = database.GetCollection<Book>(settings.BooksCollectionName);
 
                 Console.WriteLine("Greetings from HelloJob!");
             });
