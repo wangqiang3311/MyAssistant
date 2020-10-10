@@ -16,37 +16,6 @@
           "lib/netstandard2.0/BouncyCastle.Crypto.dll": {}
         }
       },
-      "Common.Logging/3.4.1": {
-        "type": "package",
-        "dependencies": {
-          "Common.Logging.Core": "3.4.1",
-          "Microsoft.CSharp": "4.0.1",
-          "System.Collections": "4.0.11",
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Globalization": "4.0.11",
-          "System.Reflection.TypeExtensions": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Threading": "4.0.11"
-        },
-        "compile": {
-          "lib/netstandard1.3/Common.Logging.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/Common.Logging.dll": {}
-        }
-      },
-      "Common.Logging.Core/3.4.1": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.CSharp": "4.0.1"
-        },
-        "compile": {
-          "lib/netstandard1.0/Common.Logging.Core.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.0/Common.Logging.Core.dll": {}
-        }
-      },
       "DnsClient/1.3.1": {
         "type": "package",
         "compile": {
@@ -1300,13 +1269,38 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
-      "NLog/4.7.0": {
+      "NLog/4.7.5": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/NLog.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/NLog.dll": {}
+        }
+      },
+      "NLog.Config/4.7.5": {
+        "type": "package",
+        "dependencies": {
+          "NLog": "4.7.5",
+          "NLog.Schema": "4.7.5"
+        },
+        "contentFiles": {
+          "contentFiles/any/any/NLog.config": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "NLog.config"
+          }
+        }
+      },
+      "NLog.Schema/4.7.5": {
+        "type": "package",
+        "contentFiles": {
+          "contentFiles/any/any/_._": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
         }
       },
       "Quartz/3.1.0": {
@@ -1719,20 +1713,6 @@
         },
         "runtime": {
           "lib/netstandard2.0/ServiceStack.Interfaces.dll": {}
-        }
-      },
-      "ServiceStack.Logging.NLog.Core/5.9.2": {
-        "type": "package",
-        "dependencies": {
-          "NLog": "4.7.0",
-          "ServiceStack.Interfaces.Core": "5.9.2",
-          "ServiceStack.Text.Core": "5.9.2"
-        },
-        "compile": {
-          "lib/netstandard2.0/ServiceStack.Logging.NLog.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/ServiceStack.Logging.NLog.dll": {}
         }
       },
       "ServiceStack.OrmLite/5.9.2": {
@@ -3909,46 +3889,6 @@
         "lib/xamarinios/BouncyCastle.Crypto.xml"
       ]
     },
-    "Common.Logging/3.4.1": {
-      "sha512": "5eZ/vgEOqzLg4PypZqnJ+wMhhgHyckicbZY4iDxqQ4FtOz0CpdYZ0xQ78aszMzeAJZiLLb5VdR9tPfunVQLz6g==",
-      "type": "package",
-      "path": "common.logging/3.4.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "common.logging.3.4.1.nupkg.sha512",
-        "common.logging.nuspec",
-        "lib/net35/Common.Logging.dll",
-        "lib/net35/Common.Logging.pdb",
-        "lib/net35/Common.Logging.xml",
-        "lib/net40/Common.Logging.dll",
-        "lib/net40/Common.Logging.pdb",
-        "lib/net40/Common.Logging.xml",
-        "lib/netstandard1.3/Common.Logging.dll",
-        "lib/netstandard1.3/Common.Logging.pdb",
-        "lib/netstandard1.3/Common.Logging.xml"
-      ]
-    },
-    "Common.Logging.Core/3.4.1": {
-      "sha512": "wLHldZHvxsSD6Ahonfj00/SkfHfKqO+YT6jsUwVm8Rch1REL9IArHAcSLXxYxYfu5/4ydGtmXvOtaH3AkVPu0A==",
-      "type": "package",
-      "path": "common.logging.core/3.4.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "common.logging.core.3.4.1.nupkg.sha512",
-        "common.logging.core.nuspec",
-        "lib/net40/Common.Logging.Core.XML",
-        "lib/net40/Common.Logging.Core.dll",
-        "lib/net40/Common.Logging.Core.pdb",
-        "lib/netstandard1.0/Common.Logging.Core.dll",
-        "lib/netstandard1.0/Common.Logging.Core.pdb",
-        "lib/netstandard1.0/Common.Logging.Core.xml",
-        "lib/portable-win+net40+sl40+wp7+wpa81/Common.Logging.Core.XML",
-        "lib/portable-win+net40+sl40+wp7+wpa81/Common.Logging.Core.dll",
-        "lib/portable-win+net40+sl40+wp7+wpa81/Common.Logging.Core.pdb"
-      ]
-    },
     "DnsClient/1.3.1": {
       "sha512": "b9XczgqSjs3dd+OlV799jn+LXxdfirln1q36GKjs3QwWBhjhgIvgHLEG5s2VrBLcP4ogQjtA0PZ5+AmRJ35Vhg==",
       "type": "package",
@@ -5449,10 +5389,10 @@
         "packageIcon.png"
       ]
     },
-    "NLog/4.7.0": {
-      "sha512": "ch4piF/ifV6ZapFx5Vj8MGaiCZkztHwTMFghJJSOkA/LeWcNdvqW8VzRw7ZMvS8anUmsH81FV334Vay6+ja4Kg==",
+    "NLog/4.7.5": {
+      "sha512": "1Udzim+UwoAGk0vW6T2rEBXJq1COvqTuE+4NFj2zHytuX1WOu+1Yes1qABG1IJOA5V3OMilIufUU1Ha9T0rrzQ==",
       "type": "package",
-      "path": "nlog/4.7.0",
+      "path": "nlog/4.7.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5478,8 +5418,36 @@
         "lib/wp8/NLog.xml",
         "lib/xamarinios10/NLog.dll",
         "lib/xamarinios10/NLog.xml",
-        "nlog.4.7.0.nupkg.sha512",
+        "nlog.4.7.5.nupkg.sha512",
         "nlog.nuspec"
+      ]
+    },
+    "NLog.Config/4.7.5": {
+      "sha512": "rUW2e2X0q5PDDlxVa/ooH8jdA9ubL89dNW+Z8HPdR6qvWAPgLIpQvIeRSJC/yicuI/fSX+xZy9EzNZZAlTVgwA==",
+      "type": "package",
+      "path": "nlog.config/4.7.5",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/NLog.config",
+        "contentFiles/any/any/NLog.config",
+        "nlog.config.4.7.5.nupkg.sha512",
+        "nlog.config.nuspec",
+        "tools/Install.ps1"
+      ]
+    },
+    "NLog.Schema/4.7.5": {
+      "sha512": "UgzboQ9sJyonVd8XXqQ3Zzea4IPz5k7nNv6qdU73HpJ43fHIkveWPmIMtZWKS8YJrMxlGso2Sk/oE6r/ZyiOXg==",
+      "type": "package",
+      "path": "nlog.schema/4.7.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/NLog.xsd",
+        "contentFiles/any/any/NLog.xsd",
+        "nlog.schema.4.7.5.nupkg.sha512",
+        "nlog.schema.nuspec"
       ]
     },
     "Quartz/3.1.0": {
@@ -5924,19 +5892,6 @@
         "lib/netstandard2.0/ServiceStack.Interfaces.xml",
         "servicestack.interfaces.core.5.9.2.nupkg.sha512",
         "servicestack.interfaces.core.nuspec"
-      ]
-    },
-    "ServiceStack.Logging.NLog.Core/5.9.2": {
-      "sha512": "oacqJnbPwVuF9HnXs3O55tJMvsu+Fj037XxcQ7jon50G24dXo97oBmMWn2i9bDJThpzmXsqBtAfK9lJl3oiaLg==",
-      "type": "package",
-      "path": "servicestack.logging.nlog.core/5.9.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/ServiceStack.Logging.NLog.dll",
-        "lib/netstandard2.0/ServiceStack.Logging.NLog.xml",
-        "servicestack.logging.nlog.core.5.9.2.nupkg.sha512",
-        "servicestack.logging.nlog.core.nuspec"
       ]
     },
     "ServiceStack.OrmLite/5.9.2": {
@@ -11456,7 +11411,6 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Acme.Common >= 1.0.0",
-      "Common.Logging >= 3.4.1",
       "DotNetCore.NPOI >= 1.2.2",
       "HslCommunication >= 9.3.1",
       "Microsoft.AspNetCore >= 2.2.0",
@@ -11465,6 +11419,8 @@
       "Microsoft.Extensions.Options >= 3.1.8",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 3.1.8",
       "MongoDB.Driver >= 2.11.2",
+      "NLog >= 4.7.5",
+      "NLog.Config >= 4.7.5",
       "Quartz >= 3.1.0",
       "ServiceStack >= 5.9.2",
       "ServiceStack.Client.Core >= 5.9.2",
@@ -11474,7 +11430,6 @@
       "ServiceStack.OrmLite.Sqlite >= 5.9.2",
       "ServiceStack.Redis.Core >= 5.9.2",
       "ServiceStack.Server.Core >= 5.9.2",
-      "Servicestack.Logging.Nlog.Core >= 5.9.2",
       "System.Drawing.Common >= 4.7.0",
       "Templater >= 4.6.0"
     ]
@@ -11526,10 +11481,6 @@
     "frameworks": {
       "netcoreapp3.1": {
         "dependencies": {
-          "Common.Logging": {
-            "target": "Package",
-            "version": "[3.4.1, )"
-          },
           "DotNetCore.NPOI": {
             "target": "Package",
             "version": "[1.2.2, )"
@@ -11561,6 +11512,14 @@
           "MongoDB.Driver": {
             "target": "Package",
             "version": "[2.11.2, )"
+          },
+          "NLog": {
+            "target": "Package",
+            "version": "[4.7.5, )"
+          },
+          "NLog.Config": {
+            "target": "Package",
+            "version": "[4.7.5, )"
           },
           "Quartz": {
             "target": "Package",
@@ -11595,10 +11554,6 @@
             "version": "[5.9.2, )"
           },
           "ServiceStack.Server.Core": {
-            "target": "Package",
-            "version": "[5.9.2, )"
-          },
-          "Servicestack.Logging.Nlog.Core": {
             "target": "Package",
             "version": "[5.9.2, )"
           },

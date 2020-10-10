@@ -88,7 +88,6 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Client.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Common.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Interfaces.dll
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.Logging.NLog.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.OrmLite.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.OrmLite.MySql.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\ServiceStack.OrmLite.Sqlite.dll
@@ -154,10 +153,7 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.dll
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.pdb
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.genruntimeconfig.cache
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Common.Logging.dll
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Common.Logging.Core.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.ConfigurationExtensions.dll
-D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.CoreCompileInputs.cache
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\appsettings.json
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.Abstractions.dll
@@ -190,3 +186,8 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\SharpCompress.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\libzstd.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy32.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NLog.config
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Log\waterLog.txt
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\UnPackWater.g.cs
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\UnPackWater.baml
+D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.CoreCompileInputs.cache

@@ -73,4 +73,23 @@ namespace MyAssistant
 
         public bool Mock { set; get; }    //是否在读取失败时采用模拟数据
     }
+
+
+    //油井设备种类信息（某厂商 某型号设备表）
+    [Alias("IOT_Device_Type")]
+    public class IotDeviceType
+    {
+        [Index]
+        [AutoIncrement]
+        public int Id { set; get; }
+        public string Name { set; get; }//设备名字（无线功图）
+        [Index]
+        public int DeviceClass { set; get; }//设备类型 （水表、功图）
+        [Index]
+        public string DeviceModel { set; get; }//设备型号（PMC3000）
+        [Index]
+        public string Firmware { set; get; }   //设备固件版本（1.0）
+        [Index]
+        public string Vendor { set; get; }    //设备制造商（西安贵隆数字化工程科技有限公司）
+    }
 }

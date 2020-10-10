@@ -1,0 +1,144 @@
+﻿<Window x:Class="MyAssistant.UnPackWater"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyAssistant"
+        mc:Ignorable="d"
+        xmlns:share="clr-namespace:MyAssistant"
+        Title="解水井包"  WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <share:ColorConverter  x:Key="gridCellcvtColor"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="450"></RowDefinition>
+            <RowDefinition></RowDefinition>
+
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+
+            <Button  Content="解国仪包" x:Name="btnUnpackGuoYi"  Style="{StaticResource BtnInfoStyle}" Click="btnUnpackGuoYi_Click"/>
+            <Button  Content="解精华包" x:Name="btnUnpackJingHua"  Style="{StaticResource BtnInfoStyle}" Click="btnUnpackJingHua_Click"/>
+            <Button  Content="自动解国仪包" x:Name="btnUnpackGuoYiAuto"  Style="{StaticResource BtnInfoStyle}" Click="btnUnpackGuoYiAuto_Click"/>
+            <Button  Content="解安森包" x:Name="btnUnpackAnSen"  Style="{StaticResource BtnInfoStyle}" Click="btnUnpackAnSen_Click"/>
+            <Button   Content="启动解析job" x:Name="btnStartJob"  Style="{StaticResource BtnInfoStyle}" Click="btnStartJob_Click"/>
+            <Button   Content="日志分析" x:Name="btnLogAnalysis"  Style="{StaticResource BtnInfoStyle}" Click="btnLogAnalysis_Click"/>
+
+            <TextBox x:Name="txtDateTime" TextWrapping="Wrap" Width="160" Height="60">
+
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock FontStyle="Italic" FontSize="11" Text="datetime"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
+                </TextBox>
+
+            <TextBox x:Name="txtLinkId" TextWrapping="Wrap" Width="100" Height="60">
+
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock FontStyle="Italic" FontSize="11" Text="linkId"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
+            </TextBox>
+
+            <Button   Content="Display Filter" x:Name="btnFilter"  Style="{StaticResource BtnInfoStyle}" Click="btnFilter_Click"/>
+
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+
+            <TextBox x:Name="txtSelectedDateTime" TextWrapping="Wrap" Text="{Binding Path=SelectedItem.DateCreateStr,ElementName=lbxPackage}"/>
+
+            <TextBox x:Name="txtUnpackageForWater" TextWrapping="Wrap" Text="{Binding Path=SelectedItem.To,ElementName=lbxPackage}">
+
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock FontStyle="Italic" FontSize="11" Text="package"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
+            </TextBox>
+
+            <ListBox x:Name="lbxPackage" Height="400">
+                <ListBox.Template>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <WrapPanel Orientation="Vertical" IsItemsHost="True" ScrollViewer.CanContentScroll="True"/>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ListBox.Template>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0,0,0,1"  BorderBrush="#FFB4A1A1" >
+                            <Grid Name="grid1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock  Text="{Binding DateCreateStr}" VerticalAlignment="Center" />
+                                <TextBlock  Grid.Row="1" Text="{Binding Description}" VerticalAlignment="Center" />
+                                <TextBlock  Grid.Row="2"  Text="{Binding From}" VerticalAlignment="Center" />
+                                <TextBlock  Grid.Row="3"  Text="{Binding To}" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+
+
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+        </StackPanel>
+        <RichTextBox x:Name="txtResult" Grid.Row="2"></RichTextBox>
+    </Grid>
+</Window>

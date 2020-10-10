@@ -66,6 +66,9 @@
     <Page Update="ExportTools.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UnPackWater.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="TestTools.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -6,15 +6,15 @@
         xmlns:local="clr-namespace:MyAssistant"
         mc:Ignorable="d"
         xmlns:share="clr-namespace:MyAssistant"
-        Title="包发布管理" Height="600" Width="900" WindowStartupLocation="CenterOwner">
+        Title="包发布管理"  WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <share:ColorConverter  x:Key="gridCellcvtColor"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
 
         </Grid.RowDefinitions>
 
@@ -27,7 +27,7 @@
             <Button   Content="自动检查redis" x:Name="btnCheckRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnCheckRedis_Click"/>
             <Button   Content="手动检查redis" x:Name="btnManualCheckRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnManualCheckRedis_Click"/>
             <Button   Content="启动job" x:Name="btnStartJob"  Style="{StaticResource BtnInfoStyle}" Click="btnStartJob_Click"/>
-            <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
+           
         </StackPanel>
         <StackPanel Grid.Row="1">
 
@@ -132,10 +132,37 @@
 
             </TextBox>
 
-
             <Button  Content="写入redis" x:Name="btnWriteToReids"  Style="{StaticResource BtnInfoStyle}" Click="btnWriteToReids_Click"/>
+
+            <TextBox x:Name="txtUnpackageForWater" TextWrapping="Wrap">
+
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock FontStyle="Italic" FontSize="11" Text="package"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
+            </TextBox>
+
+            <Button  Content="解包（国仪）" x:Name="btnUnpack"  Style="{StaticResource BtnInfoStyle}" Click="btnUnpack_Click"/>
+
 
 
         </StackPanel>
+        <RichTextBox x:Name="txtResult" Grid.Row="2"></RichTextBox>
     </Grid>
 </Window>

@@ -1,9 +1,11 @@
 ﻿using Acme.Common;
+using HslCommunication.ModBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using MongoDB.Driver;
 using MyAssistant.Common;
 using MyAssistant.ViewModel;
+using NLog;
 using NLog.Fluent;
 using NPOI.HSSF.Record.PivotTable;
 using NPOI.SS.Formula.Eval;
@@ -31,6 +33,7 @@ using System.Net.Mail;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -53,11 +56,14 @@ namespace MyAssistant
     public partial class TestTools : Window
     {
         private const string QueudId = "YCIOT";
+
+        public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public TestTools()
         {
             InitializeComponent();
 
             #region  创建消息通知
+            Logger.Info("测试工具已启动");
             ShowMessage("测试工具已启动");
             #endregion
         }
@@ -631,9 +637,17 @@ namespace MyAssistant
             var connectionFactory = App.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
             using var dbFac = connectionFactory.OpenDbConnection();
 
-            var txtWellName = this.txtWell.Text;
+            var txtWell = this.txtWell.Text;
 
-            var oilWell = dbFac.Single<IotOilWell>(w => w.WellName == txtWellName);
+            IotOilWell oilWell = null;
+            if (Regex.IsMatch(txtWell, @"^\d+$"))
+            {
+                oilWell = dbFac.Single<IotOilWell>(w => w.WellId == long.Parse(txtWell));
+            }
+            else
+            {
+                oilWell = dbFac.Single<IotOilWell>(w => w.WellName == txtWell);
+            }
 
             if (oilWell != null)
             {
@@ -641,14 +655,42 @@ namespace MyAssistant
 
                 var wells = dbFac.Select<IotOilWellDevice>(w => w.WellId == wellId);
 
+                var deviceTypes = dbFac.Select<IotDeviceType>();
+
+
+                List<string> results = new List<string>();
                 foreach (var well in wells)
                 {
-                    if (well.NetworkNode != well.RemoteHost)
+                    var deviceType = deviceTypes.SingleOrDefault(d => d.Id == well.DeviceTypeId);
+
+                    var o = new
                     {
-                        this.txtWell.Text = $"wellId: {wellId}\n WellName: {oilWell.WellName}\n GroupName: {well.GroupName} \n ModusAddress: {well.ModbusAddress}\n SlotId: {well.SlotId}";
-                        break;
-                    }
+                        wellId,
+                        oilWell.WellName,
+                        well.GroupName,
+                        well.ModbusAddress,
+                        well.SlotId,
+                        well.LinkId,
+                        well.RemoteHost,
+                        deviceType.Name,
+                        well.NetworkNode
+                    };
+                    results.Add(o.ToJson().IndentJson());
                 }
+                WriteToResult(results);
+            }
+        }
+
+        private void WriteToResult(List<string> contents)
+        {
+            txtResult.Document.Blocks.Clear();
+
+            foreach (var item in contents)
+            {
+                Paragraph p = new Paragraph();
+                Run r = new Run(item);
+                p.Inlines.Add(r);
+                txtResult.Document.Blocks.Add(p);
             }
         }
 
@@ -664,6 +706,177 @@ namespace MyAssistant
 
             redisClient.AddItemToList(listId, json.IndentJson());
         }
+
+        private void btnUnpack_Click(object sender, RoutedEventArgs e)
+        {
+            GuoYi(this.txtUnpackageForWater.Text);
+        }
+
+        public void GuoYi(string hex)
+        {
+            var s = HexStringToBytes(hex);
+            var  results=GuoYiWaterInject(s);
+
+            WriteToResult(results);
+        }
+
+        public List<string> GuoYiWaterInject(byte[] data)
+        {
+            List<string> results = new List<string>();
+            var client = new ModbusRtuOverTcp();
+
+            var value8 = client.ByteTransform.TransUInt16(data, 8);
+            var value6 = client.ByteTransform.TransUInt16(data, 6);
+
+            var cumulativeFlow = (value6 << 16 | value8) / 100.0;
+            results.Add($"表头累计：{cumulativeFlow}");
+
+            var value = client.ByteTransform.TransInt16(data, 2);
+            var settedFlow = value / 100.0; //设定流量回读
+
+            results.Add($"流量回读：{settedFlow}");
+
+
+            value = client.ByteTransform.TransInt16(data, 14);
+            var tubePressure = value / 100.0;//管压
+
+            results.Add($"管压：{tubePressure}");
+            value = client.ByteTransform.TransInt16(data, 4);
+            var instantaneousFlow = value / 100.0; //瞬时流量
+
+            results.Add($"瞬时流量：{instantaneousFlow}");
+
+
+            value = client.ByteTransform.TransInt16(data, 0);
+            var valveStatus = (value >> 4) & 0x01; //阀门状态
+            var valveMode = (value >> 1) & 0x01; //阀门工作模式
+
+            return results;
+        }
+
+
+        public byte[] HexStringToBytes(string hexString)
+        {
+            string[] array = hexString.Split(' ');
+
+            List<byte> bytes = new List<byte>();
+
+            string[] hex = { "A", "B", "C", "D", "E", "F" };
+
+            foreach (var item in array)
+            {
+                if (item.StartsWith("0"))
+                {
+                    var newValue = item.TrimStart('0');
+
+                    if (hex.Contains(newValue))
+                    {
+                        switch (newValue)
+                        {
+                            case "A":
+                                newValue = "10";
+                                break;
+                            case "B":
+                                newValue = "11";
+                                break;
+                            case "C":
+                                newValue = "12";
+                                break;
+                            case "D":
+                                newValue = "13";
+                                break;
+                            case "E":
+                                newValue = "14";
+                                break;
+                            case "F":
+                                newValue = "15";
+                                break;
+                        }
+                        bytes.Add(byte.Parse(newValue));
+                    }
+                    else
+                    {
+                        if (newValue == "") newValue = "0";
+                        var value1 = byte.Parse(newValue);
+
+                        if (value1 < 9)
+                        {
+                            bytes.Add(value1);
+                        }
+                    }
+                }
+                else
+                {
+                    var chars = item.ToCharArray();
+
+                    var first = chars[0].ToString();
+
+                    if (hex.Contains(first))
+                    {
+                        switch (first)
+                        {
+                            case "A":
+                                first = "10";
+                                break;
+                            case "B":
+                                first = "11";
+                                break;
+                            case "C":
+                                first = "12";
+                                break;
+                            case "D":
+                                first = "13";
+                                break;
+                            case "E":
+                                first = "14";
+                                break;
+                            case "F":
+                                first = "15";
+                                break;
+                        }
+                    }
+
+
+                    var second = chars[1].ToString();
+
+                    if (hex.Contains(second))
+                    {
+                        switch (second)
+                        {
+                            case "A":
+                                second = "10";
+                                break;
+                            case "B":
+                                second = "11";
+                                break;
+                            case "C":
+                                second = "12";
+                                break;
+                            case "D":
+                                second = "13";
+                                break;
+                            case "E":
+                                second = "14";
+                                break;
+                            case "F":
+                                second = "15";
+                                break;
+                        }
+                    }
+
+                    var high = byte.Parse(first);
+                    var low = byte.Parse(second);
+
+                    var value1 = high << 4 | low;
+                    bytes.Add((byte)value1);
+                }
+            }
+
+            return bytes.ToArray();
+        }
+
+
+
     }
 
     public class HelloJob : IJob
@@ -677,7 +890,7 @@ namespace MyAssistant
                 using var dbFac = connectionFactory.OpenDbConnection();
 
                 var settings = App.ServiceProvider.GetRequiredService<IBookstoreDatabaseSettings>();
-                 var client = new MongoClient(settings.ConnectionString);
+                var client = new MongoClient(settings.ConnectionString);
                 var database = client.GetDatabase(settings.DatabaseName);
 
                 var books = database.GetCollection<Book>(settings.BooksCollectionName);

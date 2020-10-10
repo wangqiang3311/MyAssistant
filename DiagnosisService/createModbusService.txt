@@ -1,0 +1,1 @@
+sc.exe create ModbusService binPath= "D:\项目集\MyAssistant\DiagnosisService\bin\Release\netcoreapp3.1\publish\DiagnosisService.exe"

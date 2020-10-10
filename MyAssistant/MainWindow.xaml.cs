@@ -59,7 +59,11 @@ namespace MyAssistant
                 {
                     doReceive_MouseDoubleClick(null, null);
                 }
-                if(item.Name== "doExport")
+                if(item.Name== "waterUnPackage")
+                {
+                    waterUnPackage_MouseDoubleClick(null, null);
+                }
+                if (item.Name == "doExport")
                 {
                     doExport_MouseDoubleClick(null, null);
                 }
@@ -104,6 +108,13 @@ namespace MyAssistant
         private void doExport_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ExportTools w = new ExportTools();
+            w.Owner = this;
+            w.ShowDialog();
+        }
+
+        private void waterUnPackage_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            UnPackWater w = new UnPackWater();
             w.Owner = this;
             w.ShowDialog();
         }

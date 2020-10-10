@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 D:\项目集\MyAssistant\MyAssistant\App.xaml
-16-804753342
+17-1572275408
 
-32-722664037
-299-439976594
-AddTask.xaml;ExportTools.xaml;MainWindow.xaml;ModbusTools.xaml;MyTask.xaml;ReceiveTools.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\labelStyle.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;Style\textboxStyle.xaml;TaskBar.xaml;TestTools.xaml;UpdateManage.xaml;
+34796459479
+296-1170203803
+AddTask.xaml;ExportTools.xaml;MainWindow.xaml;ModbusTools.xaml;MyTask.xaml;ReceiveTools.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\labelStyle.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;Style\textboxStyle.xaml;TaskBar.xaml;TestTools.xaml;UnPackWater.xaml;UpdateManage.xaml;
 
-False
+True
 
