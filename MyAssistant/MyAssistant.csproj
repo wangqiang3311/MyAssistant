@@ -70,9 +70,6 @@
        <None Update="DHTable.xlsx">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
-       <None Update="Log\waterLog.txt">
-         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-       </None>
        <None Update="NLog.config">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>

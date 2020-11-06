@@ -14,7 +14,8 @@ using ServiceStack.Redis;
 using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 /// <summary>
 /// 电流图
@@ -148,7 +149,8 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
                          var value = client.ByteTransform.TransInt16(read.Content, j * 2);
                          if (value != 0)
                          {
-                              var L = value * 0.1;
+                              //变比0.001，没有按协议文档，按实际的情况定
+                              var L = value * 0.001;
                               currentDiagram.C.Add(Math.Round(L, 2));
                          }
                          else

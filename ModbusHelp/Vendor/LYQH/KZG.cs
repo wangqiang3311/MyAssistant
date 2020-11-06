@@ -11,7 +11,7 @@ using ServiceStack.Redis;
 using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.LYQH

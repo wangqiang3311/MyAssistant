@@ -14,7 +14,8 @@ using ServiceStack.Redis;
 using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 namespace YCIOT.ModbusPoll.Vendor.LLJ
 {
@@ -29,7 +30,7 @@ namespace YCIOT.ModbusPoll.Vendor.LLJ
             var par = messageString.FromJson<ControlRequestDeHui>();
             try
             {
-                var lLJ = new OilwellDHMeasure()
+                var lLJ = new IotDataOilwellDHMeasure()
                 {
                     AlarmCode = 0,
                     AlarmMsg = "正常"
@@ -43,7 +44,7 @@ namespace YCIOT.ModbusPoll.Vendor.LLJ
                 var modbusAddress = par.ModbusAddress;
                 lLJ.DeviceTypeId = par.DeviceTypeId;
                 lLJ.Mock = false;
-
+                ClientInfo.LinkId = par.LinkId;
                 ClientInfo.CurrentModbusPoolAddress = modbusAddress;
 
                 lLJ.DateTime = DateTime.Now;
@@ -398,7 +399,9 @@ namespace YCIOT.ModbusPoll.Vendor.LLJ
         }
 
 
-        public static async Task<bool> ReadCoil(int modbusAddress, ushort startAddress, ModbusRtuOverTcp client, Action<bool> ReadSuccess, RedisClient redisClient, ControlRequest par, OilwellDHMeasure lLJ, LogIotModbusPoll logIotModbusPoll, string message)
+        public static async Task<bool> ReadCoil(int modbusAddress, ushort startAddress, ModbusRtuOverTcp client
+            , Action<bool> ReadSuccess, RedisClient redisClient, ControlRequest par
+            , IotDataOilwellDHMeasure lLJ, LogIotModbusPoll logIotModbusPoll, string message)
         {
             $"{message}开始:                ---------------".Info();
 

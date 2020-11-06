@@ -16,7 +16,9 @@ using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
 using YCIOT.ModbusPoll.Vendor.WAGL;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilOmeter;
+using YCIOT.ServiceModel.OilWell;
 
 /// <summary>
 /// 液位罐计量
@@ -33,7 +35,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
 
             try
             {
-                var tankmeasure = new IotDataOilWellTankmeasure()
+                var tankmeasure = new IotDataOilOmeter()
                 {
                     AlarmCode = 0,
                     AlarmMsg = "正常"
@@ -46,20 +48,28 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
                 ClientInfo.CurrentModbusPoolAddress = modbusAddress;
 
                 tankmeasure.DateTime = DateTime.Now;
-                tankmeasure.TankId = par.DeviceId;
+                tankmeasure.OilOmeterId = par.DeviceId;
 
                 tankmeasure.DeviceTypeId = par.DeviceTypeId;
                 tankmeasure.Mock = false;
 
-                var failed = await SetIndicatorDiagram(redisClient, client, modbusAddress, tankmeasure, logIotModbusPoll, par);
+                //从罐Id中获取大罐编号(0-3),此编号是协议中定的
+                var gId = int.Parse(par.DeviceId.ToString().Last().ToString());
+
+                var jo1 = (JObject)JsonConvert.DeserializeObject(par.CommandParameter);
+                var slotId = Convert.ToInt32(jo1["1"].ToString());
+
+                var startAddress = (ushort)(slotId * 0x600 + gId * 16);
+
+                var isSuccess = await SetGJL(redisClient, client, modbusAddress, startAddress, tankmeasure, logIotModbusPoll, par);
 
                 tankmeasure.NetworkNode = ClientInfo.ManyIpAddress;
 
                 //用于将读取的结果写入Redis队列 
-                if (!failed || par.UseMockData)
+                if (isSuccess || par.UseMockData)
                 {
                     tankmeasure.Mock = par.UseMockData;
-                    redisClient.AddItemToList("YCIOT:IOT_Data_OilWell_Tankmeasure", tankmeasure.ToJson().IndentJson());
+                    redisClient.AddItemToList("YCIOT:IOT_Data_WellField_Tankmeasure", tankmeasure.ToJson().IndentJson());
                     redisClient.Set($"Group:OilWell:{par.DeviceName}-{par.DeviceId}:Tankmeasure", tankmeasure);
                     redisClient.Set($"Single:OilWell:Tankmeasure:{par.DeviceName}-{par.DeviceId}", tankmeasure);
                 }
@@ -67,7 +77,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
                 //用于通过ServerEvent给调用着返回消息
                 if (!par.UserName.IsNullOrEmpty())
                 {
-                    ServerEventHelper.SendSseMessage(par.UserName, par.SessionId, failed ? -2 : 0, tankmeasure.ToJson().IndentJson());
+                    ServerEventHelper.SendSseMessage(par.UserName, par.SessionId, isSuccess ? 0 : -2, tankmeasure.ToJson().IndentJson());
                 }
             }
             catch (Exception ex)
@@ -83,7 +93,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
             }
         }
 
-        public static async Task<bool> GetGJL(ModbusRtuOverTcp client, int modbusAddress, IotDataOilWellTankmeasure tankmeasure, ushort startAddress, ushort regCount, int tryReadTimes)
+        public static async Task<bool> GetGJL(ModbusRtuOverTcp client, int modbusAddress, IotDataOilOmeter tankmeasure, ushort startAddress, ushort regCount, int tryReadTimes)
         {
             lock (ClientInfo.locker)
             {
@@ -97,7 +107,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
                 var value = client.ByteTransform.TransInt16(read.Content, 0);
 
                 //毫米
-                tankmeasure.Liquidlevel = value;
+                tankmeasure.CurrentElevation = value;
                 return true;
             }
             else
@@ -111,7 +121,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
             }
         }
 
-        public static async Task<bool> GetDateTime(ModbusRtuOverTcp client, int modbusAddress, IotDataOilWellTankmeasure tankmeasure, ushort startAddress, ushort regCount, int tryReadTimes)
+        public static async Task<bool> GetDateTime(ModbusRtuOverTcp client, int modbusAddress, IotDataOilOmeter tankmeasure, ushort startAddress, ushort regCount, int tryReadTimes)
         {
             lock (ClientInfo.locker)
             {
@@ -129,8 +139,10 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
                 var m = client.ByteTransform.TransByte(read.Content, 4);
                 var s = client.ByteTransform.TransByte(read.Content, 5);
 
-                tankmeasure.DateTime = new DateTime(2000 + year, month, date, h, m, s);
-
+                if (year != 0 && month != 0 && date != 0)
+                {
+                    tankmeasure.DateTime = new DateTime(2000 + year, month, date, h, m, s);
+                }
                 return true;
             }
             else
@@ -144,19 +156,20 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
             }
         }
 
-        public static async Task<bool> SetIndicatorDiagram(RedisClient redisClient, ModbusRtuOverTcp client, int modbusAddress, IotDataOilWellTankmeasure tankmeasure, LogIotModbusPoll logIotModbusPoll, ControlRequest par, int tryReadTimes = 3)
+        public static async Task<bool> SetGJL(RedisClient redisClient, ModbusRtuOverTcp client, int modbusAddress, ushort startAddress, IotDataOilOmeter tankmeasure, LogIotModbusPoll logIotModbusPoll, ControlRequest par, int tryReadTimes = 3)
         {
             //获取采集时间
 
-            var isSuccess = await GetDateTime(client, modbusAddress, tankmeasure, (ushort)49, 3, tryReadTimes);
+            var address = startAddress + 1;
+            var isSuccess = await GetDateTime(client, modbusAddress, tankmeasure, (ushort)address, 3, tryReadTimes);
 
             if (!isSuccess)
             {
-                FailLog.Write(redisClient, par, tankmeasure, logIotModbusPoll, "Get_LYQH_GJL_Tankmeasure", "读取液位罐计量数据异常！");
+                FailLog.Write(redisClient, par, tankmeasure, logIotModbusPoll, "Get_LYQH_GJL_Tankmeasure", "读取液位罐计量时间数据异常！");
                 return false;
             }
 
-            isSuccess = await GetGJL(client, modbusAddress, tankmeasure, (ushort)48, 1, tryReadTimes);
+            isSuccess = await GetGJL(client, modbusAddress, tankmeasure, startAddress, 1, tryReadTimes);
 
             if (!isSuccess)
             {

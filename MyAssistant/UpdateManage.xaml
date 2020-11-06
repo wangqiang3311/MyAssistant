@@ -49,6 +49,8 @@
                <Button   Content="批量停止" x:Name="batStop"  Style="{StaticResource BtnInfoStyle}" Click="batStop_Click"/>
                <Button   Content="批量更新主dll" x:Name="batUpdate"  Style="{StaticResource BtnInfoStyle}" Click="batUpdate_Click"/>
                <Button   Content="批量更新全部文件" x:Name="batUpdateAll"  Style="{StaticResource BtnInfoStyle}" Click="batUpdateAll_Click"/>
+               <Button   Content="停止所有服务" x:Name="batSopAllService"  Style="{StaticResource BtnInfoStyle}" Click="batSopAllService_Click"/>
+            <Button   Content="启动所有服务" x:Name="batStartAllService"  Style="{StaticResource BtnInfoStyle}" Click="batStartAllService_Click"/>
         </StackPanel>
      </Grid>
 </Window>

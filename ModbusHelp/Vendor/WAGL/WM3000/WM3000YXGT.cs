@@ -14,9 +14,10 @@ using System.Threading.Tasks;
 using HslCommunication.ModBus;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.RtuOverTcp;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
 using Acme.Common.Utils;
 using ServiceStack.Configuration;
+using YCIOT.ServiceModel.OilWell;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.WAGL
@@ -30,7 +31,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
         public static async Task Get_XAGL_WM3000YXGT_IndicatorDiagram(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
         {
             var par = messageString.FromJson<ControlRequest>();
-
             try
             {
                 var indicatorDiagram = new IotDataOilWellIndicatorDiagram()
@@ -51,7 +51,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                 var flag = true;
 
                 var jo1 = (JObject)JsonConvert.DeserializeObject(par.CommandParameter);
-
                 if (jo1["0"] != null)
                     indicatorDiagram.Displacement = Convert.ToDouble(jo1["0"].ToString());
 
@@ -340,7 +339,7 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                 //用于将读取的结果写入Redis队列
                 //&& indicatorDiagram.Count == indicatorDiagram.D.Count && indicatorDiagram.Count == indicatorDiagram.L.Count
 
-                if (flag == true || par.UseMockData)
+                if (flag == true)
                 {
                     $"YXGT:{par.DeviceName}-{par.DeviceId}已获取到数据".Info();
                     indicatorDiagram.Mock = par.UseMockData;
@@ -370,5 +369,46 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
 
         }
+
+        public static void Get_XAGL_WM3000YXGT_IndicatorDiagram_Mock(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
+        {
+            var par = messageString.FromJson<ControlRequest>();
+
+            try
+            {
+                var indicatorDiagram = new IotDataOilWellIndicatorDiagram()
+                {
+                    AlarmCode = 0,
+                    AlarmMsg = "正常"
+                };
+
+                indicatorDiagram.WellId = par.DeviceId;
+                indicatorDiagram.DeviceTypeId = par.DeviceTypeId;
+                indicatorDiagram.DateTime = DateTime.Now;
+                indicatorDiagram.Mock = par.UseMockData;
+
+                redisClient.AddItemToList("YCIOT:IOT_Data_OilWell_IndicatorDiagram", indicatorDiagram.ToJson().IndentJson());
+                redisClient.Set($"Group:OilWell:{par.DeviceName}-{par.DeviceId}:IndicatorDiagram", indicatorDiagram);
+                redisClient.Set($"Single:OilWell:IndicatorDiagram:{par.DeviceName}-{par.DeviceId}", indicatorDiagram);
+
+                ////用于通过ServerEvent给调用着返回消息
+                //if (!par.UserName.IsNullOrEmpty())
+                //{
+                //    ServerEventHelper.SendSseMessage(par.UserName, par.SessionId, flag ? 0 : -2, indicatorDiagram.ToJson().IndentJson());
+                //}
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
+                Logger.Error(ex.Source);
+
+                if (!par.UserName.IsNullOrEmpty())
+                {
+                    ServerEventHelper.SendSseMessage(par.UserName, par.SessionId, -1, ex.Message);
+                }
+            }
+        }
+            
     }
 }

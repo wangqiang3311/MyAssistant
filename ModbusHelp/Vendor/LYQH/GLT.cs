@@ -14,7 +14,8 @@ using ServiceStack.Redis;
 using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 //功率图
 namespace YCIOT.ModbusPoll.Vendor.LYQH

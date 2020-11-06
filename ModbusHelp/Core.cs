@@ -20,6 +20,7 @@ using YCIOT.ModbusPoll.Vendor.BJBC;
 using YCIOT.ModbusPoll.Vendor.LLJ;
 using YCIOT.ModbusPoll.Vendor.LYQH;
 using YCIOT.ModbusPoll.Vendor.WAGL;
+using YCIOT.ModbusPoll.Vendor.WAGL.WM2000;
 using YCIOT.ModbusPoll.Vendor.WAGL.WM3000;
 using YCIOT.ModbusPoll.Vendor.ZKAW;
 
@@ -52,7 +53,7 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
 
             ServiceStackHelper.Patch();
             #region Hsl注册
-            if (!HslCommunication.Authorization.SetAuthorizationCode("80b4f667-3c33-4f32-9bfd-aeb10cf98096"))
+            if (!HslCommunication.Authorization.SetAuthorizationCode("92db0877-b41e-4445-a594-7be68e32a5ee"))
             {
                 Console.WriteLine("Authorization failed! The current program can only be used for 8 hours!");
                 return;
@@ -226,6 +227,8 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
                         #endregion
 
                         #region //西安贵隆
+
+                        #region wm1000
                         case "Get_XAGL_WM1000YXGT_IndicatorDiagram": // 读取有线功图
                             await WM1000YXGT.Get_XAGL_WM1000YXGT_IndicatorDiagram(client, redisClient,
                                    messageString);
@@ -256,6 +259,53 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
                                    messageString);
                             break;
 
+                        #endregion
+
+                        #region  wm2000
+
+                        case "Get_XAGL_WM2000YXGT_IndicatorDiagram": // 读取有线功图
+                            await WM2000YXGT.Get_XAGL_WM2000YXGT_IndicatorDiagram(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAGL_WM2000GLT_PowerDiagram": // 读取功率图
+                            await WM2000GLT.Get_XAGL_WM2000GLT_PowerDiagram(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAGL_WM2000DLT_CurrentDiagram": // 读取电流图
+                            await WM2000DLT.Get_XAGL_WM2000DLT_CurrentDiagram(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAGL_WM2000DB_PowerMeter": // 读电参
+                            await WM2000DB.Get_XAGL_WM2000DB_PowerMeter(client, redisClient, messageString);
+                            break;
+
+                        case "Post_XAGL_WM2000KZG_StartWell": // 开井操作
+                            WM2000KZG.Post_XAGL_WM2000KZG_StartWell(client, redisClient, messageString);
+                            break;
+
+                        case "Post_XAGL_WM2000KZG_StopWell": // 关井操作
+                            WM2000KZG.Post_XAGL_WM2000KZG_StopWell(client, redisClient, messageString);
+                            break;
+
+                        case "Post_XAGL_WM2000KZG_StrokeFrequency": // 下发冲次操作
+                            await WM2000KZG.Post_XAGL_WM2000KZG_StrokeFrequency(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAGL_WM2000KZG_ControllerParameter": // 读电机参数
+                            await WM2000KZG.Get_XAGL_WM2000KZG_ControllerParameter(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAGL_WM2000KZG_ControllerStatus": // 读变频器运行参数
+                            await WM2000KZG.Get_XAGL_WM2000KZG_ControllerStatus(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAGL_PumpPressure": // 读取泵压
+                            await PumpPressure.Get_XAGL_PumpPressure(client, redisClient, messageString);
+                            break;
+
+                        #endregion
+
+                        #region wm3000
 
                         case "Get_XAGL_WM3000WXGT_IndicatorDiagram": // 读取无线功图
                             await WM3000WXGT.Get_XAGL_WM3000WXGT_IndicatorDiagram(client, redisClient,
@@ -279,11 +329,11 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
                             break;
 
                         case "Post_XAGL_WM3000KZG_StartWell": // 开井操作
-                            await WM3000KZG.Post_XAGL_WM3000KZG_StartWell(client, redisClient, messageString);
+                            WM3000KZG.Post_XAGL_WM3000KZG_StartWell(client, redisClient, messageString);
                             break;
 
                         case "Post_XAGL_WM3000KZG_StopWell": // 关井操作
-                            await WM3000KZG.Post_XAGL_WM3000KZG_StopWell(client, redisClient, messageString);
+                            WM3000KZG.Post_XAGL_WM3000KZG_StopWell(client, redisClient, messageString);
                             break;
 
                         case "Post_XAGL_WM3000KZG_StrokeFrequency": // 下发冲次操作
@@ -297,6 +347,8 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
                         case "Get_XAGL_WM3000KZG_ControllerStatus": // 读变频器运行参数
                             await WM3000KZG.Get_XAGL_WM3000KZG_ControllerStatus(client, redisClient, messageString);
                             break;
+
+                        #endregion
 
                         #endregion
 
@@ -347,6 +399,32 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
                         case "Post_XAAS_WII_TubePressure": //下发管压设定
                             await Vendor.XAAS.Box.Post_XAAS_WII_TubePressure(client, redisClient, messageString);
                             break;
+
+
+                        case "Get_XAAS_WII_IndicatorDiagram": // 读取有线功图
+                            await Vendor.XAAS.YXGT.Get_XAAS_WII_IndicatorDiagram(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAAS_WII_PowerDiagram": // 读取功率图
+                            await Vendor.XAAS.GLT.Get_XAAS_WII_PowerDiagram(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAAS_WII_CurrentDiagram": // 读取电流图
+                            await Vendor.XAAS.DLT.Get_XAAS_WII_CurrentDiagram(client, redisClient, messageString);
+                            break;
+
+                        case "Get_XAAS_WII_PowerMeter": // 读电参
+                            await Vendor.XAAS.DB.Get_XAAS_WII_PowerMeter(client, redisClient, messageString);
+                            break;
+
+                        case "Post_XAAS_WII_StartWell": // 开井操作
+                            Vendor.XAAS.KZG.Post_XAAS_WII_StartWell(client, redisClient, messageString);
+                            break;
+
+                        case "Post_XAAS_WII_StopWell": // 关井操作
+                            Vendor.XAAS.KZG.Post_XAAS_WII_StopWell(client, redisClient, messageString);
+                            break;
+
                         #endregion
 
                         #region  //延安华圣

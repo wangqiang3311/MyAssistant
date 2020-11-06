@@ -7,7 +7,7 @@ namespace Acme.Common.Utils
 {
     public static class DebugHelper
     {
-        public static string MockRequest(string CommandType, long DeviceId = 1, int ModbusAddress = 1, string Name = "Device",int slot=-1,int linkId=1)
+        public static string MockRequest(string CommandType, long DeviceId = 1, int ModbusAddress = 1, string Name = "Device", int slot = -1, int linkId = 1)
         {
             var request = new ControlRequest()
             {
@@ -17,7 +17,7 @@ namespace Acme.Common.Utils
                 ModbusAddress = ModbusAddress,
                 DeviceName = Name,
                 UseMockData = false,
-                LinkId=linkId
+                LinkId = linkId
             };
 
             var parDic = new Dictionary<long, double>();
@@ -111,7 +111,17 @@ namespace Acme.Common.Utils
 
                 #endregion
 
-                #region  //西安贵隆
+                #region 西安贵隆1000
+
+                case "Get_XAGL_WM1000YXGT_IndicatorDiagram":  // 读取有线功图1000
+                    request.CommandType = "Get_XAGL_WM1000YXGT_IndicatorDiagram";
+                    parDic.Add(0, 1);
+                    parDic.Add(1, 1);
+                    break;
+
+                #endregion
+
+                #region  西安贵隆3000
                 case "Get_XAGL_WM3000WXGT_IndicatorDiagram":  // 读取无线功图
                     request.CommandType = "Get_XAGL_WM3000WXGT_IndicatorDiagram";
                     parDic.Add(1, 1);
@@ -159,6 +169,52 @@ namespace Acme.Common.Utils
 
                 case "Get_XAGL_WM3000KZG_ControllerStatus":  // 读变频器运行参数
                     request.CommandType = "Get_XAGL_WM3000KZG_ControllerStatus";
+                    parDic.Add(1, 1);
+                    break;
+                #endregion
+
+                #region 西安贵隆2000
+                case "Get_XAGL_WM2000YXGT_IndicatorDiagram":  // 读取有线功图
+                    request.CommandType = "Get_XAGL_WM2000YXGT_IndicatorDiagram";
+                    parDic.Add(1, 1);
+                    break;
+                case "Get_XAGL_WM2000GLT_PowerDiagram":  // 读取功率图
+                    request.CommandType = "Get_XAGL_WM2000GLT_PowerDiagram";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Get_XAGL_WM2000DLT_CurrentDiagram":  // 读取电流图
+                    request.CommandType = "Get_XAGL_WM2000DLT_CurrentDiagram";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Get_XAGL_WM2000DB_PowerMeter":  // 读电参
+                    request.CommandType = "Get_XAGL_WM2000DB_PowerMeter";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Post_XAGL_WM2000KZG_StartWell":  // 开井操作
+                    request.CommandType = "Post_XAGL_WM2000KZG_StartWell";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Post_XAGL_WM2000KZG_StopWell":  // 关井操作
+                    request.CommandType = "Post_XAGL_WM2000KZG_StopWell";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Post_XAGL_WM2000KZG_StrokeFrequency":  // 下发冲次操作
+                    request.CommandType = "Post_XAGL_WM2000KZG_StrokeFrequency";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Get_XAGL_WM2000KZG_ControllerParameter":  // 读电机参数
+                    request.CommandType = "Get_XAGL_WM2000KZG_ControllerParameter";
+                    parDic.Add(1, 1);
+                    break;
+
+                case "Get_XAGL_WM2000KZG_ControllerStatus":  // 读变频器运行参数
+                    request.CommandType = "Get_XAGL_WM2000KZG_ControllerStatus";
                     parDic.Add(1, 1);
                     break;
                 #endregion
@@ -285,7 +341,7 @@ namespace Acme.Common.Utils
             switch (request)
             {
                 case LYQHRequest.Get_LYQH_DB_PowerMeter:
-                    messageString = DebugHelper.MockRequest("Get_LYQH_DB_PowerMeter", 1, modbusAddress,"Device",slot);
+                    messageString = DebugHelper.MockRequest("Get_LYQH_DB_PowerMeter", 1, modbusAddress, "Device", slot);
                     break;
 
                 case LYQHRequest.Get_LYQH_DLT_CurrentDiagram:

@@ -7,9 +7,10 @@ using System.Net;
 using System.Threading.Tasks;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.RtuOverTcp;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
 using HslCommunication.ModBus;
 using Acme.Common.Utils;
+using YCIOT.ServiceModel.OilWell;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.WAGL.WM3000
@@ -128,8 +129,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL.WM3000
                         // 总功率因素  38676  变比 0.001
                         value = client.ByteTransform.TransInt16(read.Content, 16);
                         powerMeter.TotalPowerFactor = Math.Round(value * 0.001, 1);
-
-                        Console.WriteLine(powerMeter.ToJson().Dump());
                     }
                     else
                     {
@@ -142,7 +141,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL.WM3000
                         logIotModbusPoll.State = -1;
                         logIotModbusPoll.Result = $"读取电参数据异常！[{read.Message}]";
 
-                        Console.WriteLine(logIotModbusPoll.Result);
                         redisClient.AddItemToList("YCIOT:ERROR:Log_IOT_Modbus_Poll", logIotModbusPoll.ToJson().IndentJson());
                     }
                 }
@@ -175,8 +173,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL.WM3000
                         powerMeter.TotalActivePower = Math.Round(((value1 * 65536 + value0) * 0.01) * 15, 2);
                         //这是总无功电能 
                         powerMeter.TotalReactivePower = Math.Round(((value3 * 65536 + value2) * 0.01) * 15, 2);
-
-                        Console.WriteLine(powerMeter.ToJson().Dump());
                     }
                     else
                     {
@@ -189,8 +185,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL.WM3000
                         logIotModbusPoll.DateTime = DateTime.Now;
                         logIotModbusPoll.State = -1;
                         logIotModbusPoll.Result = $"读取总有功电能数据异常！[{read.Message}]";
-
-                        Console.WriteLine(logIotModbusPoll.Result);
 
                         redisClient.AddItemToList("YCIOT:ERROR:Log_IOT_Modbus_Poll", logIotModbusPoll.ToJson().IndentJson());
                     }

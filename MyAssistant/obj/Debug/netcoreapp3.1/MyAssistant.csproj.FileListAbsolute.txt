@@ -187,7 +187,6 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy32.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NLog.config
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\Log\waterLog.txt
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\UnPackWater.g.cs
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\UnPackWater.baml
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.CoreCompileInputs.cache

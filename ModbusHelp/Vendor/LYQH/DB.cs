@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
 using YCIOT.ModbusPoll.Vendor.WAGL;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 namespace YCIOT.ModbusPoll.Vendor.LYQH
 {
@@ -134,17 +135,17 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
 
                 value = client.ByteTransform.TransInt16(read.Content, 6);
 
-                // A相电流  1609  变比 0.1
-                powerMeter.APhaseCurrent = Math.Round(value * 0.01, 1);
+                // A相电流  1609  变比 0.001 未按协议文档，按照实际情况定
+                powerMeter.APhaseCurrent = Math.Round(value * 0.001, 1);
 
                 value = client.ByteTransform.TransInt16(read.Content, 8);
-                // B相电流   1610  变比 0.1
-                powerMeter.BPhaseCurrent = Math.Round(value * 0.01, 1);
+                // B相电流   1610  变比 0.001
+                powerMeter.BPhaseCurrent = Math.Round(value * 0.001, 1);
 
                 value = client.ByteTransform.TransInt16(read.Content, 10);
 
-                // C相电流   1611  变比 0.1
-                powerMeter.CPhaseCurrent = Math.Round(value * 0.01, 1);
+                // C相电流   1611  变比 0.001
+                powerMeter.CPhaseCurrent = Math.Round(value * 0.001, 1);
 
                 value = client.ByteTransform.TransInt16(read.Content, 12);
                 //当前有功功率  1612  变比 0.01

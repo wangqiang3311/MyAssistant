@@ -14,7 +14,8 @@ using ServiceStack.Redis;
 using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 /// <summary>
 /// 油井压力

@@ -15,7 +15,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using YCIOT.ModbusPoll.RtuOverTcp;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.WAGL

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
 
 namespace YCIOT.ModbusPoll.Utils
 {

@@ -13,7 +13,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.WaterWell;
 using BCDUtils = Acme.Common.Utils.BCDUtils;
 
 //延安华圣
@@ -33,6 +34,8 @@ namespace YCIOT.ModbusPoll.Vendor.YAHS
 
                ClientInfo.LinkId = par.LinkId;
                ClientInfo.CurrentModbusPoolAddress = modbusAddress;
+
+               waterStation.DeviceTypeId = par.DeviceTypeId;
 
                var flag = true;
                try
@@ -121,6 +124,7 @@ namespace YCIOT.ModbusPoll.Vendor.YAHS
                ClientInfo.LinkId = par.LinkId;
 
                ClientInfo.CurrentModbusPoolAddress = modbusAddress;
+               waterWell.DeviceTypeId = par.DeviceTypeId;
 
                var flag = true;
 

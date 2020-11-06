@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Acme.Common.Utils;
+﻿using Acme.Common.Utils;
 using HslCommunication.ModBus;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,9 +6,15 @@ using NLog;
 using ServiceStack;
 using ServiceStack.Redis;
 using ServiceStack.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.WAGL

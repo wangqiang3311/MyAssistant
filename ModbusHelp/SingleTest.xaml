@@ -116,12 +116,16 @@
 
           <Grid.ColumnDefinitions>
                <ColumnDefinition/>
-               <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
 
           </Grid.ColumnDefinitions>
 
         <Label>CommandType：</Label>
-        <TextBox Grid.Column="1" x:Name="txtCommandType">Get_XAGL_WM3000DB_PowerMeter</TextBox>
+
+        <ComboBox Grid.Column="1" x:Name="cbxVendor"  DisplayMemberPath="showName" SelectedValuePath="name" SelectionChanged="cbxVendor_SelectionChanged"></ComboBox>
+         
+        <ComboBox Grid.Column="2" x:Name="cbxCommandType"></ComboBox>
 
         <Label Grid.Row="1">ModbusAddrss：</Label>
           <TextBox  Grid.Row="1" Grid.Column="1" x:Name="txtModbusAddress">51</TextBox>

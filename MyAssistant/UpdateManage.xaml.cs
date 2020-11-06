@@ -47,6 +47,8 @@ namespace MyAssistant
         public static string ansenRoot;
         public static string yanchangs;
         public static string ansens;
+        public static bool isUseAlwaysUp;
+
 
         public static string exeName = "YCIOT.ModbusPoll.RtuOverTcp";
 
@@ -71,7 +73,7 @@ namespace MyAssistant
             ansenRoot = appSettings.Get<string>("RootAnSen");
             yanchangs = appSettings.Get<string>("39.102.46.137");
             ansens = appSettings.Get<string>("iot.sxycyt.net");
-
+            isUseAlwaysUp = appSettings.Get<bool>("IsUseAlwaysUp");
 
             var range = yanchangs.Split('-');
 
@@ -225,6 +227,27 @@ namespace MyAssistant
                 return !isOverTime;
             }
             return false;
+        }
+
+        private async Task<bool> WaitforStartProcessAsync(string exeName, List<string> exeList)
+        {
+            //等待AlwaysUp开启exe进程
+            await Task.Delay(1000);
+
+            int count = 5;
+            bool isOverTime = false;
+            //监测进程数量
+            while (GetProcessCount(exeName) < exeList.Count)
+            {
+                count--;
+                if (count < 0)
+                {
+                    isOverTime = true;
+                    break;
+                }
+                await Task.Delay(3000);
+            }
+            return !isOverTime;
         }
 
         private async Task<bool> StartProcessAsync(string exeName, string exePath)
@@ -468,8 +491,8 @@ namespace MyAssistant
             {
                 try
                 {
-            //获取当前运行的进程数量
-            var count = GetProcessCount(procName, targetPath);
+                    //获取当前运行的进程数量
+                    var count = GetProcessCount(procName, targetPath);
 
                     KillProcess(procName, targetPath);
 
@@ -630,8 +653,8 @@ namespace MyAssistant
                         if (t.Result)
                         {
                             NotifyStop(item);
-                    //执行核心工作
-                    return Excute(sourceDllPath, targetDll, item);
+                            //执行核心工作
+                            return Excute(sourceDllPath, targetDll, item);
                         }
                         else
                         {
@@ -761,8 +784,8 @@ namespace MyAssistant
                     if (t.Result)
                     {
                         NotifyStop();
-                //执行核心工作
-                return ExcuteBat(sourceFolder);
+                        //执行核心工作
+                        return ExcuteBat(sourceFolder);
                     }
                     else
                     {
@@ -770,9 +793,19 @@ namespace MyAssistant
                     }
                 });
 
+
                 var t3 = t2.ContinueWith(async t =>
                 {
-                    var result = await StartProcessAsync(exeName, exeList);
+                    var result = false;
+
+                    if (!isUseAlwaysUp)
+                    {
+                        result = await StartProcessAsync(exeName, exeList);
+                    }
+                    else
+                    {
+                        result = await WaitforStartProcessAsync(exeName, exeList);
+                    }
                     if (result)
                     {
                         NotifyStart();
@@ -818,8 +851,8 @@ namespace MyAssistant
                     if (t.Result)
                     {
                         NotifyStop();
-                //执行核心工作
-                return ExcuteBat(sourceFolder, item);
+                        //执行核心工作
+                        return ExcuteBat(sourceFolder, item);
                     }
                     else
                     {
@@ -850,6 +883,70 @@ namespace MyAssistant
         private void Window_Closed(object sender, EventArgs e)
         {
             ConsoleManager.Toggle();
+        }
+
+        private void batSopAllService_Click(object sender, RoutedEventArgs e)
+        {
+            //sc停止服务
+            string commandStr = "sc stop \"502 (managed by AlwaysUpService)\"";
+
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+            p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+            p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+            p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+            p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+            p.StartInfo.Verb = "RunAs";
+            p.Start();//启动程序
+
+            //向cmd窗口发送输入信息
+            p.StandardInput.WriteLine(commandStr + "&exit");
+
+            p.StandardInput.AutoFlush = true;
+            //向标准输入写入要执行的命令。这里使用&是批处理命令的符号，表示前面一个命令不管是否执行成功都执行后面(exit)命令，如果不执行exit命令，后面调用ReadToEnd()方法会假死
+            //同类的符号还有&&和||前者表示必须前一个命令执行成功才会执行后面的命令，后者表示必须前一个命令执行失败才会执行后面的命令
+
+            //获取cmd窗口的输出信息
+            string output = p.StandardOutput.ReadToEnd();
+
+            p.WaitForExit();//等待程序执行完退出进程
+            p.Close();
+
+
+            Console.WriteLine(output);
+        }
+
+        private void batStartAllService_Click(object sender, RoutedEventArgs e)
+        {
+            //sc停止服务
+            string commandStr = "sc start \"502 (managed by AlwaysUpService)\"";
+
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+            p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+            p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+            p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+            p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+            p.StartInfo.Verb = "RunAs";
+            p.Start();//启动程序
+
+            //向cmd窗口发送输入信息
+            p.StandardInput.WriteLine(commandStr + "&exit");
+
+            p.StandardInput.AutoFlush = true;
+            //向标准输入写入要执行的命令。这里使用&是批处理命令的符号，表示前面一个命令不管是否执行成功都执行后面(exit)命令，如果不执行exit命令，后面调用ReadToEnd()方法会假死
+            //同类的符号还有&&和||前者表示必须前一个命令执行成功才会执行后面的命令，后者表示必须前一个命令执行失败才会执行后面的命令
+
+            //获取cmd窗口的输出信息
+            string output = p.StandardOutput.ReadToEnd();
+
+            p.WaitForExit();//等待程序执行完退出进程
+            p.Close();
+
+
+            Console.WriteLine(output);
         }
     }
 }

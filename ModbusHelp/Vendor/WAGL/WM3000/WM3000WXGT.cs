@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 using HslCommunication.ModBus;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.RtuOverTcp;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
 using Acme.Common.Utils;
 using Acme.Common;
+using YCIOT.ServiceModel.OilWell;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.WAGL
@@ -37,8 +38,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
                 var flag = true;
 
-
-
                 var indicatorDiagram = new IotDataOilWellIndicatorDiagram()
                 {
                     NetworkNode = ClientInfo.ManyIpAddress,
@@ -48,16 +47,19 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
                 var jo1 = (JObject)JsonConvert.DeserializeObject(par.CommandParameter);
 
-                indicatorDiagram.Displacement = Convert.ToDouble(jo1["0"].ToString());
+                double displacement = -1;
 
+                if (jo1["0"] != null)
+                {
+                    double.TryParse(jo1["0"].ToString().Trim(),out displacement);
+                }
+                if (displacement > 0)
+                    indicatorDiagram.Displacement = displacement;
                 var modbusAddress = par.ModbusAddress;
                 ClientInfo.CurrentModbusPoolAddress = modbusAddress;
                 var commandParameter = par.CommandParameter.ToString();
-                var Slot = Convert.ToInt32(jo1[par.DeviceId.ToString()].ToString());
+                var slot = Convert.ToInt32(jo1["1"].ToString());
 
-                //try
-                //{
-                //从api中获取值
                 var host = par.RemoteHost;
                 var url = "/getworkgraph/";
                 bool IsHostAlive = false;
@@ -71,13 +73,13 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                     IsHostAlive = TcpClientConnector.IsOnline(host, null, 1000);
                     if (IsHostAlive)
                     {
-                        url = $"http://{host}{url}{Slot}";
+                        url = $"http://{host}{url}{slot}";
 
                         $"请求树莓派api:{url}".Info();
 
                         var indicatorDiagramJson = await url.GetJsonFromUrlAsync();
 
-                        $"树莓派api返回数据:{indicatorDiagramJson}".Info();
+                        //$"树莓派api返回数据:{indicatorDiagramJson}".Info();
 
                         var oilWellIndicatorDiagram = indicatorDiagramJson.FromJson<OilWellIndicatorDiagram>();
 
@@ -126,7 +128,8 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
                         indicatorDiagram.DeviceTypeId = par.DeviceTypeId;
                         indicatorDiagram.Mock = par.UseMockData;
-                        indicatorDiagram.Displacement = Convert.ToDouble(jo1["0"].ToString());
+                        if (displacement > 0)
+                            indicatorDiagram.Displacement = displacement;
 
                         indicatorDiagram.NetworkNode = host;
 
@@ -139,11 +142,6 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                         $"无线功图树莓派({host})网络不通!".Error();
                     }
                 }
-                //}
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine("无线功图从api中获取异常：" + ex.Message + "," + ex.StackTrace);
-                //}
 
                 //用于通过ServerEvent给调用着返回消息
                 if (!par.UserName.IsNullOrEmpty())
@@ -163,6 +161,46 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                 }
             }
         }
+
+        public static void Get_XAGL_WM3000WXGT_IndicatorDiagram_Mock(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
+        {
+            var par = messageString.FromJson<ControlRequest>();
+
+            try
+            {
+                var indicatorDiagram = new IotDataOilWellIndicatorDiagram()
+                {
+                    AlarmCode = 0,
+                    AlarmMsg = "正常"
+                };
+
+                indicatorDiagram.WellId = par.DeviceId;
+                indicatorDiagram.DeviceTypeId = par.DeviceTypeId;
+                indicatorDiagram.DateTime = DateTime.Now;
+                indicatorDiagram.Mock = par.UseMockData;
+
+                redisClient.AddItemToList("YCIOT:IOT_Data_OilWell_IndicatorDiagram", indicatorDiagram.ToJson().IndentJson());
+                redisClient.Set($"Group:OilWell:{par.DeviceName}-{par.DeviceId}:IndicatorDiagram", indicatorDiagram);
+
+                ////用于通过ServerEvent给调用着返回消息
+                //if (!par.UserName.IsNullOrEmpty())
+                //{
+                //    ServerEventHelper.SendSseMessage(par.UserName, par.SessionId, flag ? 0 : -2, indicatorDiagram.ToJson().IndentJson());
+                //}
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
+                Logger.Error(ex.Source);
+
+                if (!par.UserName.IsNullOrEmpty())
+                {
+                    ServerEventHelper.SendSseMessage(par.UserName, par.SessionId, -1, ex.Message);
+                }
+            }
+        }
+
 
         public class OilWellIndicatorDiagram
         {

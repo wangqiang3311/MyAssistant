@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using HslCommunication.ModBus;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.RtuOverTcp;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
 using Acme.Common.Utils;
+using YCIOT.ServiceModel.OilWell;
 
 // ReSharper disable once CheckNamespace
 namespace YCIOT.ModbusPoll.Vendor.WAGL
@@ -18,7 +19,7 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
     public static class WM3000KZG
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public static async Task Post_XAGL_WM3000KZG_StartWell(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
+        public static void Post_XAGL_WM3000KZG_StartWell(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
         {
             var par = messageString.FromJson<ControlRequest>();
 
@@ -34,11 +35,11 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
                 if (!par.UseMockData)
                 {
-                    var read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4102", 1);
-                    read = await client.ReadAsync($"s={par.ModbusAddress};x=3;6706", 1);
+                    //var read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4102", 1);
+                    //read = await client.ReadAsync($"s={par.ModbusAddress};x=3;6706", 1);
 
                     //（1）读4106(Holding register)寄存器为1表示正转运行，3表示停机状态。
-                    read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4106", 1);
+                    //read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4106", 1);
 
                     //（2）写入1值到4121(Holding register)寄存器，设置油井的状态为开启。
                     //var result2 = await client.WriteAsync($"s={par.ModbusAddress};x=6;4121", (ushort)(1));
@@ -81,7 +82,7 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
             }
         }
 
-        public static async Task Post_XAGL_WM3000KZG_StopWell(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
+        public static void Post_XAGL_WM3000KZG_StopWell(ModbusRtuOverTcp client, RedisClient redisClient, string messageString)
         {
             var par = messageString.FromJson<ControlRequest>();
 
@@ -99,12 +100,12 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
 
                 if (!par.UseMockData)
                 {
-                    var read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4102", 1);
-                    read = await client.ReadAsync($"s={par.ModbusAddress};x=3;6706", 1);
+                    //var read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4102", 1);
+                    //read = await client.ReadAsync($"s={par.ModbusAddress};x=3;6706", 1);
 
 
                     //（1）读4106(Holding register)寄存器为1表示正转运行，3表示停机状态。
-                    read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4106", 1);
+                    //read = await client.ReadAsync($"s={par.ModbusAddress};x=3;4106", 1);
 
                     //写入0值到4121(Holding register)寄存器，设置油井的状态为开启。
                     //var result2 = await client.WriteAsync($"s={ par.ModbusAddress};x=6;4121", (ushort)(6));
@@ -346,20 +347,22 @@ namespace YCIOT.ModbusPoll.Vendor.WAGL
                     value = client.ByteTransform.TransInt16(read.Content, 16);
                     iotDataOilWellControllerState.StartAndStopStatus = value; //2020-04-15 由6变为8
 
-                    //当启停状态非1和3时候，直接抛弃
-                    if (value != 1 && value != 3)
-                    {
-                        iotDataOilWellControllerState.AlarmCode = -1;
-                        iotDataOilWellControllerState.AlarmMsg = "数据异常";
+                    #region 去掉启停状态抛弃  后期可修改为插入异常标识 yangzx 20201014
+                    ////当启停状态非1和3时候，直接抛弃
+                    //if (value != 1 && value != 3)
+                    //{
+                    //    iotDataOilWellControllerState.AlarmCode = -1;
+                    //    iotDataOilWellControllerState.AlarmMsg = "数据异常";
 
-                        iotDataOilWellControllerState.Mock = par.UseMockData;
-                        logIotModbusPoll.DateTime = DateTime.Now;
-                        logIotModbusPoll.State = -1;
-                        logIotModbusPoll.Result = $"读取变频器启停状态异常，读取异常值为:{value}";
+                    //    iotDataOilWellControllerState.Mock = par.UseMockData;
+                    //    logIotModbusPoll.DateTime = DateTime.Now;
+                    //    logIotModbusPoll.State = -1;
+                    //    logIotModbusPoll.Result = $"读取变频器启停状态异常，读取异常值为:{value}";
 
-                        redisClient.AddItemToList("YCIOT:ERROR:Log_IOT_Modbus_Poll", logIotModbusPoll.ToJson().IndentJson());
-                        return;
-                    }
+                    //    redisClient.AddItemToList("YCIOT:ERROR:Log_IOT_Modbus_Poll", logIotModbusPoll.ToJson().IndentJson());
+                    //    return;
+                    //} 
+                    #endregion
 
                     // 运行频率  4105  变比 1--->4103
                     value = client.ByteTransform.TransInt16(read.Content, 14);

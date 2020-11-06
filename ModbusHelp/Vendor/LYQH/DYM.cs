@@ -15,7 +15,8 @@ using ServiceStack.Text;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
 using YCIOT.ModbusPoll.Vendor.WAGL;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 namespace YCIOT.ModbusPoll.Vendor.LYQH
 {
@@ -55,7 +56,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
 
                 dytDiagram.DateTime = DateTime.Now;
                 dytDiagram.WellId = par.DeviceId;
-
+                dytDiagram.MovefluidHeight = 600;
 
                 var flag = await SetdytDiagram(redisClient, client, modbusAddress, dytDiagram, logIotModbusPoll, par, slotId);
 
@@ -171,7 +172,8 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
             {
                 for (var j = 0; j < regCount; j++)
                 {
-                    var value = client.ByteTransform.TransInt16(read.Content, j * 2);
+                    //无符号数0-65535
+                    var value = client.ByteTransform.TransUInt16(read.Content, j * 2);
                     if (value != 0)
                     {
                         var L = value;
@@ -281,7 +283,7 @@ namespace YCIOT.ModbusPoll.Vendor.LYQH
                 var m = client.ByteTransform.TransByte(read.Content, 4);
                 var s = client.ByteTransform.TransByte(read.Content, 5);
 
-                dytDiagram.DateTime = new DateTime(2020 + year, month, date, h, m, s);
+                dytDiagram.DateTime = new DateTime(2000 + year, month, date, h, m, s);
 
                 //采样周期
                 var value = client.ByteTransform.TransInt16(read.Content, 6);

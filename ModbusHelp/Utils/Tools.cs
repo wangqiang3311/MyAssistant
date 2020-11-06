@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel.WaterWell;
 
 namespace YCIOT.ModbusPoll.Utils
 {

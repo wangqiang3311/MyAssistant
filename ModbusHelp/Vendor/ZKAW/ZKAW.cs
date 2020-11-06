@@ -12,7 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using YCIOT.ModbusPoll.RtuOverTcp.Utils;
 using YCIOT.ModbusPoll.Utils;
-using YCIOT.ServiceModel.IOT;
+using YCIOT.ServiceModel;
+using YCIOT.ServiceModel.OilWell;
 
 //中科奥威
 namespace YCIOT.ModbusPoll.Vendor.ZKAW

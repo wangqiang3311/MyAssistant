@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -144,11 +145,11 @@ namespace MyAssistant
 
         private void btnTemplateExport_Click(object sender, RoutedEventArgs e)
         {
-          
+
         }
 
         private void btnNPOIExport_Click(object sender, RoutedEventArgs e)
-        {  
+        {
             var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             var filePath = System.IO.Path.Combine(executablePathRoot, "DHTable.xlsx");
             IWorkbook workbook = null;
@@ -156,7 +157,7 @@ namespace MyAssistant
             try
             {
                 workbook = WorkbookFactory.Create(filePath);
-                sheet = workbook.GetSheetAt(0);//获取第一个工作薄
+                sheet = workbook.GetSheetAt(2);//获取第2个工作薄
 
                 var tableName = "";
                 var fieldName = "";
@@ -164,7 +165,7 @@ namespace MyAssistant
 
                 Dictionary<string, string> fields = new Dictionary<string, string>();
 
-                for (var j = 1; j < 63; j++)
+                for (var j = 1; j < 62; j++)
                 {
                     var row = sheet.GetRow(j);
 
@@ -176,6 +177,10 @@ namespace MyAssistant
                         fieldName = key.ToString();
                         var value = GetCellValue(row.Cells[2]);
                         fieldType = value.ToString();
+
+                        fieldType = ConvertToDBType(fieldType);
+
+                        fieldName = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fieldName);
 
                         fields.Add(fieldName, fieldType);
                     }
@@ -195,6 +200,10 @@ namespace MyAssistant
                             }
                             i++;
                         }
+
+                        fieldType = ConvertToDBType(fieldType);
+
+                        fieldName = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fieldName);
                         fields.Add(fieldName, fieldType);
                     }
                 }
@@ -214,6 +223,147 @@ namespace MyAssistant
                 }
                 sb.AppendLine($")");
 
+
+                txtResult.Document.Blocks.Clear();
+
+                Paragraph p = new Paragraph();
+                Run r = new Run(sb.ToString());
+                p.Inlines.Add(r);
+                txtResult.Document.Blocks.Add(p);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("获取excel数据出错" + ex.Message);
+                workbook?.Close();
+
+            }
+        }
+
+        private string ConvertToDBType(string type)
+        {
+            var transeType = type;
+            switch (type.ToLower())
+            {
+                case "string":
+                    transeType = "varchar(100)";
+                    break;
+
+                case "double":
+                    transeType = "double(13,3)";
+                    break;
+
+                case "datetime":
+                    transeType = "date";
+                    break;
+
+                case "long":
+                    transeType = "bigint";
+                    break;
+            }
+
+            return transeType;
+        }
+
+        private void btnNPOIExportEntity_Click(object sender, RoutedEventArgs e)
+        {
+            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            var filePath = System.IO.Path.Combine(executablePathRoot, "DHTable.xlsx");
+            IWorkbook workbook = null;
+            ISheet sheet = null;
+            try
+            {
+                workbook = WorkbookFactory.Create(filePath);
+                sheet = workbook.GetSheetAt(2);//获取第二个工作薄
+
+                var tableName = "";
+                var fieldName = "";
+                var fieldType = "";
+                //描述
+                var fieldDes = "";
+
+                Dictionary<string, string> fields = new Dictionary<string, string>();
+
+                for (var j = 1; j < 62; j++)
+                {
+                    var row = sheet.GetRow(j);
+
+                    if (row.Cells.Count == 4)
+                    {
+                        var v = GetCellValue(row.Cells[0]);
+                        tableName = v.ToString();
+                        var key = GetCellValue(row.Cells[1]);
+                        fieldName = key.ToString();
+                        var value = GetCellValue(row.Cells[2]);
+                        fieldType = value.ToString();
+
+                        value = GetCellValue(row.Cells[3]);
+                        fieldDes = value.ToString();
+
+                        fieldName = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fieldName);
+
+                        fields.Add(fieldName, fieldType + "," + fieldDes);
+                    }
+                    else
+                    {
+                        int i = 0;
+                        foreach (var cell in row.Cells)
+                        {
+                            var v = GetCellValue(cell);
+                            if (i == 0)
+                            {
+                                fieldName = v.ToString();
+                            }
+                            if (i == 1)
+                            {
+                                fieldType = v.ToString();
+                            }
+                            if (i == 2)
+                            {
+                                fieldDes = v.ToString();
+                            }
+                            i++;
+                        }
+                        fieldName = fieldName.Substring(0, 1).ToUpper() + fieldName.Substring(1);
+
+                        fields.Add(fieldName, fieldType + "," + fieldDes);
+                    }
+                }
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine($"[Alias(\"{tableName}\")]");
+                sb.AppendLine($"public class {tableName}");
+                sb.AppendLine("{");
+
+                foreach (var item in fields)
+                {
+                    var v = item.Value;
+                    var vd = v.Split(',');
+
+                    var aliasName = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(item.Key);
+
+                    if (item.Key == "Id")
+                    {
+                        sb.AppendLine("[Index]");
+                        sb.AppendLine("[AutoIncrement]");
+                        sb.AppendLine(" /// <summary>");
+                        sb.AppendLine($" /// {vd[1]}");
+                        sb.AppendLine(" /// </summary>");
+
+                        sb.AppendLine("[Alias(\"" + aliasName + "\")]");
+
+                        sb.AppendLine("public   " + vd[0] + "  " + item.Key + " { set; get; }");
+                    }
+                    else
+                    {
+                        sb.AppendLine(" /// <summary>");
+                        sb.AppendLine($" /// {vd[1]}");
+                        sb.AppendLine(" /// </summary>");
+                        sb.AppendLine("[Alias(\"" + aliasName + "\")]");
+                        sb.AppendLine("public   " + vd[0] + "  " + item.Key + " { set; get; }");
+                    }
+                }
+                sb.AppendLine("}");
 
                 txtResult.Document.Blocks.Clear();
 

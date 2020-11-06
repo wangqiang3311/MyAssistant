@@ -191,12 +191,12 @@ new RoutedEventHandler(this.OnMouseLeftButtonDown));
 
 
             var value = client.ByteTransform.TransInt16(data, 10);
-           var settedFlow = value / 100.0; //设定流量回读
+            var settedFlow = value / 100.0; //设定流量回读
 
 
             value = client.ByteTransform.TransInt16(data, 4);
 
-           var instantaneousFlow = value / 100.0; //瞬时流量
+            var instantaneousFlow = value / 100.0; //瞬时流量
 
             var value3 = client.ByteTransform.TransInt16(data, 6);
 
@@ -209,7 +209,7 @@ new RoutedEventHandler(this.OnMouseLeftButtonDown));
             results.Add($"表头累计：{cumulativeFlow}, 瞬时流量：{instantaneousFlow}, 流量回读：{settedFlow}");
 
             var valveStatus = value; //阀门状态
-        
+
             value = client.ByteTransform.TransInt16(data, 2);
             var valveMode = value; //阀门工作模式
             return results;
@@ -414,7 +414,7 @@ new RoutedEventHandler(this.OnMouseLeftButtonDown));
 
             if (text.Contains(':'))
             {
-                 data = text.Split(':').Last();
+                data = text.Split(':').Last();
             }
             data = data.Substring(9);
             GuoYi(data);
@@ -488,9 +488,10 @@ new RoutedEventHandler(this.OnMouseLeftButtonDown));
         private void btnLogAnalysis_Click(object sender, RoutedEventArgs e)
         {
             //读取日志
-            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-
-            var logPath = System.IO.Path.Combine(executablePathRoot, "Log", "waterLog.txt");
+            var dialog = new OpenFileDialog();
+            dialog.Filter = ".txt|*.txt";
+            if (dialog.ShowDialog(this) == false) return;
+            var logPath = dialog.FileName;
 
             var lines = System.IO.File.ReadAllLines(logPath, Encoding.UTF8);
 
@@ -502,9 +503,25 @@ new RoutedEventHandler(this.OnMouseLeftButtonDown));
             int m = 0;
             int n = 0;
 
+            List<string> linkIds = new List<string>();
+
+            int tcpCount = 0;
 
             foreach (var item in lines)
             {
+                if (item.Contains("心跳包"))
+                {
+                    var match = Regex.Match(item, @"[\s\S]*\[(\d+)\]\[(\d+)\]心跳包");
+                    if (match.Success)
+                    {
+                        var linkCount = int.Parse(match.Groups[1].Value);
+                        tcpCount = tcpCount > linkCount ? tcpCount : linkCount;
+
+                        var linkId = match.Groups[2].Value;
+                        if (!linkIds.Contains(linkId))
+                            linkIds.Add(linkId);
+                    }
+                }
                 if (item.Contains("[1->M]"))
                 {
                     m++;
@@ -514,7 +531,8 @@ new RoutedEventHandler(this.OnMouseLeftButtonDown));
                     n++;
                 }
             }
-            WriteToResult($"[1->M]:{m}个,[M->1]:{n}个,有效率:{n * 1.0 / m}");
+
+            WriteToResult($"最大共有{tcpCount}个tcp连接，{linkIds.Count}个linkId,[1->M]:{m}个,[M->1]:{n}个,有效率:{n * 1.0 / m}");
         }
 
         private void btnUnpackJingHua_Click(object sender, RoutedEventArgs e)
