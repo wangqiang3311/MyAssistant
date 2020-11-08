@@ -61,7 +61,7 @@ namespace MyAssistant {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyAssistant;component/taskbar.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MyAssistant;V1.0.0.0;component/taskbar.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\TaskBar.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

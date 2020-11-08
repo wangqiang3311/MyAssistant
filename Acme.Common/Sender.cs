@@ -11,97 +11,98 @@ using System.Threading.Tasks;
 
 namespace ModbusCommon
 {
-     /// <summary>
-     /// 消息发送器
-     /// </summary>
-     public class Sender
-     {
-          TcpClient client;
-          Stream streamToTran;
+    /// <summary>
+    /// 消息发送器
+    /// </summary>
+    public class Sender
+    {
+        TcpClient client;
+        Stream streamToTran;
 
-          private bool bIsConnect = false;
+        private bool bIsConnect = false;
 
-          public bool Connect(string ipAddress, int ipPort, out string strException)
-          {
-               strException = string.Empty;
-               try
-               {
-                    client = new TcpClient();
-                    client.Connect(ipAddress, ipPort);
-                    bIsConnect = true;
-                    streamToTran = client.GetStream();
+        public bool Connect(string ipAddress, int ipPort, out string strException)
+        {
+            strException = string.Empty;
+            try
+            {
+                client = new TcpClient();
+                client.Connect(ipAddress, ipPort);
+                bIsConnect = true;
+                streamToTran = client.GetStream();
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                strException = ex.Message;
+                Console.WriteLine(strException);
+                return false;
+            }
+        }
+
+        public bool SendMessage(byte[] btAryBuffer)
+        {
+            try
+            {
+                lock (streamToTran)
+                {
+                    streamToTran.Write(btAryBuffer, 0, btAryBuffer.Length);
                     return true;
-               }
-               catch (System.Exception ex)
-               {
-                    strException = ex.Message;
-                    Console.WriteLine(strException);
-                    return false;
-               }
-          }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-          public bool SendMessage(byte[] btAryBuffer)
-          {
-               try
-               {
-                    lock (streamToTran)
+        public async Task<byte[]> ReceiveMessage()
+        {
+            try
+            {
+                if (!streamToTran.CanRead) return null;
+
+                var buffer = new byte[1024];
+
+                await using var ms = new MemoryStream();
+                while (true)
+                {
+                    streamToTran = client.GetStream();
+
+                    var read = await streamToTran.ReadAsync(buffer, 0, buffer.Length);
+
+                    if (read > 0)
                     {
-                         streamToTran.Write(btAryBuffer, 0, btAryBuffer.Length);
-                         return true;
+                        ms.Write(buffer, 0, read);
+
+                        return ms.ToArray();
                     }
-               }
-               catch
-               {
-                    return false;
-               }
-          }
-
-          public async Task<byte[]> ReceiveMessage()
-          {
-               try
-               {
-                    if (!streamToTran.CanRead) return null;
-
-                    var buffer = new byte[1024];
-
-                    await using var ms = new MemoryStream();
-                    while (true)
+                    else
                     {
-                         streamToTran = client.GetStream();
-
-                         var read = await streamToTran.ReadAsync(buffer, 0, buffer.Length);
-
-                         if (read > 0)
-                         {
-                              ms.Write(buffer, 0, read);
-
-                              return ms.ToArray();
-                         }
-                         else
-                         {
-                              throw new SocketException();
-                         }
+                        throw new SocketException();
                     }
-               }
-               catch(Exception ex)
-               {
-                    return null;
-               }
-          }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("接收数据异常：" + ex.Message);
+                return null;
+            }
+        }
 
-          public void SignOut()
-          {
-               if (streamToTran != null)
-                    streamToTran.Dispose();
-               if (client != null)
-                    client.Close();
+        public void SignOut()
+        {
+            if (streamToTran != null)
+                streamToTran.Dispose();
+            if (client != null)
+                client.Close();
 
-               bIsConnect = false;
-          }
+            bIsConnect = false;
+        }
 
-          public bool IsConnect()
-          {
-               return bIsConnect;
-          }
-     }
+        public bool IsConnect()
+        {
+            return bIsConnect;
+        }
+    }
 }
