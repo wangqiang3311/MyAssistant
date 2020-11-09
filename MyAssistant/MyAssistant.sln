@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyConsole", "..\MyConsole\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Acme.Common", "..\Acme.Common\Acme.Common.csproj", "{2041CD77-0429-4646-99CB-2E56CEF13106}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusTCPTest", "..\ModbusHelp\ModbusTCPTest.csproj", "{12757F26-31DC-4385-93F7-93259BF2D321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusTCPSingleTestForWindows", "..\ModbusHelp\ModbusTCPSingleTestForWindows.csproj", "{12757F26-31DC-4385-93F7-93259BF2D321}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YCIOT.ServiceModel", "..\YCIOT.ServiceModel\YCIOT.ServiceModel.csproj", "{1341A4A1-DEDF-44C1-860C-67B8B2859A72}"
 EndProject
@@ -22,6 +22,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClientTestTool", "..\TCPClientTestTool\TCPClientTestTool.csproj", "{61262FC3-610E-4D69-AD34-8BB3F884AB50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPServerTestTool", "..\TCPServerTestTool\TCPServerTestTool.csproj", "{9A761E6D-B28B-43E6-A497-5D60E0CBA6EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusTCPCore", "..\ModbusTCPCore\ModbusTCPCore.csproj", "{A411F184-372B-454D-9FEA-389F659637E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusTCPSingleTestForLinux", "..\ModbusTCPSingleTestForLinux\ModbusTCPSingleTestForLinux.csproj", "{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{9A761E6D-B28B-43E6-A497-5D60E0CBA6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A761E6D-B28B-43E6-A497-5D60E0CBA6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A761E6D-B28B-43E6-A497-5D60E0CBA6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A411F184-372B-454D-9FEA-389F659637E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A411F184-372B-454D-9FEA-389F659637E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A411F184-372B-454D-9FEA-389F659637E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A411F184-372B-454D-9FEA-389F659637E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

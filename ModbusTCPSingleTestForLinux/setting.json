@@ -1,0 +1,84 @@
+﻿{
+  "vendor": [
+    {
+      "name": "YAHS",
+      "showName": "延安华圣",
+      "commands": [
+        "Get_YAHS_WTPM_TrunkPressure",
+        "Get_YAHS_WII_WaterInjectingInstrument",
+        "Post_YAHS_WII_InjectionAllocation",
+        "Post_YAHS_WII_TubePressure"
+      ]
+    },
+    {
+      "name": "LYQH",
+      "showName": "洛阳乾禾",
+      "commands": [
+        "Get_LYQH_WG_IndicatorDiagram",
+        "Post_LYQH_KZG_StartWell",
+        "POST_LYQH_KZG_StopWell",
+        "Get_LYQH_DB_PowerMeter",
+        "Get_LYQH_DLT_CurrentDiagram",
+        "Get_LYQH_GLT_PowerDiagram",
+        "Get_LYQH_DYM_Movefluidlevel",
+        "Get_LYQH_GJL_Tankmeasure"
+      ]
+    },
+    {
+      "name": "XAGL",
+      "showName": "西安贵隆",
+      "commands": [
+        "Get_XAGL_WM2000YXGT_IndicatorDiagram",
+        "Get_XAGL_WM2000GLT_PowerDiagram",
+        "Get_XAGL_WM2000DLT_CurrentDiagram",
+        "Get_XAGL_WM2000DB_PowerMeter",
+        "Post_XAGL_WM2000KZG_StartWell",
+        "Post_XAGL_WM2000KZG_StopWell",
+        "Post_XAGL_WM2000KZG_StrokeFrequency",
+        "Get_XAGL_WM2000KZG_ControllerParameter",
+        "Get_XAGL_WM2000KZG_ControllerStatus",
+        "Get_XAGL_PumpPressure",
+        "Get_XAGL_WM3000WXGT_IndicatorDiagram",
+        "Get_XAGL_WM3000YXGT_IndicatorDiagram",
+        "Get_XAGL_WM3000GLT_PowerDiagram",
+        "Get_XAGL_WM3000DLT_CurrentDiagram",
+        "Get_XAGL_WM3000DB_PowerMeter",
+        "Post_XAGL_WM3000KZG_StartWell",
+        "Post_XAGL_WM3000KZG_StopWell",
+        "Post_XAGL_WM3000KZG_StrokeFrequency",
+        "Get_XAGL_WM3000KZG_ControllerParameter",
+        "Get_XAGL_WM3000KZG_ControllerStatus"
+      ]
+    },
+    {
+      "name": "XAAS",
+      "showName": "西安安森",
+      "commands": [
+          "Get_XAAS_WTPM_TrunkPressure",
+          "Get_XAAS_WII_WaterInjectingInstrument",
+          "Post_XAAS_WII_InjectionAllocation",
+          "Post_XAAS_WII_TubePressure"
+      ]
+    },
+    {
+      "name": "XAGY",
+      "showName": "西安国仪",
+      "commands": [
+        "Get_XAGY_WTPM_TrunkPressure",           //"读取配水间干压"
+        "Get_XAGY_WII_WaterInjectingInstrument", //读取注水仪数据"
+        "Post_XAGY_WII_InjectionAllocation",     //下发配注量"
+        "Post_XAGY_WII_TubePressure"             //下发管压设定"
+      ]
+    },
+    {
+      "name": "ZJJH",
+      "showName": "浙江精华",
+      "commands": [
+          "Get_ZJJH_WTPM_TrunkPressure",
+          "Get_ZJJH_WII_WaterInjectingInstrument",
+          "Post_ZJJH_WII_InjectionAllocation",
+          "Post_ZJJH_WII_TubePressure"
+      ]
+    }
+  ]
+}

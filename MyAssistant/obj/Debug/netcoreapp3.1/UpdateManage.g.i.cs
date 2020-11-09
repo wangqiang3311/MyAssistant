@@ -117,7 +117,7 @@ namespace MyAssistant {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MyAssistant;V1.0.0.0;component/updatemanage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MyAssistant;component/updatemanage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\UpdateManage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

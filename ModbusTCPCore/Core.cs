@@ -31,11 +31,11 @@ using YCIOT.ModbusPoll.Vendor.ZKAW;
 namespace YCIOT.ModbusPoll.RtuOverTcp
 {
     //https://github.com/BlackyPanther/Modbus/blob/master/src/ConsoleDemo/Program.cs
-    internal class Core
+    public class Core
     {
-       public static void ConnectServer()
+        public static void ConnectServer()
         {
-          //初始化
+            //初始化
             Tools.WriteStartLog();
             ClientInfo.RequestTime = DateTime.Now;
             ClientInfo.LinkId = -1;
@@ -132,13 +132,13 @@ namespace YCIOT.ModbusPoll.RtuOverTcp
         private const string QueudId = "YCIOT";
         public static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public static async void DoWork(string commandType, int linkId,int slotId,int modbusAddress=1)
+        public static async void DoWork(string commandType, int linkId, int slotId, int modbusAddress = 1)
         {
             try
             {
                 var messageString = "";
                 ControlRequest job = null;
-                messageString = DebugHelper.MockRequest(commandType, 1, modbusAddress, "Device", slotId,linkId);
+                messageString = DebugHelper.MockRequest(commandType, 1, modbusAddress, "Device", slotId, linkId);
                 job = messageString.FromJson<ControlRequest>();
 
                 if (job != null)
