@@ -715,7 +715,7 @@ namespace MyAssistant
         public void GuoYi(string hex)
         {
             var s = HexStringToBytes(hex);
-            var  results=GuoYiWaterInject(s);
+            var results = GuoYiWaterInject(s);
 
             WriteToResult(results);
         }
@@ -875,8 +875,153 @@ namespace MyAssistant
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// 打包发布v2所有新程序
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPackageNew_Click(object sender, RoutedEventArgs e)
+        {
+            var b = sender as Button;
+            PublishV2(Convert.ToInt32(b.CommandParameter));
+        }
+        /// <summary>
+        /// 打包发布
+        /// </summary>
+        /// <param name="handleLevel">处理级别0：不处理；1：删除config和db；2：删除旧文件，包括1的处理</param>
+        private void PublishV2(int handleLevel = 0)
+        {
+            Dictionary<string, string> projects = new Dictionary<string, string>();
+
+            var modbusRoot = @"D:\project\jiupai\ModbusPoll\src\YCIOT.ModbusPoll.RtuOverTcp";
+            var jobRoot = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\Executor\YCBZ_V2.Job";
+            var datawriterRoot = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\Executor\YCBZ_V2.DataProcess";
+            var v2Root = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\YCBZ_V2.SubCenter\YCBZ_V2.Service";
+            var web = @"D:\project\jiupai\YCBZ_V2\src\YCBZ_V2\YCBZ_V2.SubCenter";
+            var app = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\YCBZ_V2.App\YCBZ_V2.App.Server";
+
+            var desDir = @"D:\Desktop\publish";
+            FileHelper.DeleteDir(desDir);
+
+            projects.Add("modbus", modbusRoot);
+            projects.Add("job", jobRoot);
+            projects.Add("datawriter", datawriterRoot);
+            projects.Add("v2", v2Root);
+            projects.Add("web", web);
+            projects.Add("app", app);
 
 
+            string publishDir = "";
+
+            foreach (var item in projects)
+            {
+                Console.WriteLine($"{item.Key}打包开始");
+
+                if (item.Key == "v2")
+                {
+                    //用release发布，用配置文件发布不成功
+
+                    PublishOne(item.Value, "publishV2");
+
+                    publishDir = System.IO.Path.Combine(item.Value, @"bin\release\netcoreapp3.1");
+                }
+                else if (item.Key == "web")
+                {
+                    PublishOne(web, "publishweb");
+
+                    Console.WriteLine($"准备移动前端dist");
+                    PublishOne(web, "move");
+                    Console.WriteLine($"移动前端dist结束");
+
+                    publishDir = "";
+                }
+                else
+                {
+                    PublishOne(item.Value);
+
+                    //读取发布位置
+                    var filePath = System.IO.Path.Combine(item.Value, "Properties", "PublishProfiles", "FolderProfile.pubxml");
+
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(filePath);
+
+                    var nodes = doc.GetElementsByTagName("PublishDir");
+
+                    if (nodes.Count == 0)
+                    {
+                        nodes = doc.GetElementsByTagName("PublishUrl");
+                    }
+
+                    publishDir = nodes[0].InnerText;
+                }
+
+                if (publishDir != "")
+                {
+                    if (handleLevel > 0)
+                        Handle(handleLevel, publishDir);
+                }
+
+                if (item.Key == "v2")
+                {
+                    Console.WriteLine($"准备移动v2 release");
+                    PublishOne(item.Value, "moveV2");
+                    Console.WriteLine($"移动v2 release结束");
+                }
+
+                Console.WriteLine($"{item.Key}打包结束");
+            }
+
+            //压缩包
+            var desDirName = System.IO.Path.GetFileName(desDir);
+
+            var desParent = System.IO.Directory.GetParent(desDir);
+
+            var zipFilePath = System.IO.Path.Combine(desParent.FullName, desDirName + ".zip");
+            //压缩文件
+            ZipPackage.Zip(desDir, zipFilePath);
+
+            Console.WriteLine("打包结束");
+        }
+
+        private static void Handle(int handleLevel, string publishDir)
+        {
+            var files = Directory.GetFiles(publishDir);
+
+            foreach (var sourceFile in files)
+            {
+                var extension = System.IO.Path.GetExtension(sourceFile);
+                if (extension == ".pdb" || extension == ".config")
+                {
+                    System.IO.File.Delete(sourceFile);
+                }
+            }
+
+            //复杂处理，删除掉旧文件,只留下最新dll文件
+            if (handleLevel == 2)
+            {
+                //如果是文件夹删除
+                FileHelper.DeleteAllSubDirectories(publishDir);
+
+                //如果是上月的文件删除
+
+                FileHelper.DeleteOldFiles(publishDir);
+            }
+        }
+
+
+
+
+        private static void PublishOne(string projectRoot, string bat = "publish")
+        {
+            Process proc = new Process();
+            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            proc.StartInfo.WorkingDirectory = executablePathRoot;
+            proc.StartInfo.FileName = $"{bat}.bat";
+
+            proc.StartInfo.Arguments = projectRoot;
+            proc.Start();
+            proc.WaitForExit();
+        }
     }
 
     public class HelloJob : IJob

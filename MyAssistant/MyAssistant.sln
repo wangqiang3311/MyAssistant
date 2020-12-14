@@ -19,13 +19,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YCIOT.ServiceModel", "..\YC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagnosisService", "..\DiagnosisService\DiagnosisService.csproj", "{2C64D258-012A-4119-919B-D90206650F1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClientTestTool", "..\TCPClientTestTool\TCPClientTestTool.csproj", "{61262FC3-610E-4D69-AD34-8BB3F884AB50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPClientTestTool", "..\TCPClientTestTool\TCPClientTestTool.csproj", "{61262FC3-610E-4D69-AD34-8BB3F884AB50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPServerTestTool", "..\TCPServerTestTool\TCPServerTestTool.csproj", "{9A761E6D-B28B-43E6-A497-5D60E0CBA6EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusTCPCore", "..\ModbusTCPCore\ModbusTCPCore.csproj", "{A411F184-372B-454D-9FEA-389F659637E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusTCPCore", "..\ModbusTCPCore\ModbusTCPCore.csproj", "{A411F184-372B-454D-9FEA-389F659637E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusTCPSingleTestForLinux", "..\ModbusTCPSingleTestForLinux\ModbusTCPSingleTestForLinux.csproj", "{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusTCPSingleTestForLinux", "..\ModbusTCPSingleTestForLinux\ModbusTCPSingleTestForLinux.csproj", "{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialComDeviceTestSend", "..\SerialComDeviceTestSend\SerialComDeviceTestSend.csproj", "{118F6BBA-A9FA-4454-B989-E05320DBE262}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialComDeviceTestReceive", "..\SerialComDeviceTestReceive\SerialComDeviceTestReceive.csproj", "{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,14 @@ Global
 		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{118F6BBA-A9FA-4454-B989-E05320DBE262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{118F6BBA-A9FA-4454-B989-E05320DBE262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{118F6BBA-A9FA-4454-B989-E05320DBE262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{118F6BBA-A9FA-4454-B989-E05320DBE262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace Acme.Common
 {
@@ -102,6 +103,17 @@ namespace Acme.Common
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 在一个窗口下重启程序
+        /// </summary>
+        /// <param name="app"></param>
+        public static void Restart(string executablePathRoot,string app)
+        {
+            var exePath = Path.Combine(executablePathRoot, app);
+            Process.Start(exePath);
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

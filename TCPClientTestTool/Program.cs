@@ -1,4 +1,5 @@
 ﻿using Acme.Common;
+using Acme.Common.Utils;
 using ModbusCommon;
 using NLog;
 using System;
@@ -26,17 +27,17 @@ namespace TCPClientTestTool
             int port = int.Parse(ConfigurationManager.AppSettings["TcpPort.Many"]);
 
             int clientCount = 1;
-            int interval = 10;
+            int interval = 5000;
 
             for (int i = 0; i < clientCount; i++)
             {
                 Task.Factory.StartNew(() =>
                 {
                     var j = i;
-                    Dowork(ip, port.ToString(), interval, j);
+                    //to do   linkId从配置表中读取
+                    Dowork(ip, port.ToString(), interval, 731);
                 });
             }
-
 
             while (true)
             {
@@ -63,7 +64,7 @@ namespace TCPClientTestTool
         }
 
 
-        private static void Dowork(string ip, string port, int interval, int index)
+        private static void Dowork(string ip, string port, int interval, short linkId)
         {
             string connectionErr = "";
             Sender sender = new Sender();
@@ -72,9 +73,50 @@ namespace TCPClientTestTool
 
             if (isConnected)
             {
+                //发送注册包
+                Regist(sender, linkId);
+
+                //每隔3s发送心跳包
+                SendBeatHeart(sender, interval, linkId);
+
                 Receive(sender);
                 Send(sender);
             }
+        }
+
+        private static void SendBeatHeart(Sender sender, int interval, short linkId)
+        {
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        List<byte> bytes = new List<byte>();
+                        bytes.Add(0x00);
+                        bytes.Add(0xC8);
+                        bytes.AddRange(DataTranse.ShortToByte(linkId));
+
+                        bool isSended = sender.SendMessage(bytes.ToArray());
+
+                        Thread.Sleep(interval);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"发送心跳包失败:" + ex.Message);
+                    }
+                }
+            });
+        }
+
+        private static void Regist(Sender sender, short linkId)
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0x00);
+            bytes.Add(0xC7);
+            bytes.AddRange(DataTranse.ShortToByte(linkId));
+
+            bool isSended = sender.SendMessage(bytes.ToArray());
         }
 
 
@@ -100,6 +142,8 @@ namespace TCPClientTestTool
 
                         var receivedata = StringHelper.BytesToHexString(bytes);
 
+                        DataQueue.Enqueue(bytes);
+
                         Logger.Info("received data：" + receivedata);
                     }
                     catch (Exception ex)
@@ -112,23 +156,55 @@ namespace TCPClientTestTool
 
         public static void Send(Sender sender)
         {
-            while (true)
+            Task.Run(() =>
             {
-                if (!DataQueue.TryDequeue(out var data))
+                while (true)
                 {
-                    Thread.Sleep(20);
-                    continue;
+                    if (!DataQueue.TryDequeue(out var data))
+                    {
+                        Thread.Sleep(20);
+                        continue;
+                    }
+                    //some condition was matched, send data
+                    //判断井状态
+                    if (StringHelper.BytesToHexString(data).StartsWith("01 03 10 07 00 01 31 0B"))
+                    {
+                        var sendData = StringHelper.HexStringToBytes("01 03 02 00 01 79 84");
+
+                        var isSended = sender.SendMessage(sendData);
+
+                        if (isSended)
+                        {
+                            Logger.Info("send well status response success");
+                        }
+                    }
+
+                    //读取贵隆2000电表
+                    if (StringHelper.BytesToHexString(data).StartsWith("01 03 10 19 00 07 D1 0F"))
+                    {
+                        var sendData = StringHelper.HexStringToBytes("01 03 0E 08 DE 08 A4 08 E3 00 07 00 0C 00 0A 00 00 23 32");
+
+                        var isSended = sender.SendMessage(sendData);
+
+                        if (isSended)
+                        {
+                            Logger.Info("send DB success");
+                        }
+                    }
+
+                    if(StringHelper.BytesToHexString(data).StartsWith("01 03 10 2D 00 04 D0 C0"))
+                    {
+                        var sendData = StringHelper.HexStringToBytes("01 03 08 33 56 A4 08 E3 00 07 00 2D 82");
+
+                        var isSended = sender.SendMessage(sendData);
+
+                        if (isSended)
+                        {
+                            Logger.Info("send DB success");
+                        }
+                    }
                 }
-
-                //some condition was matched, send data
-
-                var isSended = sender.SendMessage(data);
-
-                if (isSended)
-                {
-                    Logger.Info("send success");
-                }
-            }
+            });
         }
     }
 }

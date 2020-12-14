@@ -21,6 +21,7 @@
                <ListBoxItem>知识库</ListBoxItem>
                <ListBoxItem x:Name="publishManage" MouseDoubleClick="publishManage_MouseDoubleClick">发布管理</ListBoxItem>
             <ListBoxItem x:Name="modbusPackage" MouseDoubleClick="modbusPackage_MouseDoubleClick">Modbus包解析</ListBoxItem>
+            <ListBoxItem x:Name="TCPTools" MouseDoubleClick="TCPTools_MouseDoubleClick">tcp工具</ListBoxItem>
             <ListBoxItem x:Name="waterUnPackage" MouseDoubleClick="waterUnPackage_MouseDoubleClick">水井包解析</ListBoxItem>
             <ListBoxItem x:Name="doTest" MouseDoubleClick="doTest_MouseDoubleClick">包发送管理</ListBoxItem>
             <ListBoxItem x:Name="doReceive" MouseDoubleClick="doReceive_MouseDoubleClick">包接收管理</ListBoxItem>

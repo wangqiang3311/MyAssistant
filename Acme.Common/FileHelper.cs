@@ -11,20 +11,73 @@ namespace Acme.Common
 {
     public static class FileHelper
     {
-        public static void DeleteDirectories(string baseDirPath, int hours = 30)
+        /// <summary>
+        /// 删除大于30天的文件
+        /// </summary>
+        /// <param name="baseDirPath"></param>
+        /// <param name="days"></param>
+        public static void DeleteOldFiles(string baseDirPath, int days = 30)
+        {
+            var baseDir = new DirectoryInfo(baseDirPath);
+            var files = baseDir.GetFiles();
+
+            foreach (var item in files)
+            {
+                var ts = DateTime.Now - item.LastWriteTime;
+                if (ts.TotalDays > days)
+                {
+                    item.Delete();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除所有子文件夹
+        /// </summary>
+        /// <param name="baseDirPath"></param>
+        /// <param name="days"></param>
+        public static void DeleteAllSubDirectories(string baseDirPath)
         {
             var baseDir = new DirectoryInfo(baseDirPath);
             var subDirectories = baseDir.GetDirectories();
 
-            if (subDirectories.Length <= 0) return;
-
-            for (var j = subDirectories.Length - 1; j >= 0; j--)
+            foreach (var item in subDirectories)
             {
-                var ts = DateTime.Now - subDirectories[j].CreationTime;
-                if (ts.TotalHours > hours)
+                item.Delete(true);
+            }
+        }
+
+        /// <summary>
+        /// 删除文件夹下所有的文件
+        /// </summary>
+        /// <param name="file"></param>
+        public static void DeleteDir(string file)
+        {
+            //判断文件夹是否还存在
+            if (Directory.Exists(file))
+            {
+                //去除文件夹和子文件的只读属性
+                //去除文件夹的只读属性
+                System.IO.DirectoryInfo fileInfo = new DirectoryInfo(file);
+                fileInfo.Attributes = FileAttributes.Normal & FileAttributes.Directory;
+
+                foreach (string f in Directory.GetFileSystemEntries(file))
                 {
-                    subDirectories[j].Delete(true);
+                    if (System.IO.File.Exists(f))
+                    {
+                        //去除文件的只读属性
+                        System.IO.File.SetAttributes(f, System.IO.FileAttributes.Normal);
+                        //如果有子文件删除文件
+                        System.IO.File.Delete(f);
+                    }
+                    else
+                    {
+                        //循环递归删除子文件夹
+                        DeleteDir(f);
+                    }
                 }
+                //删除空文件夹
+                Directory.Delete(file);
             }
         }
 

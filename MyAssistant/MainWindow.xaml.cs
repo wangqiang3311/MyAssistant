@@ -51,7 +51,13 @@ namespace MyAssistant
                 {
                     modbusPackage_MouseDoubleClick(null, null);
                 }
-                if(item.Name== "doTest")
+
+                if (item.Name == "tcpTool")
+                {
+                    TCPTools_MouseDoubleClick (null, null);
+                }
+
+                if (item.Name== "doTest")
                 {
                     doTest_MouseDoubleClick(null, null);
                 }
@@ -91,6 +97,18 @@ namespace MyAssistant
             w.ShowDialog();
         }
 
+        private void TCPTools_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TCPTools w = new TCPTools();
+            w.Owner = this;
+            w.ShowDialog();
+        }
+
+        /// <summary>
+        /// 包发送管理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void doTest_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TestTools w = new TestTools();

@@ -43,6 +43,9 @@
      </ItemGroup>
 
      <ItemGroup>
+       <Compile Update="TCPTools.xaml.cs">
+         <SubType>Code</SubType>
+       </Compile>
        <Compile Update="ReceiveTools.xaml.cs">
          <SubType>Code</SubType>
        </Compile>
@@ -70,7 +73,22 @@
        <None Update="DHTable.xlsx">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
+       <None Update="moveV2.bat">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
        <None Update="NLog.config">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update=".bat">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update="move.bat">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update="publishV2.bat">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update="publishweb.bat">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
        <None Update="publish.bat">
@@ -82,6 +100,9 @@
      </ItemGroup>
 
      <ItemGroup>
+       <Page Update="TCPTools.xaml">
+         <SubType>Designer</SubType>
+       </Page>
        <Page Update="Style\labelStyle.xaml">
          <SubType>Designer</SubType>
        </Page>

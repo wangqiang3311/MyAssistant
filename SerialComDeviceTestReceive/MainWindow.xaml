@@ -1,0 +1,18 @@
+﻿<Window x:Class="SerialComDeviceTestReceive.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SerialComDeviceTestReceive"
+        mc:Ignorable="d"
+         Title="串口数据接收" Height="350" Width="525" x:Name="receiveWindow" Loaded="receiveWindow_Loaded" Closed="receiveWindow_Closed">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label>数据接收：</Label>
+        <RichTextBox Grid.Row="1" x:Name="rtxReceiveData"></RichTextBox>
+    </Grid>
+</Window>
