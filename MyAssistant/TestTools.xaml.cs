@@ -414,7 +414,7 @@ namespace MyAssistant
                 // and start it off
                 await scheduler.Start();
 
-                IJobDetail job = JobBuilder.Create<HelloJob>()
+                IJobDetail job = JobBuilder.Create<MonitorJob>()
                    .WithIdentity("job1", "group1")
                    .Build();
 
@@ -424,6 +424,7 @@ namespace MyAssistant
                     .StartNow()
                     .WithSimpleSchedule(x => x
                         .WithIntervalInSeconds(10)
+                        //.WithIntervalInHours(1)
                         .RepeatForever())
                     .Build();
 
@@ -893,12 +894,16 @@ namespace MyAssistant
         {
             Dictionary<string, string> projects = new Dictionary<string, string>();
 
-            var modbusRoot = @"D:\project\jiupai\ModbusPoll\src\YCIOT.ModbusPoll.RtuOverTcp";
-            var jobRoot = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\Executor\YCBZ_V2.Job";
-            var datawriterRoot = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\Executor\YCBZ_V2.DataProcess";
-            var v2Root = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\YCBZ_V2.SubCenter\YCBZ_V2.Service";
-            var web = @"D:\project\jiupai\YCBZ_V2\src\YCBZ_V2\YCBZ_V2.SubCenter";
-            var app = @"D:\project\jiupai\YCBZ_V2\src\YCIOT_V2\YCBZ_V2.App\YCBZ_V2.App.Server";
+            var appSettings = new AppSettings();
+
+
+            var modbusRoot = appSettings.GetString("modbusRoot");
+            var jobRoot = appSettings.GetString("jobRoot");
+            var datawriterRoot = appSettings.GetString("datawriterRoot");
+            var v2Root = appSettings.GetString("v2Root");
+            var web = appSettings.GetString("web");
+            var app = appSettings.GetString("app");
+
 
             var desDir = @"D:\Desktop\publish";
             FileHelper.DeleteDir(desDir);
@@ -1022,6 +1027,17 @@ namespace MyAssistant
             proc.Start();
             proc.WaitForExit();
         }
+
+        /// <summary>
+        /// 差异更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPackageDif_Click(object sender, RoutedEventArgs e)
+        {
+            var b = sender as Button;
+            PublishV2(Convert.ToInt32(b.CommandParameter));
+        }
     }
 
     public class HelloJob : IJob
@@ -1041,6 +1057,25 @@ namespace MyAssistant
                 var books = database.GetCollection<Book>(settings.BooksCollectionName);
 
                 Console.WriteLine("Greetings from HelloJob!");
+            });
+        }
+    }
+
+    public class MonitorJob : IJob
+    {
+        Task IJob.Execute(IJobExecutionContext context)
+        {
+            return Task.Run(() =>
+            {
+                //操作数据库
+                var connectionFactory = App.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+                using var dbFac = connectionFactory.OpenDbConnection();
+
+
+
+
+
+                Console.WriteLine("checked!");
             });
         }
     }

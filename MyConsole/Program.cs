@@ -1,7 +1,10 @@
 ﻿using Ansen;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MyConsole
 {
@@ -15,7 +18,57 @@ namespace MyConsole
 
             double[] c = DYMFilter.DoFilter(x);
 
+            Get_Sth();
+
             Console.Read();
+        }
+
+        public static async void Get_Sth()
+        {
+            await Task.Delay(3000);
+
+            WritLog();
+        }
+
+        public static void WritLog()
+        {
+            var s1 = new StackTrace().ToString();
+
+            var matches = Regex.Matches(s1, @"([Get_Post_][\s\S]*)\(",RegexOptions.Multiline);
+
+            foreach (Match item in matches)
+            {
+                if (item.Success)
+                {
+                    var cs = item.Captures;
+
+                    foreach (Capture citem in cs)
+                    {
+                        var t = citem.Value;
+                    }
+                }
+            }
+          
+
+            var lines = s1.Replace("\r", "").Split('\n');
+
+            foreach (var item in lines)
+            {
+                if (item.Contains("Get_") || item.Contains("Post_"))
+                {
+                    var ms = item.Split('.');
+
+                    if (ms.Length > 0)
+                    {
+                        var names = ms[ms.Length - 1].Split('(');
+                        if (names.Length > 0)
+                        {
+                            var name = names[0];
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 }

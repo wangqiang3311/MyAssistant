@@ -40,4 +40,10 @@ namespace YCIOT.ServiceModel.OilWell
         public int? AlarmCode { get; set; }     //功图诊断结果类型
         public string AlarmMsg { get; set; }    //诊断信息
     }
+
+    //油井功图模拟数据
+    [Alias("IOT_Data_OilWell_IndicatorDiagram_Mock")]
+    public class IotDataOilWellIndicatorDiagramMock : IotDataOilWellIndicatorDiagram
+    {
+    }
 }

@@ -8,12 +8,12 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\
 MyAssistant
 none
 false
-TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
+TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 D:\项目集\MyAssistant\MyAssistant\App.xaml
 18-1046088110
 
 341234681293
-296-1170203803
+2971766482350
 AddTask.xaml;ExportTools.xaml;MainWindow.xaml;ModbusTools.xaml;MyTask.xaml;ReceiveTools.xaml;Style\buttonStyle.xaml;Style\datagridStyle.xaml;Style\General.xaml;Style\labelStyle.xaml;Style\listviewStyle.xaml;Style\mainStyle.xaml;Style\textboxStyle.xaml;TaskBar.xaml;TCPTools.xaml;TestTools.xaml;UnPackWater.xaml;UpdateManage.xaml;
 
 False

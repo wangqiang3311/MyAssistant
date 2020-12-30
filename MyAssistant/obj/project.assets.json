@@ -3858,6 +3858,19 @@
         "runtime": {
           "bin/placeholder/Acme.Common.dll": {}
         }
+      },
+      "YCIOT.ServiceModel/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Acme.Common": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/YCIOT.ServiceModel.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/YCIOT.ServiceModel.dll": {}
+        }
       }
     }
   },
@@ -11406,6 +11419,11 @@
       "type": "project",
       "path": "../Acme.Common/Acme.Common.csproj",
       "msbuildProject": "../Acme.Common/Acme.Common.csproj"
+    },
+    "YCIOT.ServiceModel/1.0.0": {
+      "type": "project",
+      "path": "../YCIOT.ServiceModel/YCIOT.ServiceModel.csproj",
+      "msbuildProject": "../YCIOT.ServiceModel/YCIOT.ServiceModel.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -11431,7 +11449,8 @@
       "ServiceStack.Redis.Core >= 5.9.2",
       "ServiceStack.Server.Core >= 5.9.2",
       "System.Drawing.Common >= 4.7.0",
-      "Templater >= 4.6.0"
+      "Templater >= 4.6.0",
+      "YCIOT.ServiceModel >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -11465,9 +11484,13 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
             "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj": {
               "projectPath": "D:\\项目集\\MyAssistant\\Acme.Common\\Acme.Common.csproj"
+            },
+            "D:\\项目集\\MyAssistant\\YCIOT.ServiceModel\\YCIOT.ServiceModel.csproj": {
+              "projectPath": "D:\\项目集\\MyAssistant\\YCIOT.ServiceModel\\YCIOT.ServiceModel.csproj"
             }
           }
         }
@@ -11480,6 +11503,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "DotNetCore.NPOI": {
             "target": "Package",
@@ -11584,7 +11608,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

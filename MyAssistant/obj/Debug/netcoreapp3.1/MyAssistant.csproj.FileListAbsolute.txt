@@ -1,6 +1,5 @@
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\NLog.config
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\MyAssistant.exe
-D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\.bat
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\App.config
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\appsettings.json
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\DHTable.xlsx
@@ -197,3 +196,7 @@ D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.csproj.
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.dll
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.pdb
 D:\项目集\MyAssistant\MyAssistant\obj\Debug\netcoreapp3.1\MyAssistant.genruntimeconfig.cache
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\1-2-1.csv
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\YCIOT.ServiceModel.dll
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\YCIOT.ServiceModel.pdb
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\wwwroot.bat

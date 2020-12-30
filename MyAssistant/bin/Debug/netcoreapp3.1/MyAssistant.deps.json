@@ -30,6 +30,7 @@
           "ServiceStack.Server.Core": "5.9.2",
           "System.Drawing.Common": "4.7.0",
           "Templater": "4.6.0",
+          "YCIOT.ServiceModel": "1.0.0",
           "OpenPop": "2.0.5.0"
         },
         "runtime": {
@@ -2745,6 +2746,14 @@
           "Acme.Common.dll": {}
         }
       },
+      "YCIOT.ServiceModel/1.0.0": {
+        "dependencies": {
+          "Acme.Common": "1.0.0"
+        },
+        "runtime": {
+          "YCIOT.ServiceModel.dll": {}
+        }
+      },
       "OpenPop/2.0.5.0": {
         "runtime": {
           "OpenPop.dll": {
@@ -4428,6 +4437,11 @@
       "hashPath": "templater.4.6.0.nupkg.sha512"
     },
     "Acme.Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "YCIOT.ServiceModel/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -23,6 +23,9 @@
             <Button   Content="[T]导出" x:Name="btnTemplateExport"  Style="{StaticResource BtnInfoStyle}" Click="btnTemplateExport_Click"/>
             <Button   Content="导出Sql" x:Name="btnNPOIExport"  Style="{StaticResource BtnInfoStyle}" Click="btnNPOIExport_Click"/>
             <Button   Content="导出实体类" x:Name="btnNPOIExportEntity"  Style="{StaticResource BtnInfoStyle}" Click="btnNPOIExportEntity_Click"/>
+
+            <Button   Content="导出功图数据" x:Name="btnCSVExportData"  Style="{StaticResource BtnInfoStyle}" Click="btnCSVExportData_Click"/>
+
             <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
 
         </StackPanel>
