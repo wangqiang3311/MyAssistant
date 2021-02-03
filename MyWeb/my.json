@@ -1,0 +1,20 @@
+{
+  "Learning": {
+    "Years": 5,
+    "Topic": [ "Hotfix", ".NET Core", "Options" ],
+    "Skill": [
+      {
+        "Lang": "C#",
+        "Score": 3.9
+      },
+      {
+        "Lang": "Python",
+        "Score": 2.6
+      },
+      {
+        "Lang": "JavaScript",
+        "Score": 2.8
+      }
+    ]
+  }
+}

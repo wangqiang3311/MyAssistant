@@ -407,13 +407,16 @@ namespace MyAssistant
 
             //获取文件夹下所有文件
 
+            int s = 0;
+            int f = 0;
+
             var files = Directory.GetFiles(dataDirPath);
 
             foreach (var file in files)
             {
                 var filePath = file;
 
-                string fileName = System.IO.Path.GetFileName(file).Replace(".csv","");
+                string fileName = System.IO.Path.GetFileName(file).Replace(".csv", "");
                 string wellName = "";
 
                 var indicatorDiagram = new IotDataOilWellIndicatorDiagram()
@@ -438,7 +441,7 @@ namespace MyAssistant
                 {
                     wellName = $"{fileInfos[0]}-{fileInfos[1]}井";
                 }
-                if(fileInfos.Length == 1)
+                if (fileInfos.Length == 1)
                 {
                     wellName = $"{fileInfos[0]}井";
                 }
@@ -497,10 +500,11 @@ namespace MyAssistant
 
                         indicatorDiagram.Id = indicatorDiagram.WellId;
 
-                        if(indicatorDiagram.D.Last()!= indicatorDiagram.D[0]){
+                        if (indicatorDiagram.D.Last() != indicatorDiagram.D[0])
+                        {
                             indicatorDiagram.D.Add(indicatorDiagram.D[0]);
                         }
-                        if(indicatorDiagram.L.Last() != indicatorDiagram.L[0])
+                        if (indicatorDiagram.L.Last() != indicatorDiagram.L[0])
                         {
                             indicatorDiagram.L.Add(indicatorDiagram.L[0]);
                         }
@@ -529,7 +533,7 @@ namespace MyAssistant
                                     Console.WriteLine($"{oilWell.WellName}-{oilWell.WellId}功图数据保存成功");
                                 }
                             }
-
+                            s++;
                             redisClient.AddItemToList("YCIOT:IOT_Data_OilWell_IndicatorDiagram", indicatorDiagram.ToJson().IndentJson());
 
                             if (oilWell != null)
@@ -539,9 +543,12 @@ namespace MyAssistant
                             }
                         }
                     }
+
+                    Console.WriteLine($"总共{files.Length}条数据执行,成功{s}条,失败{f}条");
                 }
                 catch (Exception ex)
                 {
+                    f++;
                     Console.WriteLine("导出功图数据出错" + ex.Message);
                 }
             }
@@ -655,6 +662,192 @@ namespace MyAssistant
                 throw new Exception("非预期的byte格式");
             }
             return true;
+        }
+
+        private void btnExcelExportData_Click(object sender, RoutedEventArgs e)
+        {
+            var connectionFactory = App.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+            using var dbFac = connectionFactory.OpenDbConnection();
+
+            var appSettings = new AppSettings();
+            var redisCon = appSettings.GetString("TestRedis");
+
+            using var redisClient = new RedisClient(redisCon);
+
+            var executablePathRoot = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            var filePath = System.IO.Path.Combine(executablePathRoot, "功图.xlsx");
+            IWorkbook workbook = null;
+            ISheet sheet = null;
+
+            int s = 0;
+            int f = 0;
+
+            try
+            {
+                workbook = WorkbookFactory.Create(filePath);
+                sheet = workbook.GetSheetAt(0);//获取第1个工作薄
+
+                var wellName = "";
+                var display = "";
+                var load = "";
+
+                var total = 49;
+
+                Dictionary<string, string> fields = new Dictionary<string, string>();
+
+                for (var j = 1; j < total; j++)
+                {
+                    var row = sheet.GetRow(j);
+
+                    int i = 0;
+                    foreach (var cell in row.Cells)
+                    {
+                        var v = GetCellValue(cell);
+
+                        //井号
+                        if (i == 0)
+                        {
+                            wellName = v.ToString();
+                        }
+                        if (i == 1)
+                        {
+                            //位移
+                            display = v.ToString();
+                        }
+                        if (i == 2)
+                        {
+                            //载荷
+                            load = v.ToString();
+                        }
+                        i++;
+                    }
+
+                    //保存
+                    var indicatorDiagram = new IotDataOilWellIndicatorDiagram()
+                    {
+                        AlarmCode = 0,
+                        AlarmMsg = "正常"
+                    };
+
+                    indicatorDiagram.Mock = true;
+
+                    indicatorDiagram.D = new List<double>();  //位移
+                    indicatorDiagram.L = new List<double>();  //载荷
+
+
+                    var disList = display.Replace("[", "").Replace("]", "").Split(',');
+
+                    foreach (var item in disList)
+                    {
+                        indicatorDiagram.D.Add(Convert.ToDouble(item));
+                    }
+
+                    var loads = load.Replace("[", "").Replace("]", "").Split(',');
+
+                    foreach (var item in loads)
+                    {
+                        indicatorDiagram.L.Add(Convert.ToDouble(item));
+                    }
+
+                    indicatorDiagram.DateTime = DateTime.Now;
+
+                    IotOilWell oilWell = null;
+
+                    //根据文件名获取井Id
+                    wellName = $"{wellName}井";
+
+                    if (wellName != "")
+                    {
+                        oilWell = dbFac.Single<IotOilWell>(w => w.WellName == wellName);
+
+                        if (oilWell != null)
+                        {
+                            indicatorDiagram.WellId = oilWell.WellId;
+                        }
+                    }
+
+                    if (indicatorDiagram.L.Count > 0)
+                    {
+                        var maxLoad = Math.Round(indicatorDiagram.L.Max(), 2);//最大载荷
+                        var minLoad = Math.Round(indicatorDiagram.L.Min(), 2);//最小载荷
+                        var avgLoad = Math.Round(indicatorDiagram.L.Average(), 2);//平均载荷
+
+                        //间隔 = 60（秒）/ 冲次 / 采样点数
+
+                        int count = indicatorDiagram.D.Count;
+
+                        //冲次2.5到3之间随机
+
+                        var n = new Random().Next(1, 5);
+
+                        var stroke = 2.5 + n * 0.1;
+
+                        var interval = Math.Round(60 / stroke / count, 2);
+
+                        indicatorDiagram.Displacement = Math.Round(indicatorDiagram.D.Max(), 2);
+                        indicatorDiagram.Stroke = stroke;
+                        indicatorDiagram.Interval = interval;
+
+                        indicatorDiagram.MaxLoad = maxLoad;
+                        indicatorDiagram.MinLoad = minLoad;
+                        indicatorDiagram.AvgLoad = avgLoad;
+                        indicatorDiagram.Count = count;
+
+                        indicatorDiagram.Id = indicatorDiagram.WellId;
+
+                        if (indicatorDiagram.D.Last() != indicatorDiagram.D[0])
+                        {
+                            indicatorDiagram.D.Add(indicatorDiagram.D[0]);
+                        }
+                        if (indicatorDiagram.L.Last() != indicatorDiagram.L[0])
+                        {
+                            indicatorDiagram.L.Add(indicatorDiagram.L[0]);
+                        }
+                        Console.WriteLine($"当前井：{oilWell.WellName}-{oilWell.WellId}");
+                        //写入数据库
+
+                        if (indicatorDiagram.WellId > 0)
+                        {
+                            var recordMock = indicatorDiagram.ConvertTo<IotDataOilWellIndicatorDiagramMock>();
+
+                            if (dbFac.Exists<IotDataOilWellIndicatorDiagramMock>(d => d.WellId == recordMock.WellId))
+                            {
+                                var aCount = dbFac.Update(recordMock);
+
+                                if (aCount > 0)
+                                {
+                                    Console.WriteLine($"{oilWell.WellName}-{oilWell.WellId}功图数据更新成功");
+                                }
+                            }
+                            else
+                            {
+                                var isSuccess = dbFac.Save(recordMock);
+
+                                if (isSuccess)
+                                {
+                                    Console.WriteLine($"{oilWell.WellName}-{oilWell.WellId}功图数据保存成功");
+                                }
+                            }
+                            s++;
+                            redisClient.AddItemToList("YCIOT:IOT_Data_OilWell_IndicatorDiagram", indicatorDiagram.ToJson().IndentJson());
+
+                            if (oilWell != null)
+                            {
+                                redisClient.Set($"Group:OilWell:{oilWell.WellName}-{oilWell.WellId}:IndicatorDiagram", indicatorDiagram);
+                                redisClient.Set($"Single:OilWell:IndicatorDiagram:{oilWell.WellName}-{oilWell.WellId}", indicatorDiagram);
+                            }
+                        }
+                    }
+                }
+
+                Console.WriteLine($"总共{total - 1}条数据执行,成功{s}条,失败{f}条");
+            }
+            catch (Exception ex)
+            {
+                f++;
+                Console.WriteLine("获取excel数据出错" + ex.Message);
+                workbook?.Close();
+            }
         }
     }
 }

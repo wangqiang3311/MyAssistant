@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DynamicDataDisplay.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Charts\Axes\AxisControlStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\Isolines\IsolineTrackingGraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\Legend.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\LineLegendItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\MagnifyingGlass.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\Navigation\AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\Navigation\CursorCoordinateGraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\Shapes\DraggablePoint.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\Shapes\RangeHighlightStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Charts\ViewportListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Common\PlotterStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
+</Project>

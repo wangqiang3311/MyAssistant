@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="GodSharp.SerialPort" Version="1.2.0.6" />
+    <ProjectReference Include="..\ModbusTCPCore\ModbusTCPCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Acme.Common\Acme.Common.csproj" />
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

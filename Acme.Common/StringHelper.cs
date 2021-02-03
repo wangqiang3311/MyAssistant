@@ -95,7 +95,7 @@ namespace Acme.Common
                         if (newValue == "") newValue = "0";
                         var value1 = byte.Parse(newValue);
 
-                        if (value1 < 9)
+                        if (value1 < 10)
                         {
                             bytes.Add(value1);
                         }

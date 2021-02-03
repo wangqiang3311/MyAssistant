@@ -22,8 +22,15 @@
 
             <Button   Content="生成sql语句" x:Name="MakeSql"  Style="{StaticResource BtnInfoStyle}" Click="MakeSql_Click"/>
             <Button   Content="打包发布" x:Name="btnPackage"  Style="{StaticResource BtnInfoStyle}" Click="btnPackage_Click"/>
-            <Button   Content="打包发布所有新程序" x:Name="btnPackageNew"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageNew_Click" CommandParameter="1"/>
-            <Button   Content="打包发布差异化程序" x:Name="btnPackageDif"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageDif_Click" CommandParameter="2"/>
+
+            <Button   Content="打包发布withConfig[V2]" x:Name="btnPackageWithConfig"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageNew_Click" CommandParameter="0"/>
+
+            <Button   Content="打包发布所有新程序[V2]" x:Name="btnPackageNew"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageNew_Click" CommandParameter="1"/>
+            <Button   Content="打包发布差异化程序[V2]" x:Name="btnPackageDif"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageDif_Click" CommandParameter="2"/>
+
+            <Button   Content="打包发布所有新程序[Center]" x:Name="btnPackageNewCenter"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageNewCenter_Click" CommandParameter="1"/>
+            <Button   Content="打包发布差异化程序[Center]" x:Name="btnPackageDifCenter"  Style="{StaticResource BtnInfoStyle}" Click="btnPackageDifCenter_Click" CommandParameter="2"/>
+
             <Button   Content="发送邮件" x:Name="btnSendEmail"  Style="{StaticResource BtnInfoStyle}" Click="btnSendEmail_Click"/>
             <Button   Content="读取Redis" x:Name="btnReadRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnReadRedis_Click"/>
             <Button   Content="自动检查redis" x:Name="btnCheckRedis"  Style="{StaticResource BtnInfoStyle}" Click="btnCheckRedis_Click"/>

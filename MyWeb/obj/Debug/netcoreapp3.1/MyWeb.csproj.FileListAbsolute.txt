@@ -1,6 +1,5 @@
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\appsettings.Development.json
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\appsettings.json
-D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.exe
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.deps.json
 D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\MyWeb.runtimeconfig.json
@@ -17,4 +16,8 @@ D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\staticwebassets\MyWeb.Sta
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.dll
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.pdb
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.genruntimeconfig.cache
+D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\scopedcss\bundle\MyWeb.styles.css
+D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.csproj.CopyComplete
+D:\项目集\MyAssistant\MyWeb\bin\Debug\netcoreapp3.1\my.json
 D:\项目集\MyAssistant\MyWeb\obj\Debug\netcoreapp3.1\MyWeb.csprojAssemblyReference.cache

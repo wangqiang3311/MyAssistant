@@ -14,5 +14,6 @@
 
         <Label>数据接收：</Label>
         <RichTextBox Grid.Row="1" x:Name="rtxReceiveData"></RichTextBox>
+
     </Grid>
 </Window>

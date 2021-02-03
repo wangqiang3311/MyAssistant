@@ -101,6 +101,9 @@
        <None Update="Update\YCIOT.ModbusPoll.RtuOverTcp.dll">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
+       <None Update="功图.xlsx">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
      </ItemGroup>
 
      <ItemGroup>

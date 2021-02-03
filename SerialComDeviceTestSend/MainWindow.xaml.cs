@@ -1,10 +1,12 @@
 ﻿using Acme.Common;
 using GodSharp.SerialPort;
 using GodSharp.SerialPort.Enums;
+using ServiceStack.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using YCIOT.ModbusPoll.Utils;
 
 namespace SerialComDeviceTestSend
 {
@@ -25,20 +28,22 @@ namespace SerialComDeviceTestSend
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly GodSerialPort _serialPort;
+        private GodSerialPort _serialPort;
         public MainWindow()
         {
             InitializeComponent();
 
             //To Do:从配置文件中获取com口、波特率等串口参数
 
-            _serialPort =
-            new GodSerialPort("COM8", 9600, Parity.None, 8, StopBits.One)
-            {
-                DataFormat = SerialPortDataFormat.Hex,
-                RtsEnable = true,
-                DtrEnable = true
-            };
+            //一个大坑，没有这个前面的appSettings出不来
+            var assembliesWithServices = new Assembly[1];
+            assembliesWithServices[0] = typeof(AppHost).Assembly;
+            var appHost = new AppHost("AppHost", assembliesWithServices);
+
+            IAppSettings appSettings = new AppSettings();
+
+            var com = appSettings.Get<string>("COM");
+            var rate = appSettings.Get<int>("Rate");
         }
 
         private void testSend_Click(object sender, RoutedEventArgs e)
@@ -58,14 +63,18 @@ namespace SerialComDeviceTestSend
                 content.Text = StringHelper.BytesToHexString(datas);
             });
 
-            _serialPort.Write(datas);
+            if (_serialPort.IsOpen)
+                _serialPort.Write(datas);
+            else
+            {
+                Console.WriteLine("串口未打开");
+            }
         }
 
         int times = 6;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _serialPort.Open();
 
             Random r = new Random();
 
@@ -106,27 +115,65 @@ namespace SerialComDeviceTestSend
 
             });
 
-
-            Task.Factory.StartNew(() =>
-            {
-                while (true)
-                {
-                    var data = _serialPort.ReadString();
-
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        if (!string.IsNullOrEmpty(data))
-                            content.Text += data + "\n";
-                    });
-
-                    Thread.Sleep(3000);
-                }
-            });
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            _serialPort.Close();
+            try
+            {
+                _serialPort?.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("串口关闭失败：" + ex.Message);
+            }
+        }
+
+        private void btnSetting_Click(object sender, RoutedEventArgs e)
+        {
+            _serialPort = new GodSerialPort(txtCOM.Text, Convert.ToInt32(txtRate.Text), Parity.None, 8, StopBits.One)
+            {
+                DataFormat = SerialPortDataFormat.Hex,
+                RtsEnable = true,
+                DtrEnable = true
+            };
+
+            _serialPort.Open();
+
+            if (!_serialPort.IsOpen)
+            {
+                Console.WriteLine("串口打开失败");
+            }
+            else
+            {
+                int interval = Convert.ToInt32(txtReceiveInterval.Text);
+
+                Task.Factory.StartNew(() =>
+                {
+                    while (true)
+                    {
+                        var data = _serialPort?.ReadString();
+
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            if (!string.IsNullOrEmpty(data))
+                            {
+                                if (data.StartsWith("00 C7") || data.StartsWith("00 C8"))
+                                {
+                                    Console.WriteLine("收到注册包或心跳包" + data);
+                                }
+                                else
+                                {
+                                    content.Text = data + "\r\n";
+                                }
+                            }
+                        });
+
+
+                        Thread.Sleep(5000);
+                    }
+                });
+            }
         }
     }
 }

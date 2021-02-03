@@ -27,9 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusTCPCore", "..\ModbusT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusTCPSingleTestForLinux", "..\ModbusTCPSingleTestForLinux\ModbusTCPSingleTestForLinux.csproj", "{5E3E5BA7-8F3E-41D3-939B-9250B80BF1FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialComDeviceTestSend", "..\SerialComDeviceTestSend\SerialComDeviceTestSend.csproj", "{118F6BBA-A9FA-4454-B989-E05320DBE262}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialComDeviceTestSend", "..\SerialComDeviceTestSend\SerialComDeviceTestSend.csproj", "{118F6BBA-A9FA-4454-B989-E05320DBE262}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialComDeviceTestReceive", "..\SerialComDeviceTestReceive\SerialComDeviceTestReceive.csproj", "{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialComDeviceTestReceive", "..\SerialComDeviceTestReceive\SerialComDeviceTestReceive.csproj", "{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDevice", "..\SmartDevice\SmartDevice.csproj", "{446DBA8E-C50A-441B-B26E-095E23D8E748}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECD8B440-DE4D-4D13-9D08-758B83CBCFF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{446DBA8E-C50A-441B-B26E-095E23D8E748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{446DBA8E-C50A-441B-B26E-095E23D8E748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{446DBA8E-C50A-441B-B26E-095E23D8E748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{446DBA8E-C50A-441B-B26E-095E23D8E748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

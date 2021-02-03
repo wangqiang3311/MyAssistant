@@ -200,3 +200,4 @@ D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\1-2-1.csv
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\YCIOT.ServiceModel.dll
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\YCIOT.ServiceModel.pdb
 D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\wwwroot.bat
+D:\项目集\MyAssistant\MyAssistant\bin\Debug\netcoreapp3.1\功图.xlsx

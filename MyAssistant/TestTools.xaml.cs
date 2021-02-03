@@ -616,6 +616,30 @@ namespace MyAssistant
             try
             {
                 redisClient = new RedisClient(redisCon);
+
+                #region 计算当日累计
+
+                var date = DateTime.Now;
+
+                if (date.Hour < 8)
+                {
+                    //如果不到8点，取昨天的日期
+                    date = DateTime.Now.AddDays(-1);
+                }
+                string key = date.ToString("yyyy-MM-dd") + "_wbq";
+
+                //从缓存中获取当日累计的基准值
+                var baseCumulativeFlow = redisClient.Get<double?>(key);
+
+                if (baseCumulativeFlow == null)
+                {
+                    baseCumulativeFlow = 100;
+                    //写入到redis
+                    redisClient.Set<double?>(key, baseCumulativeFlow, new TimeSpan(0, 10, 0));
+                }
+
+                #endregion
+
                 var userRequestListId = $"{QueudId}:User:JobList:{groupName}";
 
                 var messageString = redisClient.RemoveStartFromList(userRequestListId);
@@ -884,37 +908,17 @@ namespace MyAssistant
         private void btnPackageNew_Click(object sender, RoutedEventArgs e)
         {
             var b = sender as Button;
-            PublishV2(Convert.ToInt32(b.CommandParameter));
+            PackageV2(Convert.ToInt32(b.CommandParameter));
         }
         /// <summary>
         /// 打包发布
         /// </summary>
         /// <param name="handleLevel">处理级别0：不处理；1：删除config和db；2：删除旧文件，包括1的处理</param>
-        private void PublishV2(int handleLevel = 0)
+        private void PublishV2(Dictionary<string, string> projects,int handleLevel = 0)
         {
-            Dictionary<string, string> projects = new Dictionary<string, string>();
-
-            var appSettings = new AppSettings();
-
-
-            var modbusRoot = appSettings.GetString("modbusRoot");
-            var jobRoot = appSettings.GetString("jobRoot");
-            var datawriterRoot = appSettings.GetString("datawriterRoot");
-            var v2Root = appSettings.GetString("v2Root");
-            var web = appSettings.GetString("web");
-            var app = appSettings.GetString("app");
-
-
             var desDir = @"D:\Desktop\publish";
+
             FileHelper.DeleteDir(desDir);
-
-            projects.Add("modbus", modbusRoot);
-            projects.Add("job", jobRoot);
-            projects.Add("datawriter", datawriterRoot);
-            projects.Add("v2", v2Root);
-            projects.Add("web", web);
-            projects.Add("app", app);
-
 
             string publishDir = "";
 
@@ -932,10 +936,9 @@ namespace MyAssistant
                 }
                 else if (item.Key == "web")
                 {
-                    PublishOne(web, "publishweb");
-
+                    PublishOne(projects["web"], "publishweb");
                     Console.WriteLine($"准备移动前端dist");
-                    PublishOne(web, "move");
+                    PublishOne(projects["web"], "move");
                     Console.WriteLine($"移动前端dist结束");
 
                     publishDir = "";
@@ -1013,9 +1016,6 @@ namespace MyAssistant
             }
         }
 
-
-
-
         private static void PublishOne(string projectRoot, string bat = "publish")
         {
             Process proc = new Process();
@@ -1036,7 +1036,71 @@ namespace MyAssistant
         private void btnPackageDif_Click(object sender, RoutedEventArgs e)
         {
             var b = sender as Button;
-            PublishV2(Convert.ToInt32(b.CommandParameter));
+            PackageV2(Convert.ToInt32(b.CommandParameter));
+        }
+
+        private void btnPackageNewCenter_Click(object sender, RoutedEventArgs e)
+        {
+            var b = sender as Button;
+            PackageCenter(Convert.ToInt32(b.CommandParameter));
+        }
+
+        /// <summary>
+        /// 打包V2
+        /// </summary>
+        /// <param name="handleLevel"></param>
+        private void PackageV2(int handleLevel)
+        {
+            Dictionary<string, string> projects = new Dictionary<string, string>();
+            var appSettings = new AppSettings();
+
+            var modbusRoot = appSettings.GetString("modbusRoot");
+            var jobRoot = appSettings.GetString("jobRoot");
+            var datawriterRoot = appSettings.GetString("datawriterRoot");
+            var v2Root = appSettings.GetString("v2Root");
+            var web = appSettings.GetString("web");
+            var app = appSettings.GetString("app");
+
+            projects.Add("modbus", modbusRoot);
+            projects.Add("job", jobRoot);
+            projects.Add("datawriter", datawriterRoot);
+            projects.Add("v2", v2Root);
+            projects.Add("web", web);
+            projects.Add("app", app);
+
+            PublishV2(projects, handleLevel);
+        }
+
+
+
+        /// <summary>
+        /// 打包中心端
+        /// </summary>
+        /// <param name="handleLevel"></param>
+        private void PackageCenter(int handleLevel)
+        {
+            Dictionary<string, string> projects = new Dictionary<string, string>();
+            var appSettings = new AppSettings();
+
+            var modbusRoot = appSettings.GetString("modbusRoot");
+            var jobRoot = appSettings.GetString("jobRoot_c");
+            var datawriterRoot = appSettings.GetString("datawriterRoot_c");
+            var v2Root = appSettings.GetString("v2Root_c");
+            var web = appSettings.GetString("web_c");
+
+            projects.Add("modbus", modbusRoot);
+            projects.Add("job", jobRoot);
+            projects.Add("datawriter", datawriterRoot);
+            projects.Add("v2", v2Root);
+            projects.Add("web", web);
+
+            PublishV2(projects, handleLevel);
+        }
+
+        private void btnPackageDifCenter_Click(object sender, RoutedEventArgs e)
+        {
+            var b = sender as Button;
+            PackageCenter(Convert.ToInt32(b.CommandParameter));
         }
     }
 

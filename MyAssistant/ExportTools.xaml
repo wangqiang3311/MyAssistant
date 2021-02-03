@@ -24,7 +24,9 @@
             <Button   Content="导出Sql" x:Name="btnNPOIExport"  Style="{StaticResource BtnInfoStyle}" Click="btnNPOIExport_Click"/>
             <Button   Content="导出实体类" x:Name="btnNPOIExportEntity"  Style="{StaticResource BtnInfoStyle}" Click="btnNPOIExportEntity_Click"/>
 
-            <Button   Content="导出功图数据" x:Name="btnCSVExportData"  Style="{StaticResource BtnInfoStyle}" Click="btnCSVExportData_Click"/>
+            <Button   Content="导出功图数据(csv)" x:Name="btnCSVExportData"  Style="{StaticResource BtnInfoStyle}" Click="btnCSVExportData_Click"/>
+
+            <Button   Content="导出功图数据(Excel)" x:Name="btnExcelExportData"  Style="{StaticResource BtnInfoStyle}" Click="btnExcelExportData_Click"/>
 
             <RichTextBox x:Name="txtResult" Width="350"></RichTextBox>
 
