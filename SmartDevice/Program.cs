@@ -30,8 +30,7 @@ namespace TCPClientTestTool
 
             int clientCount = 1;
 
-            //间隔5分钟
-            int interval = 60 * 5 * 1000;
+            int interval = int.Parse(ConfigurationManager.AppSettings["Interval"]);
 
             for (int i = 0; i < clientCount; i++)
             {
